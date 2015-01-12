@@ -1,0 +1,30 @@
+<HEAD><TITLE>oplk-led.ads</TITLE></HEAD>
+<BODY>
+<HR><DIV ALIGN="center"><H1> File : oplk-led.ads </H1></DIV><HR>
+<PRE>
+
+<FONT COLOR=green><EM>-- \brief  Definitions for user LED module</EM></FONT>
+<FONT COLOR=green><EM>-- This file contains definitions for the user LED module.</EM></FONT>
+
+<b>pragma</b> Ada_2005;
+<b>pragma</b> Style_Checks (Off);
+
+<b>with</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C; <b>use</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C;
+
+<b>package</b> <A HREF="oplk__ads.htm#10_9">oplk</A>.<FONT COLOR=red><A NAME="10_14">led</A></FONT> <b>is</b>
+   
+   <FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <FONT COLOR=green><EM>--\brief   Valid LED types                                                  --</EM></FONT>
+   <FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+   <FONT COLOR=green><EM>-- The structure defines all valid LED types used by POWERLINK.             --</EM></FONT>
+   <FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="17_9">tLedType</A></FONT> <b>is</b> 
+     (kLedTypeStatus,
+      <FONT COLOR=green><EM>-- POWERLINK Status LED</EM></FONT>
+      KLedTypeError
+<FONT COLOR=green><EM>-- POWERLINK Error LED</EM></FONT>
+     );
+   <b>pragma</b> Convention (C, <A HREF="oplk-led__ads.htm#17_9">tLedType</A>);  <FONT COLOR=green><EM>-- ./oplk/led.h:63</EM></FONT>
+   
+<b>end</b> <A HREF="oplk__ads.htm#10_9">oplk</A>.<A HREF="oplk-led__ads.htm#10_14">Led</A>;
+</PRE></BODY></HTML>

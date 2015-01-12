@@ -1,0 +1,278 @@
+<HEAD><TITLE>oplk-nmt.ads</TITLE></HEAD>
+<BODY>
+<HR><DIV ALIGN="center"><H1> File : oplk-nmt.ads </H1></DIV><HR>
+<PRE>
+<b>pragma</b> Ada_2005;
+<b>pragma</b> Style_Checks (Off);
+
+<b>with</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C; <b>use</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C;
+
+<b>package</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<FONT COLOR=red><A NAME="6_14">nmt</A></FONT> <b>is</b>
+   
+   <FONT COLOR=green><EM>--   define super-states and masks to identify a super-state   --</EM></FONT>
+   <FONT COLOR=red><A NAME="9_4">NMT_GS_POWERED</A></FONT>        : <b>constant</b> := 16#0008#;
+   <FONT COLOR=green><EM>-- super state</EM></FONT>
+   <FONT COLOR=red><A NAME="11_4">NMT_GS_INITIALISATION</A></FONT> : <b>constant</b> := 16#0009#;
+   <FONT COLOR=green><EM>-- super state</EM></FONT>
+   <FONT COLOR=red><A NAME="13_4">NMT_GS_COMMUNICATING</A></FONT>  : <b>constant</b> := 16#000C#;
+   <FONT COLOR=green><EM>-- super state</EM></FONT>
+   <FONT COLOR=red><A NAME="15_4">NMT_CS_PLKMODE</A></FONT>        : <b>constant</b> := 16#000D#;
+   <FONT COLOR=green><EM>-- super state</EM></FONT>
+   <FONT COLOR=red><A NAME="17_4">NMT_MS_PLKMODE</A></FONT>        : <b>constant</b> := 16#000D#;
+   <FONT COLOR=green><EM>-- super state</EM></FONT>
+   
+   <FONT COLOR=red><A NAME="20_4">NMT_SUPERSTATE_MASK</A></FONT>   : <b>constant</b> := 16#000F#;
+   <FONT COLOR=green><EM>-- mask to select state</EM></FONT>
+   
+   <FONT COLOR=red><A NAME="23_4">NMT_TYPE_UNDEFINED</A></FONT>    : <b>constant</b> := 16#0000#;
+   <FONT COLOR=green><EM>-- type of NMT state is still undefined</EM></FONT>
+   <FONT COLOR=red><A NAME="25_4">NMT_TYPE_CS</A></FONT>           : <b>constant</b> := 16#0100#;
+   <FONT COLOR=green><EM>-- CS type of NMT state</EM></FONT>
+   <FONT COLOR=red><A NAME="27_4">NMT_TYPE_MS</A></FONT>           : <b>constant</b> := 16#0200#;
+   <FONT COLOR=green><EM>-- MS type of NMT state</EM></FONT>
+   <FONT COLOR=red><A NAME="29_4">NMT_TYPE_MASK</A></FONT>         : <b>constant</b> := 16#0300#;
+   <FONT COLOR=green><EM>-- mask to select type of NMT state (i.e. CS or MS)   --  ./oplk/nmt.h:61</EM></FONT>
+
+
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief NMT states                                                         --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- The enumeration lists all valid NMT states.                              --</EM></FONT>
+<FONT COLOR=green><EM>-- The lower Byte of the NMT-State is encoded like the values in the        --</EM></FONT>
+<FONT COLOR=green><EM>-- POWERLINK standard. The higher byte is used to encode MN                 --</EM></FONT>
+<FONT COLOR=green><EM>-- (Bit 1 of the higher byte = 1) or CN (Bit 0 of the higher byte  = 1).    --</EM></FONT>
+<FONT COLOR=green><EM>-- The super-states are not mentioned in this enum because they are no real --</EM></FONT>
+<FONT COLOR=green><EM>-- states --&gt; there are masks defined to identify the super-states.         --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- The order of the states is important as it is used in the source code to --</EM></FONT>
+<FONT COLOR=green><EM>-- determine several things:                                                --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- state &gt; kMntGsResetConfiguration:  No reset state                        --</EM></FONT>
+<FONT COLOR=green><EM>-- state &gt;= kNmtMsNotActive:          Node is running as MN                 --</EM></FONT>
+<FONT COLOR=green><EM>-- state &lt; kNmtMsNotActive:           Node is running as CN                 --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="50_12">tNmtState</A></FONT> <b>is</b> unsigned;
+   kNmtGsOff                : <b>constant</b> <A HREF="oplk-nmt__ads.htm#50_12">tNmtState</A> := 0;
+   kNmtGsInitialising       : <b>constant</b> <A HREF="oplk-nmt__ads.htm#50_12">tNmtState</A> := 25;
+   kNmtGsResetApplication   : <b>constant</b> <A HREF="oplk-nmt__ads.htm#50_12">tNmtState</A> := 41;
+   kNmtGsResetCommunication : <b>constant</b> <A HREF="oplk-nmt__ads.htm#50_12">tNmtState</A> := 57;
+   kNmtGsResetConfiguration : <b>constant</b> <A HREF="oplk-nmt__ads.htm#50_12">tNmtState</A> := 121;
+   kNmtCsNotActive          : <b>constant</b> <A HREF="oplk-nmt__ads.htm#50_12">tNmtState</A> := 284;
+   kNmtCsPreOperational1    : <b>constant</b> <A HREF="oplk-nmt__ads.htm#50_12">tNmtState</A> := 285;
+   kNmtCsStopped            : <b>constant</b> <A HREF="oplk-nmt__ads.htm#50_12">tNmtState</A> := 333;
+   kNmtCsPreOperational2    : <b>constant</b> <A HREF="oplk-nmt__ads.htm#50_12">tNmtState</A> := 349;
+   kNmtCsReadyToOperate     : <b>constant</b> <A HREF="oplk-nmt__ads.htm#50_12">tNmtState</A> := 365;
+   kNmtCsOperational        : <b>constant</b> <A HREF="oplk-nmt__ads.htm#50_12">tNmtState</A> := 509;
+   kNmtCsBasicEthernet      : <b>constant</b> <A HREF="oplk-nmt__ads.htm#50_12">tNmtState</A> := 286;
+   kNmtMsNotActive          : <b>constant</b> <A HREF="oplk-nmt__ads.htm#50_12">tNmtState</A> := 540;
+   kNmtMsPreOperational1    : <b>constant</b> <A HREF="oplk-nmt__ads.htm#50_12">tNmtState</A> := 541;
+   kNmtMsPreOperational2    : <b>constant</b> <A HREF="oplk-nmt__ads.htm#50_12">tNmtState</A> := 605;
+   kNmtMsReadyToOperate     : <b>constant</b> <A HREF="oplk-nmt__ads.htm#50_12">tNmtState</A> := 621;
+   kNmtMsOperational        : <b>constant</b> <A HREF="oplk-nmt__ads.htm#50_12">tNmtState</A> := 765;
+   kNmtMsBasicEthernet      : <b>constant</b> <A HREF="oplk-nmt__ads.htm#50_12">tNmtState</A> := 542;  <FONT COLOR=green><EM>-- ./oplk/nmt.h:104</EM></FONT>
+   
+
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief NMT events                                                         --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- This enumeration lists all valid NMT events.                             --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+
+   <FONT COLOR=green><EM>--   Events from DLL                                --</EM></FONT>
+   <FONT COLOR=green><EM>--   Events defined by the POWERLINK specification  --</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="79_12">tNmtEvent</A></FONT> <b>is</b> unsigned;
+   kNmtEventNoEvent              : <b>constant</b> <A HREF="oplk-nmt__ads.htm#79_12">tNmtEvent</A> := 0;
+   <FONT COLOR=green><EM>-- No event has occured</EM></FONT>
+   kNmtEventDllMePresTimeout     : <b>constant</b> <A HREF="oplk-nmt__ads.htm#79_12">tNmtEvent</A> := 2;
+   <FONT COLOR=green><EM>-- A PRes timeout event has occured on the MN</EM></FONT>
+   kNmtEventDllMeAsndTimeout     : <b>constant</b> <A HREF="oplk-nmt__ads.htm#79_12">tNmtEvent</A> := 3;
+   <FONT COLOR=green><EM>-- An ASnd timeout event has occured on the MN</EM></FONT>
+   kNmtEventDllMeSocTrig         : <b>constant</b> <A HREF="oplk-nmt__ads.htm#79_12">tNmtEvent</A> := 5;
+   <FONT COLOR=green><EM>-- An SoC trigger event has occured on the MN</EM></FONT>
+   kNmtEventDllMeSoaTrig         : <b>constant</b> <A HREF="oplk-nmt__ads.htm#79_12">tNmtEvent</A> := 6;
+   <FONT COLOR=green><EM>-- An SoA trigger event has occured on the MN</EM></FONT>
+   kNmtEventDllCeSoc             : <b>constant</b> <A HREF="oplk-nmt__ads.htm#79_12">tNmtEvent</A> := 7;
+   <FONT COLOR=green><EM>-- An SoC event has occured on the CN</EM></FONT>
+   kNmtEventDllCePreq            : <b>constant</b> <A HREF="oplk-nmt__ads.htm#79_12">tNmtEvent</A> := 8;
+   <FONT COLOR=green><EM>-- A PReq event has occured on the CN</EM></FONT>
+   kNmtEventDllCePres            : <b>constant</b> <A HREF="oplk-nmt__ads.htm#79_12">tNmtEvent</A> := 9;
+   <FONT COLOR=green><EM>-- A PRes event has occured on the CN</EM></FONT>
+   kNmtEventDllCeSoa             : <b>constant</b> <A HREF="oplk-nmt__ads.htm#79_12">tNmtEvent</A> := 10;
+   <FONT COLOR=green><EM>-- An SoA event has occured on the CN</EM></FONT>
+   kNmtEventDllCeAInv            : <b>constant</b> <A HREF="oplk-nmt__ads.htm#79_12">tNmtEvent</A> := 11;
+   <FONT COLOR=green><EM>-- An AInv event has occured on the CN</EM></FONT>
+   kNmtEventDllCeAsnd            : <b>constant</b> <A HREF="oplk-nmt__ads.htm#79_12">tNmtEvent</A> := 12;
+   <FONT COLOR=green><EM>-- An ASnd event has occured on the CN</EM></FONT>
+   kNmtEventDllCeFrameTimeout    : <b>constant</b> <A HREF="oplk-nmt__ads.htm#79_12">tNmtEvent</A> := 13;
+   <FONT COLOR=green><EM>-- A frame timeout has occured on the CN</EM></FONT>
+
+   <FONT COLOR=green><EM>--   Events triggered by NMT-Commands   --</EM></FONT>
+   kNmtEventSwReset              : <b>constant</b> <A HREF="oplk-nmt__ads.htm#79_12">tNmtEvent</A> := 16;
+   <FONT COLOR=green><EM>-- A SwReset event has occured (NMT_GT1, NMT_GT2, NMT_GT8)</EM></FONT>
+   kNmtEventResetNode            : <b>constant</b> <A HREF="oplk-nmt__ads.htm#79_12">tNmtEvent</A> := 17;
+   <FONT COLOR=green><EM>-- A ResetNode event has occured</EM></FONT>
+   kNmtEventResetCom             : <b>constant</b> <A HREF="oplk-nmt__ads.htm#79_12">tNmtEvent</A> := 18;
+   <FONT COLOR=green><EM>-- A ResetCommunication event has occured</EM></FONT>
+   kNmtEventResetConfig          : <b>constant</b> <A HREF="oplk-nmt__ads.htm#79_12">tNmtEvent</A> := 19;
+   <FONT COLOR=green><EM>-- A ResetConfiguration event has occured</EM></FONT>
+   kNmtEventEnterPreOperational2 : <b>constant</b> <A HREF="oplk-nmt__ads.htm#79_12">tNmtEvent</A> := 20;
+   <FONT COLOR=green><EM>-- An EnterPreOperational2 event has occured</EM></FONT>
+   kNmtEventEnableReadyToOperate : <b>constant</b> <A HREF="oplk-nmt__ads.htm#79_12">tNmtEvent</A> := 21;
+   <FONT COLOR=green><EM>-- An EnableReadyToOperate event has occured</EM></FONT>
+   kNmtEventStartNode            : <b>constant</b> <A HREF="oplk-nmt__ads.htm#79_12">tNmtEvent</A> := 22;
+   <FONT COLOR=green><EM>-- A StartNode event has occured (NMT_CT7)</EM></FONT>
+   kNmtEventStopNode             : <b>constant</b> <A HREF="oplk-nmt__ads.htm#79_12">tNmtEvent</A> := 23;
+   <FONT COLOR=green><EM>-- A StopNode event has occured</EM></FONT>
+
+   <FONT COLOR=green><EM>--   Events triggered by higher layer   --</EM></FONT>
+   kNmtEventEnterResetApp        : <b>constant</b> <A HREF="oplk-nmt__ads.htm#79_12">tNmtEvent</A> := 32;
+   <FONT COLOR=green><EM>-- An EnterResetApplication event has occured</EM></FONT>
+   kNmtEventEnterResetCom        : <b>constant</b> <A HREF="oplk-nmt__ads.htm#79_12">tNmtEvent</A> := 33;
+   <FONT COLOR=green><EM>-- An EnterResetCommunication event has occured</EM></FONT>
+   kNmtEventInternComError       : <b>constant</b> <A HREF="oplk-nmt__ads.htm#79_12">tNmtEvent</A> := 34;
+   <FONT COLOR=green><EM>-- An internal communication error has occured</EM></FONT>
+   <FONT COLOR=green><EM>-- (NMT_GT6 -&gt; enter ResetCommunication)</EM></FONT>
+   kNmtEventEnterResetConfig     : <b>constant</b> <A HREF="oplk-nmt__ads.htm#79_12">tNmtEvent</A> := 35;
+   <FONT COLOR=green><EM>-- An EnterResetConfiguration event has occured</EM></FONT>
+   kNmtEventEnterCsNotActive     : <b>constant</b> <A HREF="oplk-nmt__ads.htm#79_12">tNmtEvent</A> := 36;
+   <FONT COLOR=green><EM>-- An EnterCsNotActive event has occured</EM></FONT>
+   kNmtEventEnterMsNotActive     : <b>constant</b> <A HREF="oplk-nmt__ads.htm#79_12">tNmtEvent</A> := 37;
+   <FONT COLOR=green><EM>-- An EnterMsNotActive event has occured</EM></FONT>
+   kNmtEventTimerBasicEthernet   : <b>constant</b> <A HREF="oplk-nmt__ads.htm#79_12">tNmtEvent</A> := 38;
+   <FONT COLOR=green><EM>-- NMT_CT3; timer triggered state change (NotActive -&gt; BasicEth)</EM></FONT>
+   kNmtEventTimerMsPreOp1        : <b>constant</b> <A HREF="oplk-nmt__ads.htm#79_12">tNmtEvent</A> := 39;
+   <FONT COLOR=green><EM>-- enter PreOp1 on MN (NotActive -&gt; MsPreOp1)</EM></FONT>
+   kNmtEventNmtCycleError        : <b>constant</b> <A HREF="oplk-nmt__ads.htm#79_12">tNmtEvent</A> := 40;
+   <FONT COLOR=green><EM>-- NMT_CT11, NMT_MT6; error during cycle -&gt; enter PreOp1</EM></FONT>
+   kNmtEventTimerMsPreOp2        : <b>constant</b> <A HREF="oplk-nmt__ads.htm#79_12">tNmtEvent</A> := 41;
+   <FONT COLOR=green><EM>-- enter PreOp2 on MN (MsPreOp1 -&gt; MsPreOp2 if kNmtEventAllMandatoryCNIdent)</EM></FONT>
+   kNmtEventAllMandatoryCNIdent  : <b>constant</b> <A HREF="oplk-nmt__ads.htm#79_12">tNmtEvent</A> := 42;
+   <FONT COLOR=green><EM>-- enter PreOp2 on MN if kNmtEventTimerMsPreOp2</EM></FONT>
+   kNmtEventEnterReadyToOperate  : <b>constant</b> <A HREF="oplk-nmt__ads.htm#79_12">tNmtEvent</A> := 43;
+   <FONT COLOR=green><EM>-- application ready for the state ReadyToOp</EM></FONT>
+   kNmtEventEnterMsOperational   : <b>constant</b> <A HREF="oplk-nmt__ads.htm#79_12">tNmtEvent</A> := 44;
+   <FONT COLOR=green><EM>-- enter Operational on MN</EM></FONT>
+   kNmtEventSwitchOff            : <b>constant</b> <A HREF="oplk-nmt__ads.htm#79_12">tNmtEvent</A> := 45;
+   <FONT COLOR=green><EM>-- enter state Off</EM></FONT>
+   kNmtEventCriticalError        : <b>constant</b> <A HREF="oplk-nmt__ads.htm#79_12">tNmtEvent</A> := 46;
+   <FONT COLOR=green><EM>-- enter state Off because of critical error -- ./oplk/nmt.h:157</EM></FONT>
+   
+
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief NMT state change event                                             --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- This structure defines the NMT state change event.                       --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="162_9">tEventNmtStateChange</A></FONT> <b>is</b> <b>record</b>
+      newNmtState : <b>aliased</b> <A HREF="oplk-nmt__ads.htm#50_12">tNmtState</A>;
+      <FONT COLOR=green><EM>-- New NMT state</EM></FONT>
+      oldNmtState : <b>aliased</b> <A HREF="oplk-nmt__ads.htm#50_12">tNmtState</A>;
+      <FONT COLOR=green><EM>-- Old NMT state</EM></FONT>
+      nmtEvent    : <b>aliased</b> <A HREF="oplk-nmt__ads.htm#79_12">tNmtEvent</A>;
+      <FONT COLOR=green><EM>-- NMT event</EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention
+     (C_Pass_By_Copy, <A HREF="oplk-nmt__ads.htm#162_9">tEventNmtStateChange</A>);  <FONT COLOR=green><EM>-- ./oplk/nmt.h:169</EM></FONT>
+   
+
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief Heartbeat event                                                    --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- This structure defines the heartbeat event.                              --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="179_9">tHeartbeatEvent</A></FONT> <b>is</b> <b>record</b>
+      nodeId    : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Node ID</EM></FONT>
+      nmtState  : <b>aliased</b> <A HREF="oplk-nmt__ads.htm#50_12">tNmtState</A>;
+      <FONT COLOR=green><EM>-- NMT state (remember distinguish between MN / CN)</EM></FONT>
+      errorCode : <b>aliased</b> unsigned_short;
+      <FONT COLOR=green><EM>-- POWERLINK error code in case of NMT state NotActive</EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-nmt__ads.htm#179_9">tHeartbeatEvent</A>);  <FONT COLOR=green><EM>-- ./oplk/nmt.h:181</EM></FONT>
+   
+
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief Node events                                                        --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- The enumeration lists the valid node events.                             --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="195_9">tNmtNodeEvent</A></FONT> <b>is</b>
+     (kNmtNodeEventFound,
+   <FONT COLOR=green><EM>-- A configured node has been found.</EM></FONT>
+      kNmtNodeEventUpdateSw,
+   <FONT COLOR=green><EM>-- The application shall update the software on the CN.</EM></FONT>
+      kNmtNodeEventCheckConf,
+   <FONT COLOR=green><EM>-- The application / Configuration Manager shall check and update the</EM></FONT>
+   <FONT COLOR=green><EM>-- configuration on the CN.</EM></FONT>
+      kNmtNodeEventUpdateConf,
+   <FONT COLOR=green><EM>-- The application / Configuration Manager shall update the</EM></FONT>
+   <FONT COLOR=green><EM>-- configuration on the CN (check was done by NmtMn module).</EM></FONT>
+      kNmtNodeEventVerifyConf,
+   <FONT COLOR=green><EM>-- The application / Configuration Manager shall verify the</EM></FONT>
+   <FONT COLOR=green><EM>-- configuration of the CN.</EM></FONT>
+      kNmtNodeEventReadyToStart,
+   <FONT COLOR=green><EM>-- Issued if NMT_STARTUP_NO_STARTNODE set, application must call</EM></FONT>
+   <FONT COLOR=green><EM>-- oplk_execNmtCommand(kErrorNmtCmdStartNode) manually.</EM></FONT>
+      kNmtNodeEventNmtState,
+   <FONT COLOR=green><EM>-- Issued if the NMT state of the CN has changed.</EM></FONT>
+      KNmtNodeEventError
+   <FONT COLOR=green><EM>-- NMT error of the CN.</EM></FONT>
+   );
+   <b>pragma</b> Convention (C, <A HREF="oplk-nmt__ads.htm#195_9">tNmtNodeEvent</A>);  <FONT COLOR=green><EM>-- ./oplk/nmt.h:199</EM></FONT>
+   
+
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief NMT node commands</EM></FONT>
+<FONT COLOR=green><EM>--</EM></FONT>
+<FONT COLOR=green><EM>-- This enumeration lists all valid NMT node commands.</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="225_12">tNmtNodeCommand</A></FONT> <b>is</b> unsigned;
+   kNmtNodeCommandBoot         : <b>constant</b> <A HREF="oplk-nmt__ads.htm#225_12">tNmtNodeCommand</A> := 1;
+   <FONT COLOR=green><EM>-- If NMT_NODEASSIGN_START_CN is not set,</EM></FONT>
+   <FONT COLOR=green><EM>-- this command must be issued after kNmtNodeEventFound.</EM></FONT>
+   kNmtNodeCommandSwOk         : <b>constant</b> <A HREF="oplk-nmt__ads.htm#225_12">tNmtNodeCommand</A> := 2;
+   <FONT COLOR=green><EM>-- The application has verified the software on the CN to be fine.</EM></FONT>
+   kNmtNodeCommandSwUpdated    : <b>constant</b> <A HREF="oplk-nmt__ads.htm#225_12">tNmtNodeCommand</A> := 3;
+   <FONT COLOR=green><EM>-- The application has successfully updated the software on the CN.</EM></FONT>
+   kNmtNodeCommandConfOk       : <b>constant</b> <A HREF="oplk-nmt__ads.htm#225_12">tNmtNodeCommand</A> := 4;
+   <FONT COLOR=green><EM>-- The application / Configuration Manager has successfully updated the</EM></FONT>
+   <FONT COLOR=green><EM>-- configuration on the CN.</EM></FONT>
+   kNmtNodeCommandConfRestored : <b>constant</b> <A HREF="oplk-nmt__ads.htm#225_12">tNmtNodeCommand</A> := 5;
+   <FONT COLOR=green><EM>-- The application / Configuration Manager has restored the original</EM></FONT>
+   <FONT COLOR=green><EM>-- CN configuration, and the CN needs a ResetNode to complete the</EM></FONT>
+   <FONT COLOR=green><EM>-- restore process. Afterwards, the new configuration can be downloaded.</EM></FONT>
+   kNmtNodeCommandConfReset    : <b>constant</b> <A HREF="oplk-nmt__ads.htm#225_12">tNmtNodeCommand</A> := 6;
+   <FONT COLOR=green><EM>-- The application / Configuration Manager has successfully updated the</EM></FONT>
+   <FONT COLOR=green><EM>-- configuration on the CN, and the CN needs ResetConf so that the</EM></FONT>
+   <FONT COLOR=green><EM>-- configuration gets activated.</EM></FONT>
+   kNmtNodeCommandConfErr      : <b>constant</b> <A HREF="oplk-nmt__ads.htm#225_12">tNmtNodeCommand</A> := 7;
+   <FONT COLOR=green><EM>-- The application / Configuration Manager failed on updating configuration</EM></FONT>
+   <FONT COLOR=green><EM>-- on the CN.</EM></FONT>
+   kNmtNodeCommandStart        : <b>constant</b> <A HREF="oplk-nmt__ads.htm#225_12">tNmtNodeCommand</A> := 8;
+<FONT COLOR=green><EM>-- If NMT_STARTUP_NO_STARTNODE is set, this command must be issued after</EM></FONT>
+<FONT COLOR=green><EM>-- kNmtNodeEventReadyToStart.                             -- ./oplk/nmt.h:216</EM></FONT>
+   
+
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief NMT boot events                                                    --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- This enumeration lists all valid NMT boot events.                        --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="257_9">tNmtBootEvent</A></FONT> <b>is</b>
+     (kNmtBootEventBootStep1Finish,
+   <FONT COLOR=green><EM>-- PreOp2 is possible</EM></FONT>
+      kNmtBootEventBootStep2Finish,
+   <FONT COLOR=green><EM>-- ReadyToOp is possible for MN</EM></FONT>
+      kNmtBootEventEnableReadyToOp,
+   <FONT COLOR=green><EM>-- ReadyToOP is possible for CN</EM></FONT>
+      kNmtBootEventCheckComFinish,
+   <FONT COLOR=green><EM>-- Operational is possible</EM></FONT>
+      kNmtBootEventOperational,
+   <FONT COLOR=green><EM>--all mandatory CNs are Operational</EM></FONT>
+      KNmtBootEventError
+   <FONT COLOR=green><EM>-- boot process halted because of an error</EM></FONT>
+   );
+   <b>pragma</b> Convention (C, <A HREF="oplk-nmt__ads.htm#257_9">tNmtBootEvent</A>);  <FONT COLOR=green><EM>-- ./oplk/nmt.h:231</EM></FONT>
+
+<b>end</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-nmt__ads.htm#6_14">nmt</A>;
+</PRE></BODY></HTML>

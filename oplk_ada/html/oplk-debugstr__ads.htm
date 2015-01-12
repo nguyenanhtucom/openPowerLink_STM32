@@ -1,0 +1,160 @@
+<HEAD><TITLE>oplk-debugstr.ads</TITLE></HEAD>
+<BODY>
+<HR><DIV ALIGN="center"><H1> File : oplk-debugstr.ads </H1></DIV><HR>
+<PRE>
+
+<FONT COLOR=green><EM>-- This file contains the definitions for the debug-string module.</EM></FONT>
+
+<b>pragma</b> Ada_2005;
+<b>pragma</b> Style_Checks (Off);
+
+<b>with</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C; <b>use</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C;
+<b>with</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-nmt__ads.htm#6_14">Nmt</A>;
+<b>with</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C.Strings;
+<b>with</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-event__ads.htm#13_14">Event</A>;
+<b>with</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-oplk__ads.htm#22_14">Oplk</A>;
+<b>with</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-sdo__ads.htm#11_14">Sdo</A>;
+<b>with</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-errordefs__ads.htm#9_14">Errordefs</A>;
+
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--           Public Functions from debugstr.c                               --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+
+<b>package</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<FONT COLOR=red><A NAME="19_14">Debugstr</A></FONT> <b>is</b>
+   
+   
+   <b>function</b> <A HREF="oplk-debugstr__ads.htm#30_10">debugstr_getNmtEventStr</A><FONT COLOR=red><A NAME="22_13"></A></FONT> 
+     (nmtEvent_p : <A HREF="oplk-nmt__ads.htm#6_14">Nmt</A>.<A HREF="oplk-nmt__ads.htm#79_12">tNmtEvent</A>) 
+     <b>return</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C.Strings.chars_ptr;
+   <FONT COLOR=green><EM>-- nmtEvent_p : Event to print</EM></FONT>
+   <FONT COLOR=green><EM>-- The function returns a string describing the specified event.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function returns the string describing the specified event.</EM></FONT>
+   <b>pragma</b> Import 
+     (C, <A HREF="oplk-debugstr__ads.htm#22_13">debugstr_getNmtEventStr</A><FONT COLOR=red><A NAME="30_10"></A></FONT>, "debugstr_getNmtEventStr");  <FONT COLOR=green><EM>-- oplk/debugstr.h:64</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-debugstr__ads.htm#41_10">debugstr_getEventTypeStr</A><FONT COLOR=red><A NAME="33_13"></A></FONT> 
+     (eventType_p : <A HREF="oplk-event__ads.htm#13_14">Event</A>.<A HREF="oplk-event__ads.htm#23_12">tEventType</A>) 
+     <b>return</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C.Strings.chars_ptr;
+   <FONT COLOR=green><EM>-- eventType_p : Event type to print</EM></FONT>
+   <FONT COLOR=green><EM>-- The function returns a string describing the specified event type.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- Return the string of the specified event type</EM></FONT>
+   <b>pragma</b> Import 
+     (C, <A HREF="oplk-debugstr__ads.htm#33_13">debugstr_getEventTypeStr</A><FONT COLOR=red><A NAME="41_10"></A></FONT>, "debugstr_getEventTypeStr");  <FONT COLOR=green><EM>-- oplk/debugstr.h:65</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-debugstr__ads.htm#52_10">debugstr_getEventSourceStr</A><FONT COLOR=red><A NAME="44_13"></A></FONT> 
+     (eventSrc_p : <A HREF="oplk-event__ads.htm#13_14">Event</A>.<A HREF="oplk-event__ads.htm#156_12">tEventSource</A>) 
+     <b>return</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C.Strings.chars_ptr;
+   <FONT COLOR=green><EM>-- eventType_p : Event source to print</EM></FONT>
+   <FONT COLOR=green><EM>-- The function returns a string describing the specified event source.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- Return the string of the specified event source</EM></FONT>
+   <b>pragma</b> Import 
+     (C, <A HREF="oplk-debugstr__ads.htm#44_13">debugstr_getEventSourceStr</A><FONT COLOR=red><A NAME="52_10"></A></FONT>, "debugstr_getEventSourceStr");  <FONT COLOR=green><EM>-- oplk/debugstr.h:66</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-debugstr__ads.htm#63_10">debugstr_getEventSinkStr</A><FONT COLOR=red><A NAME="55_13"></A></FONT> 
+     (eventSink_p : <A HREF="oplk-event__ads.htm#13_14">Event</A>.<A HREF="oplk-event__ads.htm#114_12">tEventSink</A>) 
+     <b>return</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C.Strings.chars_ptr;
+   <FONT COLOR=green><EM>-- eventSink_p : Event sink to print</EM></FONT>
+   <FONT COLOR=green><EM>-- The function returns a string describing the specified event sink.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- Return the string of the specified event sink</EM></FONT>
+   <b>pragma</b> Import 
+     (C, <A HREF="oplk-debugstr__ads.htm#55_13">debugstr_getEventSinkStr</A><FONT COLOR=red><A NAME="63_10"></A></FONT>, "debugstr_getEventSinkStr");  <FONT COLOR=green><EM>-- oplk/debugstr.h:67</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-debugstr__ads.htm#74_10">debugstr_getNmtStateStr</A><FONT COLOR=red><A NAME="66_13"></A></FONT> 
+     (nmtState_p : <A HREF="oplk-nmt__ads.htm#6_14">Nmt</A>.<A HREF="oplk-nmt__ads.htm#50_12">tNmtState</A>) 
+     <b>return</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C.Strings.chars_ptr;
+   <FONT COLOR=green><EM>-- nmtState_p : NMT state to print</EM></FONT>
+   <FONT COLOR=green><EM>-- The function returns a string describing the specified NMT state.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- Return the string of the specified NMT state</EM></FONT>
+   <b>pragma</b> Import 
+     (C, <A HREF="oplk-debugstr__ads.htm#66_13">debugstr_getNmtStateStr</A><FONT COLOR=red><A NAME="74_10"></A></FONT>, "debugstr_getNmtStateStr");  <FONT COLOR=green><EM>-- oplk/debugstr.h:68</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-debugstr__ads.htm#85_10">debugstr_getApiEventStr</A><FONT COLOR=red><A NAME="77_13"></A></FONT> 
+     (ApiEvent_p : <A HREF="oplk-oplk__ads.htm#22_14">Oplk</A>.<A HREF="oplk-oplk__ads.htm#242_12">tOplkApiEventType</A>) 
+     <b>return</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C.Strings.chars_ptr;
+   <FONT COLOR=green><EM>-- ApiEvent_p : API event to print</EM></FONT>
+   <FONT COLOR=green><EM>-- The function returns a string describing the specified API event.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- Return the string of the specified API event</EM></FONT>
+   <b>pragma</b> Import 
+     (C, <A HREF="oplk-debugstr__ads.htm#77_13">debugstr_getApiEventStr</A><FONT COLOR=red><A NAME="85_10"></A></FONT>, "debugstr_getApiEventStr");  <FONT COLOR=green><EM>-- oplk/debugstr.h:69</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-debugstr__ads.htm#96_10">debugstr_getNmtNodeEventTypeStr</A><FONT COLOR=red><A NAME="88_13"></A></FONT> 
+     (NodeEventType_p : <A HREF="oplk-nmt__ads.htm#6_14">Nmt</A>.<A HREF="oplk-nmt__ads.htm#195_9">tNmtNodeEvent</A>) 
+     <b>return</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C.Strings.chars_ptr;
+   <FONT COLOR=green><EM>-- NodeEventType_p : NMT node event to print</EM></FONT>
+   <FONT COLOR=green><EM>-- The function returns a string describing the specified NMT node event.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- Return the string of the specified NMT node event</EM></FONT>
+   <b>pragma</b> Import 
+     (C, <A HREF="oplk-debugstr__ads.htm#88_13">debugstr_getNmtNodeEventTypeStr</A><FONT COLOR=red><A NAME="96_10"></A></FONT>, "debugstr_getNmtNodeEventTypeStr");  <FONT COLOR=green><EM>-- oplk/debugstr.h:70</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-debugstr__ads.htm#107_10">debugstr_getNmtBootEventTypeStr</A><FONT COLOR=red><A NAME="99_13"></A></FONT> 
+     (BootEventType_p : <A HREF="oplk-nmt__ads.htm#6_14">Nmt</A>.<A HREF="oplk-nmt__ads.htm#257_9">tNmtBootEvent</A>) 
+     <b>return</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C.Strings.chars_ptr;
+   <FONT COLOR=green><EM>-- BootEventType_p : NMT boot event to print</EM></FONT>
+   <FONT COLOR=green><EM>-- The function returns a string describing the specified NMT boot event.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- Return the string of the specified NMT boot event</EM></FONT>
+   <b>pragma</b> Import 
+     (C, <A HREF="oplk-debugstr__ads.htm#99_13">debugstr_getNmtBootEventTypeStr</A><FONT COLOR=red><A NAME="107_10"></A></FONT>, "debugstr_getNmtBootEventTypeStr");  <FONT COLOR=green><EM>-- oplk/debugstr.h:71</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-debugstr__ads.htm#119_10">debugstr_getSdoComConStateStr</A><FONT COLOR=red><A NAME="110_13"></A></FONT> 
+     (SdoComConState_p : <A HREF="oplk-sdo__ads.htm#11_14">Sdo</A>.<A HREF="oplk-sdo__ads.htm#46_9">tSdoComConState</A>) 
+     <b>return</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C.Strings.chars_ptr;
+   <FONT COLOR=green><EM>-- SdoComConState_p : SDO command connection state to print</EM></FONT>
+   <FONT COLOR=green><EM>-- The function returns a string describing the specified SDO command</EM></FONT>
+   <FONT COLOR=green><EM>-- connection state.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- Return the string of the specified SDO command connection state</EM></FONT>
+   <b>pragma</b> Import 
+     (C, <A HREF="oplk-debugstr__ads.htm#110_13">debugstr_getSdoComConStateStr</A><FONT COLOR=red><A NAME="119_10"></A></FONT>, "debugstr_getSdoComConStateStr");  <FONT COLOR=green><EM>-- oplk/debugstr.h:72</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-debugstr__ads.htm#130_10">debugstr_getRetValStr</A><FONT COLOR=red><A NAME="122_13"></A></FONT> 
+     (OplkError_p : <A HREF="oplk-errordefs__ads.htm#9_14">Errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>) 
+     <b>return</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C.Strings.chars_ptr;
+   <FONT COLOR=green><EM>-- OplkError_p : tOplkError value to print</EM></FONT>
+   <FONT COLOR=green><EM>-- The function returns a string describing the specified tOplkError type.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- Return the string of the specified SDO command connection state</EM></FONT>
+   <b>pragma</b> Import 
+     (C, <A HREF="oplk-debugstr__ads.htm#122_13">debugstr_getRetValStr</A><FONT COLOR=red><A NAME="130_10"></A></FONT>, "debugstr_getRetValStr");  <FONT COLOR=green><EM>-- oplk/debugstr.h:73</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-debugstr__ads.htm#141_10">debugstr_getEmergErrCodeStr</A><FONT COLOR=red><A NAME="133_13"></A></FONT> 
+     (EmergErrCode_p : unsigned_short) 
+     <b>return</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C.Strings.chars_ptr;
+   <FONT COLOR=green><EM>-- EmergErrCode_p : Emergency error code value to print</EM></FONT>
+   <FONT COLOR=green><EM>-- The function returns a string describing the specified emergency error code.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- Return the string describing the specified emergency error code</EM></FONT>
+   <b>pragma</b> Import 
+     (C, <A HREF="oplk-debugstr__ads.htm#133_13">debugstr_getEmergErrCodeStr</A><FONT COLOR=red><A NAME="141_10"></A></FONT>, "debugstr_getEmergErrCodeStr");  <FONT COLOR=green><EM>-- oplk/debugstr.h:74</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-debugstr__ads.htm#152_10">debugstr_getAbortCodeStr</A><FONT COLOR=red><A NAME="144_13"></A></FONT> 
+     (abortCode_p : unsigned) 
+     <b>return</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C.Strings.chars_ptr;
+   <FONT COLOR=green><EM>-- abortCode_p : Abort code value to print</EM></FONT>
+   <FONT COLOR=green><EM>-- The function returns a string describing the specified abort code.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- Return the string describing the specified abort code</EM></FONT>
+   <b>pragma</b> Import 
+     (C, <A HREF="oplk-debugstr__ads.htm#144_13">debugstr_getAbortCodeStr</A><FONT COLOR=red><A NAME="152_10"></A></FONT>, "debugstr_getAbortCodeStr");  <FONT COLOR=green><EM>-- oplk/debugstr.h:75</EM></FONT>
+
+<b>end</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-debugstr__ads.htm#19_14">Debugstr</A>;
+
+</PRE></BODY></HTML>

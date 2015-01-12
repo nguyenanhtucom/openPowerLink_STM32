@@ -1,0 +1,56 @@
+<HEAD><TITLE>oplk-oplkinc.ads</TITLE></HEAD>
+<BODY>
+<HR><DIV ALIGN="center"><H1> File : oplk-oplkinc.ads </H1></DIV><HR>
+<PRE>
+<FONT COLOR=green><EM>--\brief  Standard include file for public headers.</EM></FONT>
+
+<b>pragma</b> Ada_2005;
+<b>pragma</b> Style_Checks (Off);
+
+<b>with</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C; <b>use</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C;
+<b>with</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C.Strings;
+
+<b>package</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<FONT COLOR=red><A NAME="9_14">oplkinc</A></FONT> <b>is</b>
+
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief  IEEE 1588 conforming net time structure                           --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- The structure defines an IEEE 1588 conforming net time.                  --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="16_9">tNetTime</A></FONT> <b>is</b> <b>record</b>
+      sec  : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Seconds</EM></FONT>
+      nsec : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Nanoseconds</EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-oplkinc__ads.htm#16_9">tNetTime</A>);  <FONT COLOR=green><EM>-- ./oplk/oplkinc.h:69</EM></FONT>
+
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief Hardware parameter structure                                       --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- The following structure specifies the hardware parameters of an          --</EM></FONT>
+<FONT COLOR=green><EM>-- openPOWERLINK Ethernet controller.                                       --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="30_9">tHwParam</A></FONT> <b>is</b> <b>record</b>
+      devNum   : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Device number of the used Ethernet controller</EM></FONT>
+      pDevName : <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C.Strings.chars_ptr;
+      <FONT COLOR=green><EM>-- Device name of the Ethernet controller (valid if non-null)</EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-oplkinc__ads.htm#30_9">tHwParam</A>);  <FONT COLOR=green><EM>-- ./oplk/oplkinc.h:81</EM></FONT>
+
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief Time of day structure                                              --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- The following structure defines a CANopen time-of-day format.            --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="43_9">tTimeOfDay</A></FONT> <b>is</b> <b>record</b>
+      msec : <b>aliased</b> unsigned_long;
+      <FONT COLOR=green><EM>-- Milliseconds after midnight</EM></FONT>
+      days : <b>aliased</b> unsigned_short;
+      <FONT COLOR=green><EM>-- Days since January the 1st, 1984</EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-oplkinc__ads.htm#43_9">tTimeOfDay</A>);  <FONT COLOR=green><EM>-- ./oplk/oplkinc.h:93</EM></FONT>
+
+<b>end</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-oplkinc__ads.htm#9_14">oplkinc</A>;
+</PRE></BODY></HTML>

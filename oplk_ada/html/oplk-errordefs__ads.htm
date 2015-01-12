@@ -1,0 +1,415 @@
+<HEAD><TITLE>oplk-errordefs.ads</TITLE></HEAD>
+<BODY>
+<HR><DIV ALIGN="center"><H1> File : oplk-errordefs.ads </H1></DIV><HR>
+<PRE>
+<FONT COLOR=green><EM>--  \brief  openPOWERLINK error definitions</EM></FONT>
+<FONT COLOR=green><EM>--    Definitions of return values and errors.</EM></FONT>
+
+<b>pragma</b> Ada_2005;
+<b>pragma</b> Style_Checks (Off);
+
+<b>with</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C; <b>use</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C;
+
+<b>package</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<FONT COLOR=red><A NAME="9_14">errordefs</A></FONT> <b>is</b>
+   
+   <FONT COLOR=green><EM>--   Emergency error codes   --</EM></FONT>
+   <FONT COLOR=red><A NAME="12_4">E_NO_ERROR</A></FONT>          : <b>constant</b> := 16#0000#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   
+   <FONT COLOR=green><EM>--   0xFxxx manufacturer specific error codes   ---</EM></FONT>
+   <FONT COLOR=red><A NAME="16_4">E_NMT_NO_IDENT_RES</A></FONT>  : <b>constant</b> := 16#F001#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=red><A NAME="18_4">E_NMT_NO_STATUS_RES</A></FONT> : <b>constant</b> := 16#F002#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   
+   <FONT COLOR=green><EM>--   0x816x HW errors   --</EM></FONT>
+   <FONT COLOR=red><A NAME="22_4">E_DLL_BAD_PHYS_MODE</A></FONT>     : <b>constant</b> := 16#8161#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=red><A NAME="24_4">E_DLL_COLLISION</A></FONT>         : <b>constant</b> := 16#8162#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=red><A NAME="26_4">E_DLL_COLLISION_TH</A></FONT>      : <b>constant</b> := 16#8163#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=red><A NAME="28_4">E_DLL_CRC_TH</A></FONT>            : <b>constant</b> := 16#8164#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=red><A NAME="30_4">E_DLL_LOSS_OF_LINK</A></FONT>      : <b>constant</b> := 16#8165#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=red><A NAME="32_4">E_DLL_MAC_BUFFER</A></FONT>        : <b>constant</b> := 16#8166#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   
+   <FONT COLOR=green><EM>--   0x82xx Protocol errors   --</EM></FONT>
+   <FONT COLOR=red><A NAME="36_4">E_DLL_ADDRESS_CONFLICT</A></FONT>  : <b>constant</b> := 16#8201#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=red><A NAME="38_4">E_DLL_MULTIPLE_MN</A></FONT>       : <b>constant</b> := 16#8202#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   
+   <FONT COLOR=green><EM>--   0x821x Frame size errors   --</EM></FONT>
+   <FONT COLOR=red><A NAME="42_4">E_PDO_SHORT_RX</A></FONT>          : <b>constant</b> := 16#8210#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=red><A NAME="44_4">E_PDO_MAP_VERS</A></FONT>          : <b>constant</b> := 16#8211#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=red><A NAME="46_4">E_NMT_ASND_MTU_DIF</A></FONT>      : <b>constant</b> := 16#8212#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=red><A NAME="48_4">E_NMT_ASND_MTU_LIM</A></FONT>      : <b>constant</b> := 16#8213#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=red><A NAME="50_4">E_NMT_ASND_TX_LIM</A></FONT>       : <b>constant</b> := 16#8214#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   
+   <FONT COLOR=green><EM>--   0x823x Timing errors   --</EM></FONT>
+   <FONT COLOR=red><A NAME="54_4">E_NMT_CYCLE_LEN</A></FONT>         : <b>constant</b> := 16#8231#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=red><A NAME="56_4">E_DLL_CYCLE_EXCEED</A></FONT>      : <b>constant</b> := 16#8232#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=red><A NAME="58_4">E_DLL_CYCLE_EXCEED_TH</A></FONT>   : <b>constant</b> := 16#8233#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=red><A NAME="60_4">E_NMT_IDLE_LIM</A></FONT>          : <b>constant</b> := 16#8234#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=red><A NAME="62_4">E_DLL_JITTER_TH</A></FONT>         : <b>constant</b> := 16#8235#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=red><A NAME="64_4">E_DLL_LATE_PRES_TH</A></FONT>      : <b>constant</b> := 16#8236#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=red><A NAME="66_4">E_NMT_PREQ_CN</A></FONT>           : <b>constant</b> := 16#8237#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=red><A NAME="68_4">E_NMT_PREQ_LIM</A></FONT>          : <b>constant</b> := 16#8238#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=red><A NAME="70_4">E_NMT_PRES_CN</A></FONT>           : <b>constant</b> := 16#8239#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=red><A NAME="72_4">E_NMT_PRES_RX_LIM</A></FONT>       : <b>constant</b> := 16#823A#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=red><A NAME="74_4">E_NMT_PRES_TX_LIM</A></FONT>       : <b>constant</b> := 16#823B#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   
+   <FONT COLOR=green><EM>--   0x824x Frame errors   --</EM></FONT>
+   <FONT COLOR=red><A NAME="78_4">E_DLL_INVALID_FORMAT</A></FONT>    : <b>constant</b> := 16#8241#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=red><A NAME="80_4">E_DLL_LOSS_PREQ_TH</A></FONT>      : <b>constant</b> := 16#8242#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=red><A NAME="82_4">E_DLL_LOSS_PRES_TH</A></FONT>      : <b>constant</b> := 16#8243#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=red><A NAME="84_4">E_DLL_LOSS_SOA_TH</A></FONT>       : <b>constant</b> := 16#8244#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=red><A NAME="86_4">E_DLL_LOSS_SOC_TH</A></FONT>       : <b>constant</b> := 16#8245#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   
+   <FONT COLOR=green><EM>--   0x84xx BootUp Errors   --</EM></FONT>
+   <FONT COLOR=red><A NAME="90_4">E_NMT_BA1</A></FONT>               : <b>constant</b> := 16#8410#;
+   <FONT COLOR=green><EM>-- other MN in MsNotActive active</EM></FONT>
+   <FONT COLOR=red><A NAME="92_4">E_NMT_BA1_NO_MN_SUPPORT</A></FONT> : <b>constant</b> := 16#8411#;
+   <FONT COLOR=green><EM>-- MN is not supported</EM></FONT>
+   <FONT COLOR=red><A NAME="94_4">E_NMT_BPO1</A></FONT>              : <b>constant</b> := 16#8420#;
+   <FONT COLOR=green><EM>-- mandatory CN was not found or failed in BootStep1</EM></FONT>
+   <FONT COLOR=red><A NAME="96_4">E_NMT_BPO1_GET_IDENT</A></FONT>    : <b>constant</b> := 16#8421#;
+   <FONT COLOR=green><EM>-- IdentRes was not received</EM></FONT>
+   <FONT COLOR=red><A NAME="98_4">E_NMT_BPO1_DEVICE_TYPE</A></FONT>  : <b>constant</b> := 16#8422#;
+   <FONT COLOR=green><EM>-- wrong device type</EM></FONT>
+   <FONT COLOR=red><A NAME="100_4">E_NMT_BPO1_VENDOR_ID</A></FONT>    : <b>constant</b> := 16#8423#;
+   <FONT COLOR=green><EM>-- wrong vendor ID</EM></FONT>
+   <FONT COLOR=red><A NAME="102_4">E_NMT_BPO1_PRODUCT_CODE</A></FONT> : <b>constant</b> := 16#8424#;
+   <FONT COLOR=green><EM>-- wrong product code</EM></FONT>
+   <FONT COLOR=red><A NAME="104_4">E_NMT_BPO1_REVISION_NO</A></FONT>  : <b>constant</b> := 16#8425#;
+   <FONT COLOR=green><EM>-- wrong revision number</EM></FONT>
+   <FONT COLOR=red><A NAME="106_4">E_NMT_BPO1_SERIAL_NO</A></FONT>    : <b>constant</b> := 16#8426#;
+   <FONT COLOR=green><EM>-- wrong serial number</EM></FONT>
+   <FONT COLOR=red><A NAME="108_4">E_NMT_BPO1_CF_VERIFY</A></FONT>    : <b>constant</b> := 16#8428#;
+   <FONT COLOR=green><EM>-- verification of configuration failed</EM></FONT>
+   <FONT COLOR=red><A NAME="110_4">E_NMT_BPO2</A></FONT>              : <b>constant</b> := 16#8430#;
+   <FONT COLOR=green><EM>-- mandatory CN failed in BootStep2</EM></FONT>
+   <FONT COLOR=red><A NAME="112_4">E_NMT_BRO</A></FONT>               : <b>constant</b> := 16#8440#;
+   <FONT COLOR=green><EM>-- CheckCommunication failed for mandatory CN</EM></FONT>
+   <FONT COLOR=red><A NAME="114_4">E_NMT_WRONG_STATE</A></FONT>       : <b>constant</b> := 16#8480#;
+   <FONT COLOR=green><EM>-- mandatory CN has wrong NMT state</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief openPOWERLINK function error codes                                 --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- The following enumeration specifies the error codes for return values of --</EM></FONT>
+<FONT COLOR=green><EM>-- openPOWERLINK functions.                                                 --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="124_12">tOplkError</A></FONT> <b>is</b> unsigned;
+   
+   <FONT COLOR=green><EM>--   area for generic errors 0x0000 - 0x000F   --</EM></FONT>
+   kErrorOk                       : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 0;
+   <FONT COLOR=green><EM>-- No error/successful run</EM></FONT>
+   kErrorIllegalInstance          : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 1;
+   <FONT COLOR=green><EM>-- The called instance does not exist</EM></FONT>
+   kErrorInvalidInstanceParam     : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 2;
+   <FONT COLOR=green><EM>-- There was an invalid instance parameter</EM></FONT>
+   kErrorNoFreeInstance           : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 3;
+   <FONT COLOR=green><EM>-- XxxAddInstance was called but no free instance is available</EM></FONT>
+   kErrorWrongSignature           : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 4;
+   <FONT COLOR=green><EM>-- Wrong signature while writing to object 0x1010 or 0x1011</EM></FONT>
+   kErrorInvalidOperation         : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 5;
+   <FONT COLOR=green><EM>-- Operation is not allowed in this situation</EM></FONT>
+   kErrorInvalidNodeId            : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 7;
+   <FONT COLOR=green><EM>-- An invalid NodeId was specified</EM></FONT>
+   kErrorNoResource               : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 8;
+   <FONT COLOR=green><EM>-- The resource could not be created</EM></FONT>
+   kErrorShutdown                 : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 9;
+   <FONT COLOR=green><EM>-- Stack is shutting down</EM></FONT>
+   kErrorReject                   : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 10;
+   <FONT COLOR=green><EM>-- Reject the subsequent command</EM></FONT>
+   kErrorRetry                    : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 11;
+   <FONT COLOR=green><EM>-- Retry this command</EM></FONT>
+   kErrorInvalidEvent             : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 12;
+   <FONT COLOR=green><EM>-- Invalid event was posted</EM></FONT>
+   kErrorGeneralError             : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 13;
+   <FONT COLOR=green><EM>-- General error</EM></FONT>
+   kErrorFeatureMismatch          : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 14;
+   <FONT COLOR=green><EM>-- Features of user and kernel stack are mismatched</EM></FONT>
+   
+   <FONT COLOR=green><EM>--   area for EDRV module 0x0010 - 0x001F   --</EM></FONT>
+   kErrorEdrvNoFreeTxDesc         : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 17;
+   <FONT COLOR=green><EM>-- No free TX descriptor available</EM></FONT>
+   kErrorEdrvInvalidCycleLen      : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 18;
+   <FONT COLOR=green><EM>-- Invalid cycle length (e.g. 0)</EM></FONT>
+   kErrorEdrvInit                 : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 19;
+   <FONT COLOR=green><EM>-- Edrv initialization error</EM></FONT>
+   kErrorEdrvNoFreeBufEntry       : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 20;
+   <FONT COLOR=green><EM>-- No free entry in internal buffer table for TX frames</EM></FONT>
+   kErrorEdrvBufNotExisting       : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 21;
+   <FONT COLOR=green><EM>-- The specified TX buffer does not exist</EM></FONT>
+   kErrorEdrvInvalidRxBuf         : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 22;
+   <FONT COLOR=green><EM>-- The specified RX buffer is invalid</EM></FONT>
+   kErrorEdrvInvalidParam         : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 28;
+   <FONT COLOR=green><EM>-- Invalid parameter in function call</EM></FONT>
+   kErrorEdrvNextTxListNotEmpty   : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 29;
+   <FONT COLOR=green><EM>-- Next TX buffer list is not empty, i.e. still in use</EM></FONT>
+   kErrorEdrvCurTxListEmpty       : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 30;
+   <FONT COLOR=green><EM>-- Current TX buffer list is empty, i.e. DLL didn't provide one</EM></FONT>
+   kErrorEdrvTxListNotFinishedYet : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 31;
+   <FONT COLOR=green><EM>-- Current TX buffer list has not been finished yet, but new cycle has started</EM></FONT>
+   
+   <FONT COLOR=green><EM>--   area for DLL module 0x0020 - 0x002F   --</EM></FONT>
+   kErrorDllOutOfMemory           : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 33;
+   <FONT COLOR=green><EM>-- DLL is out of memory</EM></FONT>
+   kErrorDllIllegalHdl            : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 34;
+   <FONT COLOR=green><EM>-- Illegal handle for a TxFrame was passed</EM></FONT>
+   kErrorDllCbAsyncRegistered     : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 35;
+   <FONT COLOR=green><EM>-- Handler for non-POWERLINK frames was already registered before</EM></FONT>
+   kErrorDllAsyncSyncReqFull      : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 36;
+   <FONT COLOR=green><EM>-- The buffer for SyncRequests is full</EM></FONT>
+   kErrorDllAsyncTxBufferEmpty    : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 37;
+   <FONT COLOR=green><EM>-- The transmit buffer for asynchronous frames is empty</EM></FONT>
+   kErrorDllAsyncTxBufferFull     : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 38;
+   <FONT COLOR=green><EM>-- Transmit buffer for asynchronous frames is full</EM></FONT>
+   kErrorDllNoNodeInfo            : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 39;
+   <FONT COLOR=green><EM>-- MN: too less space in the internal node info structure</EM></FONT>
+   kErrorDllInvalidParam          : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 40;
+   <FONT COLOR=green><EM>-- Invalid parameters passed to DLL function</EM></FONT>
+   kErrorDllInvalidAsndServiceId  : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 41;
+   <FONT COLOR=green><EM>-- Invalid AsndServiceId specified</EM></FONT>
+   kErrorDllTxBufNotReady         : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 46;
+   <FONT COLOR=green><EM>-- TxBuffer (e.g. for PReq) is not ready yet</EM></FONT>
+   kErrorDllTxFrameInvalid        : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 47;
+   <FONT COLOR=green><EM>-- TxFrame (e.g. for PReq) is invalid or does not exist</EM></FONT>
+   
+   <FONT COLOR=green><EM>--   area for OBD module 0x0030 - 0x003F   --</EM></FONT>
+   kErrorObdIllegalPart           : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 48;
+   <FONT COLOR=green><EM>-- Unknown OD part</EM></FONT>
+   kErrorObdIndexNotExist         : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 49;
+   <FONT COLOR=green><EM>-- Object index does not exist in OD</EM></FONT>
+   kErrorObdSubindexNotExist      : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 50;
+   <FONT COLOR=green><EM>-- Sub-index does not exist in object index</EM></FONT>
+   kErrorObdReadViolation         : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 51;
+   <FONT COLOR=green><EM>-- Read access to a write-only object</EM></FONT>
+   kErrorObdWriteViolation        : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 52;
+   <FONT COLOR=green><EM>-- Write access to a read-only object</EM></FONT>
+   kErrorObdAccessViolation       : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 53;
+   <FONT COLOR=green><EM>-- Access not allowed</EM></FONT>
+   kErrorObdUnknownObjectType     : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 54;
+   <FONT COLOR=green><EM>-- The object type is not defined/known</EM></FONT>
+   kErrorObdVarEntryNotExist      : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 55;
+   <FONT COLOR=green><EM>-- The object does not contain a VarEntry structure</EM></FONT>
+   kErrorObdValueTooLow           : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 56;
+   <FONT COLOR=green><EM>-- The value to write to an object is too low</EM></FONT>
+   kErrorObdValueTooHigh          : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 57;
+   <FONT COLOR=green><EM>-- The value to write to an object is too high</EM></FONT>
+   kErrorObdValueLengthError      : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 58;
+   <FONT COLOR=green><EM>-- The value to write is to long or to short</EM></FONT>
+   kErrorObdErrnoSet              : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 59;
+   <FONT COLOR=green><EM>-- File I/O error occurred and errno is set</EM></FONT>
+   kErrorObdInvalidDcf            : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 60;
+   <FONT COLOR=green><EM>-- The device configuration file (CDC) is not valid</EM></FONT>
+   kErrorObdOutOfMemory           : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 61;
+   <FONT COLOR=green><EM>-- Out of memory</EM></FONT>
+   kErrorObdNoConfigData          : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 62;
+   <FONT COLOR=green><EM>-- No configuration data present (CDC is empty)</EM></FONT>
+   
+   <FONT COLOR=green><EM>--   area for NMT module 0x0040 - 0x004F   --</EM></FONT>
+   kErrorNmtUnknownCommand        : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 64;
+   <FONT COLOR=green><EM>-- Unknown NMT command</EM></FONT>
+   kErrorNmtInvalidFramePointer   : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 65;
+   <FONT COLOR=green><EM>-- Pointer to the frame is not valid</EM></FONT>
+   kErrorNmtInvalidEvent          : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 66;
+   <FONT COLOR=green><EM>-- Invalid event send to NMT-module</EM></FONT>
+   kErrorNmtInvalidState          : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 67;
+   <FONT COLOR=green><EM>-- Unknown state in NMT state machine</EM></FONT>
+   kErrorNmtInvalidParam          : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 68;
+   <FONT COLOR=green><EM>-- Invalid parameters specified</EM></FONT>
+   kErrorNmtSyncReqRejected       : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 69;
+   <FONT COLOR=green><EM>-- SyncReq could not be issued</EM></FONT>
+   
+   <FONT COLOR=green><EM>--   area for SDO/UDP module 0x0050 - 0x005F   --</EM></FONT>
+   kErrorSdoUdpMissCb             : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 80;
+   <FONT COLOR=green><EM>-- Missing callback-function pointer during init of module</EM></FONT>
+   kErrorSdoUdpNoSocket           : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 81;
+   <FONT COLOR=green><EM>-- Error during init of socket</EM></FONT>
+   kErrorSdoUdpSocketError        : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 82;
+   <FONT COLOR=green><EM>-- Error during usage of socket</EM></FONT>
+   kErrorSdoUdpThreadError        : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 83;
+   <FONT COLOR=green><EM>-- Error during start of listen thread</EM></FONT>
+   kErrorSdoUdpNoFreeHandle       : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 84;
+   <FONT COLOR=green><EM>-- No free connection handle for Udp</EM></FONT>
+   kErrorSdoUdpSendError          : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 85;
+   <FONT COLOR=green><EM>-- Error during sending of frame</EM></FONT>
+   kErrorSdoUdpInvalidHdl         : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 86;
+   <FONT COLOR=green><EM>-- The connection handle is invalid</EM></FONT>
+   
+   <FONT COLOR=green><EM>--   area for SDO Sequence layer module 0x0060 - 0x006F   --</EM></FONT>
+   kErrorSdoSeqMissCb             : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 96;
+   <FONT COLOR=green><EM>-- No SDO callback function is assigned</EM></FONT>
+   kErrorSdoSeqNoFreeHandle       : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 97;
+   <FONT COLOR=green><EM>-- No free handle for connection</EM></FONT>
+   kErrorSdoSeqInvalidHdl         : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 98;
+   <FONT COLOR=green><EM>-- Invalid handle in SDO sequence layer</EM></FONT>
+   kErrorSdoSeqUnsupportedProt    : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 99;
+   <FONT COLOR=green><EM>-- Unsupported Protocol selected</EM></FONT>
+   kErrorSdoSeqNoFreeHistory      : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 100;
+   <FONT COLOR=green><EM>-- No free entry in history</EM></FONT>
+   kErrorSdoSeqFrameSizeError     : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 101;
+   <FONT COLOR=green><EM>-- The size of the frames is not correct</EM></FONT>
+   kErrorSdoSeqRequestAckNeeded   : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 102;
+   <FONT COLOR=green><EM>-- Indicates that the history buffer is full and a ack request is needed</EM></FONT>
+   kErrorSdoSeqInvalidFrame       : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 103;
+   <FONT COLOR=green><EM>-- The frame is not valid</EM></FONT>
+   kErrorSdoSeqConnectionBusy     : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 104;
+   <FONT COLOR=green><EM>-- Connection is busy -&gt; retry later</EM></FONT>
+   kErrorSdoSeqInvalidEvent       : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 105;
+   <FONT COLOR=green><EM>-- Invalid event received</EM></FONT>
+   
+   <FONT COLOR=green><EM>--   area for SDO Command Layer module 0x0070 - 0x007F   --</EM></FONT>
+   kErrorSdoComUnsupportedProt    : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 112;
+   <FONT COLOR=green><EM>-- Unsupported Protocol selected</EM></FONT>
+   kErrorSdoComNoFreeHandle       : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 113;
+   <FONT COLOR=green><EM>-- No free handle for connection</EM></FONT>
+   kErrorSdoComInvalidServiceType : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 114;
+   <FONT COLOR=green><EM>-- Invalid SDO service type specified</EM></FONT>
+   kErrorSdoComInvalidHandle      : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 115;
+   <FONT COLOR=green><EM>-- Handle is invalid</EM></FONT>
+   kErrorSdoComInvalidSendType    : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 116;
+   <FONT COLOR=green><EM>-- The state of frame to send is not possible</EM></FONT>
+   kErrorSdoComNotResponsible     : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 117;
+   <FONT COLOR=green><EM>-- Internal error: command layer handle is not responsible for </EM></FONT>
+   <FONT COLOR=green><EM>-- this event from sequence layer</EM></FONT>
+   kErrorSdoComHandleExists       : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 118;
+   <FONT COLOR=green><EM>-- Handle to same node already exists</EM></FONT>
+   kErrorSdoComHandleBusy         : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 119;
+   <FONT COLOR=green><EM>-- Transfer via this handle is already running</EM></FONT>
+   kErrorSdoComInvalidParam       : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 120;
+   <FONT COLOR=green><EM>-- Invalid parameters passed to function</EM></FONT>
+   
+   <FONT COLOR=green><EM>--   area for openPOWERLINK event module 0x0080 - 0x008F   --</EM></FONT>
+   kErrorEventUnknownSink         : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 128;
+   <FONT COLOR=green><EM>-- Unknown sink for event</EM></FONT>
+   kErrorEventPostError           : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 129;
+   <FONT COLOR=green><EM>-- Error during post of event</EM></FONT>
+   kErrorEventReadError           : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 130;
+   <FONT COLOR=green><EM>-- Error during reading of event from queue</EM></FONT>
+   kErrorEventWrongSize           : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 131;
+   <FONT COLOR=green><EM>-- Event arg has wrong size</EM></FONT>
+   
+   <FONT COLOR=green><EM>--   area for openPOWERLINK timer module 0x0090 - 0x009F   --</EM></FONT>
+   kErrorTimerInvalidHandle       : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 144;
+   <FONT COLOR=green><EM>-- Invalid handle for timer</EM></FONT>
+   kErrorTimerNoTimerCreated      : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 145;
+   <FONT COLOR=green><EM>-- No timer was created caused by an error</EM></FONT>
+   kErrorTimerThreadError         : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 146;
+   <FONT COLOR=green><EM>-- Process thread could not be created</EM></FONT>
+   
+   <FONT COLOR=green><EM>--   area for openPOWERLINK SDO/Asnd module 0x00A0 - 0x0AF   --</EM></FONT>
+   kErrorSdoAsndInvalidNodeId     : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 160;
+   <FONT COLOR=green><EM>-- Node-ID is invalid</EM></FONT>
+   kErrorSdoAsndNoFreeHandle      : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 161;
+   <FONT COLOR=green><EM>-- No free handle for connection</EM></FONT>
+   kErrorSdoAsndInvalidHandle     : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 162;
+   <FONT COLOR=green><EM>-- Handle for connection is invalid</EM></FONT>
+   
+   <FONT COLOR=green><EM>--   area for PDO module 0x00B0 - 0x00BF   --</EM></FONT>
+   kErrorPdoNotExist              : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 176;
+   <FONT COLOR=green><EM>-- Selected PDO does not exist</EM></FONT>
+   kErrorPdoLengthExceeded        : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 177;
+   <FONT COLOR=green><EM>-- Length of PDO mapping exceeds the current payload limit</EM></FONT>
+   kErrorPdoGranularityMismatch   : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 178;
+   <FONT COLOR=green><EM>-- Configured PDO granularity is not equal to supported granularity</EM></FONT>
+   kErrorPdoInitError             : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 179;
+   <FONT COLOR=green><EM>-- Error during initialization of PDO module</EM></FONT>
+   kErrorPdoConfWhileEnabled      : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 183;
+   <FONT COLOR=green><EM>-- PDO configuration cannot be changed while it is enabled</EM></FONT>
+   kErrorPdoErrorMapp             : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 184;
+   <FONT COLOR=green><EM>-- Invalid PDO mapping</EM></FONT>
+   kErrorPdoVarNotFound           : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 185;
+   <FONT COLOR=green><EM>-- The referenced object in a PDO mapping does not exist</EM></FONT>
+   kErrorPdoVarNotMappable        : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 186;
+   <FONT COLOR=green><EM>-- The referenced object in a PDO mapping is not mappable</EM></FONT>
+   kErrorPdoSizeMismatch          : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 188;
+   <FONT COLOR=green><EM>-- Bit size of object mapping is larger than the object size</EM></FONT>
+   kErrorPdoTooManyTxPdos         : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 189;
+   <FONT COLOR=green><EM>-- There exits more than one TPDO on CN</EM></FONT>
+   kErrorPdoInvalidObjIndex       : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 190;
+   <FONT COLOR=green><EM>-- Invalid object index used for PDO mapping or communication parameter</EM></FONT>
+   kErrorPdoTooManyPdos           : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 191;
+   <FONT COLOR=green><EM>-- Too many PDOs do exist</EM></FONT>
+   
+   <FONT COLOR=green><EM>--   Configuration manager module 0x00C0 - 0x00CF   --</EM></FONT>
+   kErrorCfmConfigError           : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 192;
+   <FONT COLOR=green><EM>-- Error in configuration manager</EM></FONT>
+   kErrorCfmSdocTimeOutError      : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 193;
+   <FONT COLOR=green><EM>-- Error in configuration manager, SDO timeout</EM></FONT>
+   kErrorCfmInvalidDcf            : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 194;
+   <FONT COLOR=green><EM>-- Device configuration file (CDC) is not valid</EM></FONT>
+   kErrorCfmUnsupportedDcf        : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 195;
+   <FONT COLOR=green><EM>-- Unsupported Dcf format</EM></FONT>
+   kErrorCfmConfigWithErrors      : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 196;
+   <FONT COLOR=green><EM>-- Configuration finished with errors</EM></FONT>
+   kErrorCfmNoFreeConfig          : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 197;
+   <FONT COLOR=green><EM>-- No free configuration entry</EM></FONT>
+   kErrorCfmNoConfigData          : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 198;
+   <FONT COLOR=green><EM>-- No configuration data present</EM></FONT>
+   kErrorCfmUnsuppDatatypeDcf     : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 199;
+   <FONT COLOR=green><EM>-- Unsupported datatype found in dcf -&gt; this entry was not configured</EM></FONT>
+   kErrorApiTaskDeferred          : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 320;
+   <FONT COLOR=green><EM>-- openPOWERLINK performs task in background and informs the application </EM></FONT>
+   <FONT COLOR=green><EM>-- (or vice-versa), when it is finished</EM></FONT>
+   kErrorApiInvalidParam          : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 322;
+   <FONT COLOR=green><EM>-- Passed invalid parameters to a function (e.g. invalid node id)</EM></FONT>
+   kErrorApiNoObdInitRam          : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 323;
+   <FONT COLOR=green><EM>-- No function pointer for ObdInitRam supplied</EM></FONT>
+   kErrorApiSdoBusyIntern         : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 324;
+   <FONT COLOR=green><EM>-- The SDO channel to this node is internally used by the stack (e.g. the CFM) </EM></FONT>
+   <FONT COLOR=green><EM>-- and currently not available for the application.</EM></FONT>
+   kErrorApiPIAlreadyAllocated    : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 325;
+   <FONT COLOR=green><EM>-- Process image is already allocated</EM></FONT>
+   kErrorApiPIOutOfMemory         : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 326;
+   <FONT COLOR=green><EM>-- Process image: out of memory</EM></FONT>
+   kErrorApiPISizeExceeded        : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 327;
+   <FONT COLOR=green><EM>-- Process image: variable linking or copy job exceeds the size of the PI</EM></FONT>
+   kErrorApiPINotAllocated        : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 328;
+   <FONT COLOR=green><EM>-- Process image is not allocated</EM></FONT>
+   kErrorApiPIJobQueueFull        : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 329;
+   <FONT COLOR=green><EM>-- Process image: job queue is full</EM></FONT>
+   kErrorApiPIJobQueueEmpty       : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 330;
+   <FONT COLOR=green><EM>-- Process image: job queue is empty</EM></FONT>
+   kErrorApiPIInvalidJobSize      : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 331;
+   <FONT COLOR=green><EM>-- Process image: invalid job size</EM></FONT>
+   kErrorApiPIInvalidPIPointer    : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 332;
+   <FONT COLOR=green><EM>-- Process image: pointer to application's process image is invalid</EM></FONT>
+   kErrorApiPINonBlockingNotSupp  : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 333;
+   <FONT COLOR=green><EM>-- Process image: non-blocking copy jobs are not supported on this target</EM></FONT>
+   kErrorApiNotInitialized        : <b>constant</b> <A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A> := 334;
+   <FONT COLOR=green><EM>-- PI called but stack is not initialized/running       -- ./oplk/errordefs.h:273</EM></FONT>
+   
+   <FONT COLOR=green><EM>--   area until 0x07FF is reserved                     --</EM></FONT>
+   <FONT COLOR=green><EM>--   area for user application from 0x0800 to 0x7FFF   --</EM></FONT>
+   
+<b>end</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>;
+</PRE></BODY></HTML>

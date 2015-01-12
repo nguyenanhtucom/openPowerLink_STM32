@@ -1,0 +1,338 @@
+<HEAD><TITLE>oplk-event.ads</TITLE></HEAD>
+<BODY>
+<HR><DIV ALIGN="center"><H1> File : oplk-event.ads </H1></DIV><HR>
+<PRE>
+<FONT COLOR=green><EM>--\brief  Header file for event module</EM></FONT>
+<FONT COLOR=green><EM>--This file contains definitions for the event module.</EM></FONT>
+
+<b>pragma</b> Ada_2005;
+<b>pragma</b> Style_Checks (Off);
+
+<b>with</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C; <b>use</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C;
+<b>with</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-oplkinc__ads.htm#9_14">oplkinc</A>;
+<b>with</b> System;
+<b>with</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>;
+<b>with</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-nmt__ads.htm#6_14">nmt</A>;
+
+<b>package</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<FONT COLOR=red><A NAME="13_14">event</A></FONT> <b>is</b>
+
+   <FONT COLOR=red><A NAME="15_4">MAX_EVENT_ARG_SIZE</A></FONT> : <b>constant</b> := 2048;
+   <FONT COLOR=green><EM>-- max size of event argument                    --  ./oplk/event.h:53</EM></FONT>
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief  Type of an event                                                  --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- This enumeration defines all valid event types.                          --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="23_12">tEventType</A></FONT> <b>is</b> unsigned;
+   kEventTypeNmtEvent              : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 1;
+   <FONT COLOR=green><EM>-- NMT event (arg is pointer to tNmtEvent)</EM></FONT>
+   kEventTypePdoRx                 : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 2;
+   <FONT COLOR=green><EM>-- PDO frame received event (PRes/PReq) (arg is pointer to tFrameInfo)</EM></FONT>
+   kEventTypePdoTx                 : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 3;
+   <FONT COLOR=green><EM>-- PDO frame transmitted event (PRes/PReq) (arg is pointer to tFrameInfo)</EM></FONT>
+   kEventTypePdoSoa                : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 4;
+   <FONT COLOR=green><EM>-- SoA frame received event (isochronous phase completed) </EM></FONT>
+   <FONT COLOR=green><EM>-- (arg is pointer to nothing)</EM></FONT>
+   kEventTypeSync                  : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 5;
+   <FONT COLOR=green><EM>-- Sync event (e.g. SoC or anticipated SoC) (arg is pointer to nothing)</EM></FONT>
+   kEventTypeTimer                 : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 6;
+   <FONT COLOR=green><EM>-- Timer event (arg is pointer to tTimerEventArg)</EM></FONT>
+   kEventTypeHeartbeat             : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 7;
+   <FONT COLOR=green><EM>-- Heartbeat event (arg is pointer to tHeartbeatEvent)</EM></FONT>
+   kEventTypeHistoryEntry          : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 8;
+   <FONT COLOR=green><EM>-- Error history entry event (arg is pointer to the tErrHistoryEntry)</EM></FONT>
+   kEventTypeDllkFlag1             : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 9;
+   <FONT COLOR=green><EM>-- DLL kernel Flag 1 changed event (arg is pointer to nothing)</EM></FONT>
+   kEventTypeDllkFillTx            : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 10;
+   <FONT COLOR=green><EM>-- DLL kernel fill TxBuffer event (arg is pointer to tDllAsyncReqPriority)</EM></FONT>
+   kEventTypeDllkPresReady         : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 11;
+   <FONT COLOR=green><EM>-- DLL kernel PRes ready event (arg is pointer to nothing)</EM></FONT>
+   kEventTypeError                 : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 12;
+   <FONT COLOR=green><EM>-- Error event for API layer (arg is pointer to tEventError)</EM></FONT>
+   kEventTypeNmtStateChange        : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 13;
+   <FONT COLOR=green><EM>-- Indicate change of NMT-State (arg is pointer to tEventNmtStateChange)</EM></FONT>
+   kEventTypeDllError              : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 14;
+   <FONT COLOR=green><EM>-- DLL error event for error handler (arg is pointer to tEventDllError)</EM></FONT>
+   kEventTypeAsndRx                : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 15;
+   <FONT COLOR=green><EM>-- received ASnd frame for DLL user module (arg is pointer to tPlkFrame)</EM></FONT>
+   kEventTypeDllkServFilter        : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 16;
+   <FONT COLOR=green><EM>-- configure ServiceIdFilter (arg is pointer to tDllAsndServiceId)</EM></FONT>
+   kEventTypeDllkIdentity          : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 17;
+   <FONT COLOR=green><EM>-- configure Identity (arg is pointer to tDllIdentParam)</EM></FONT>
+   kEventTypeDllkConfig            : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 18;
+   <FONT COLOR=green><EM>-- configure ConfigParam (arg is pointer to tDllConfigParam)</EM></FONT>
+   kEventTypeDllkIssueReq          : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 19;
+   <FONT COLOR=green><EM>-- issue Ident/Status request (arg is pointer to tDllCalIssueRequest)</EM></FONT>
+   kEventTypeDllkAddNode           : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 20;
+   <FONT COLOR=green><EM>-- add node to isochronous phase (arg is pointer to tDllNodeOpParam)</EM></FONT>
+   kEventTypeDllkDelNode           : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 21;
+   <FONT COLOR=green><EM>-- remove node from isochronous phase (arg is pointer to tDllNodeOpParam)</EM></FONT>
+   kEventTypeDllkConfigNode        : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 22;
+   <FONT COLOR=green><EM>-- configures parameters of node (arg is pointer to tDllNodeInfo)</EM></FONT>
+   kEventTypeDllkStartReducedCycle : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 23;
+   <FONT COLOR=green><EM>-- start reduced POWERLINK cycle on MN (arg is pointer to nothing)</EM></FONT>
+   kEventTypeNmtMnuNmtCmdSent      : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 24;
+   <FONT COLOR=green><EM>-- NMT command was actually sent (arg is pointer to tPlkFrame)</EM></FONT>
+   kEventTypeApiUserDef            : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 25;
+   <FONT COLOR=green><EM>-- user-defined event (arg is user-defined pointer)</EM></FONT>
+   kEventTypeDllkCycleFinish       : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 26;
+   <FONT COLOR=green><EM>-- SoA sent, cycle finished (arg is pointer to nothing)</EM></FONT>
+   kEventTypePdokAlloc             : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 32;
+   <FONT COLOR=green><EM>-- alloc PDOs (arg is pointer to tPdoAllocationParam)</EM></FONT>
+   kEventTypePdokConfig            : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 33;
+   <FONT COLOR=green><EM>-- configure PDO channel (arg is pointer to tPdoChannelConf)</EM></FONT>
+   kEventTypeNmtMnuNodeCmd         : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 34;
+   <FONT COLOR=green><EM>-- trigger NMT node command (arg is pointer to tNmtNodeCommand)</EM></FONT>
+   kEventTypeGw309AsciiReq         : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 35;
+   <FONT COLOR=green><EM>-- GW309ASCII request (arg is pointer to pointer of tGw309AsciiRequest)</EM></FONT>
+   kEventTypeNmtMnuNodeAdded       : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 36;
+   <FONT COLOR=green><EM>-- node was added to isochronous phase by DLL </EM></FONT>
+   <FONT COLOR=green><EM>--  (arg is pointer to unsigned int containing the node-ID)</EM></FONT>
+   kEventTypePdokSetupPdoBuf       : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 37;
+   <FONT COLOR=green><EM>-- dealloc PDOs</EM></FONT>
+   kEventTypePdokControlSync       : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 38;
+   <FONT COLOR=green><EM>-- enable/disable the pdokcal sync trigger (arg is pointer to BOOL)</EM></FONT>
+   kEventTypeReleaseRxFrame        : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 39;
+   <FONT COLOR=green><EM>-- Free receive buffer (arg is pointer to the buffer to release)</EM></FONT>
+   kEventTypeAsndNotRx             : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 40;
+   <FONT COLOR=green><EM>-- Didn't receive ASnd frame for DLL user module </EM></FONT>
+   <FONT COLOR=green><EM>-- (arg is pointer to tDllAsndNotRx)</EM></FONT>
+   kEventTypeAsndRxInfo            : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 41;
+   <FONT COLOR=green><EM>-- Received ASnd frame for DLL user module (arg is pointer to tFrameInfo)</EM></FONT>
+   kEventTypeReceivedPres          : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 48;
+   <FONT COLOR=green><EM>-- Received a PRes frame, which shall be forwarded to application </EM></FONT>
+   <FONT COLOR=green><EM>-- (arg is pointer to tEventReceivedPres)</EM></FONT>
+   kEventTypeRequPresForward       : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 49;
+   <FONT COLOR=green><EM>-- Request forwarding of a PRes frame to API layer (e.g. for conformance test)</EM></FONT>
+   kEventTypeSdoAsySend            : <b>constant</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A> := 50;
+   <FONT COLOR=green><EM>-- SDO sequence layer event (for SDO command layer testing module)  </EM></FONT>
+                                                            <FONT COLOR=green><EM>-- ./oplk/event.h:106</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief  Valid sinks for an event                                          --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- This enumeration defines all valid event sinks.                          --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="114_12">tEventSink</A></FONT> <b>is</b> unsigned;
+   kEventSinkSync       : <b>constant</b> <A HREF="oplk-event__ads.htm#114_12">tEventSink</A> := 0;
+   <FONT COLOR=green><EM>-- Sync event for application or kernel POWERLINK module</EM></FONT>
+   kEventSinkNmtk       : <b>constant</b> <A HREF="oplk-event__ads.htm#114_12">tEventSink</A> := 1;
+   <FONT COLOR=green><EM>-- events for Nmtk module</EM></FONT>
+   kEventSinkDllk       : <b>constant</b> <A HREF="oplk-event__ads.htm#114_12">tEventSink</A> := 2;
+   <FONT COLOR=green><EM>-- events for Dllk module</EM></FONT>
+   kEventSinkDlluCal    : <b>constant</b> <A HREF="oplk-event__ads.htm#114_12">tEventSink</A> := 3;
+   <FONT COLOR=green><EM>-- events for DlluCal module</EM></FONT>
+   kEventSinkDllkCal    : <b>constant</b> <A HREF="oplk-event__ads.htm#114_12">tEventSink</A> := 4;
+   <FONT COLOR=green><EM>-- events for DllkCal module</EM></FONT>
+   kEventSinkPdok       : <b>constant</b> <A HREF="oplk-event__ads.htm#114_12">tEventSink</A> := 5;
+   <FONT COLOR=green><EM>-- events for Pdok module</EM></FONT>
+   kEventSinkNmtu       : <b>constant</b> <A HREF="oplk-event__ads.htm#114_12">tEventSink</A> := 6;
+   <FONT COLOR=green><EM>-- events for Nmtu module</EM></FONT>
+   kEventSinkErrk       : <b>constant</b> <A HREF="oplk-event__ads.htm#114_12">tEventSink</A> := 7;
+   <FONT COLOR=green><EM>-- events for Error handler module</EM></FONT>
+   kEventSinkErru       : <b>constant</b> <A HREF="oplk-event__ads.htm#114_12">tEventSink</A> := 8;
+   <FONT COLOR=green><EM>-- events for Error signaling module</EM></FONT>
+   kEventSinkSdoAsySeq  : <b>constant</b> <A HREF="oplk-event__ads.htm#114_12">tEventSink</A> := 9;
+   <FONT COLOR=green><EM>-- events for asyncronous SDO Sequence Layer module</EM></FONT>
+   kEventSinkNmtMnu     : <b>constant</b> <A HREF="oplk-event__ads.htm#114_12">tEventSink</A> := 10;
+   <FONT COLOR=green><EM>-- events for NmtMnu module</EM></FONT>
+   kEventSinkLedu       : <b>constant</b> <A HREF="oplk-event__ads.htm#114_12">tEventSink</A> := 11;
+   <FONT COLOR=green><EM>-- events for Ledu module</EM></FONT>
+   kEventSinkPdokCal    : <b>constant</b> <A HREF="oplk-event__ads.htm#114_12">tEventSink</A> := 12;
+   <FONT COLOR=green><EM>-- events for PdokCal module</EM></FONT>
+   kEventSinkGw309Ascii : <b>constant</b> <A HREF="oplk-event__ads.htm#114_12">tEventSink</A> := 14;
+   <FONT COLOR=green><EM>-- events for GW309ASCII module</EM></FONT>
+   kEventSinkApi        : <b>constant</b> <A HREF="oplk-event__ads.htm#114_12">tEventSink</A> := 15;
+   <FONT COLOR=green><EM>-- events for API module</EM></FONT>
+   kEventSinkSdoTest    : <b>constant</b> <A HREF="oplk-event__ads.htm#114_12">tEventSink</A> := 16;
+   <FONT COLOR=green><EM>-- events for SDO testing module</EM></FONT>
+   kEventSinkInvalid    : <b>constant</b> <A HREF="oplk-event__ads.htm#114_12">tEventSink</A> := 255;
+   <FONT COLOR=green><EM>-- Identifies an invalid sink                        -- ./oplk/event.h:133</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief  Valid sources for an event                                        --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- This enumeration defines all valid event sources.                        --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="156_12">tEventSource</A></FONT> <b>is</b> unsigned;
+   kEventSourceDllk       : <b>constant</b> <A HREF="oplk-event__ads.htm#156_12">tEventSource</A> := 1;
+   <FONT COLOR=green><EM>-- Events from Dllk module</EM></FONT>
+   kEventSourceNmtk       : <b>constant</b> <A HREF="oplk-event__ads.htm#156_12">tEventSource</A> := 2;
+   <FONT COLOR=green><EM>-- Events from Nmtk module</EM></FONT>
+   kEventSourceObdk       : <b>constant</b> <A HREF="oplk-event__ads.htm#156_12">tEventSource</A> := 3;
+   <FONT COLOR=green><EM>-- Events from Obdk module</EM></FONT>
+   kEventSourcePdok       : <b>constant</b> <A HREF="oplk-event__ads.htm#156_12">tEventSource</A> := 4;
+   <FONT COLOR=green><EM>-- Events from Pdok module</EM></FONT>
+   kEventSourceTimerk     : <b>constant</b> <A HREF="oplk-event__ads.htm#156_12">tEventSource</A> := 5;
+   <FONT COLOR=green><EM>-- Events from Timerk module</EM></FONT>
+   kEventSourceEventk     : <b>constant</b> <A HREF="oplk-event__ads.htm#156_12">tEventSource</A> := 6;
+   <FONT COLOR=green><EM>-- Events from Eventk module</EM></FONT>
+   kEventSourceSyncCb     : <b>constant</b> <A HREF="oplk-event__ads.htm#156_12">tEventSource</A> := 7;
+   <FONT COLOR=green><EM>-- Events from sync-Cb</EM></FONT>
+   kEventSourceErrk       : <b>constant</b> <A HREF="oplk-event__ads.htm#156_12">tEventSource</A> := 8;
+   <FONT COLOR=green><EM>-- Events from kernel error handler module</EM></FONT>
+   kEventSourceDllu       : <b>constant</b> <A HREF="oplk-event__ads.htm#156_12">tEventSource</A> := 16;
+   <FONT COLOR=green><EM>-- Events from Dllu module</EM></FONT>
+   kEventSourceNmtu       : <b>constant</b> <A HREF="oplk-event__ads.htm#156_12">tEventSource</A> := 17;
+   <FONT COLOR=green><EM>-- Events from Nmtu module</EM></FONT>
+   kEventSourceNmtCnu     : <b>constant</b> <A HREF="oplk-event__ads.htm#156_12">tEventSource</A> := 18;
+   <FONT COLOR=green><EM>-- Events from NmtCnu module</EM></FONT>
+   kEventSourceNmtMnu     : <b>constant</b> <A HREF="oplk-event__ads.htm#156_12">tEventSource</A> := 19;
+   <FONT COLOR=green><EM>-- Events from NmtMnu module</EM></FONT>
+   kEventSourceObdu       : <b>constant</b> <A HREF="oplk-event__ads.htm#156_12">tEventSource</A> := 20;
+   <FONT COLOR=green><EM>-- Events from Obdu module</EM></FONT>
+   kEventSourceSdoUdp     : <b>constant</b> <A HREF="oplk-event__ads.htm#156_12">tEventSource</A> := 21;
+   <FONT COLOR=green><EM>-- Events from Sdo/Udp module</EM></FONT>
+   kEventSourceSdoAsnd    : <b>constant</b> <A HREF="oplk-event__ads.htm#156_12">tEventSource</A> := 22;
+   <FONT COLOR=green><EM>-- Events from Sdo/Asnd module</EM></FONT>
+   kEventSourceSdoAsySeq  : <b>constant</b> <A HREF="oplk-event__ads.htm#156_12">tEventSource</A> := 23;
+   <FONT COLOR=green><EM>-- Events from Sdo asynchronous Sequence Layer module</EM></FONT>
+   kEventSourceSdoCom     : <b>constant</b> <A HREF="oplk-event__ads.htm#156_12">tEventSource</A> := 24;
+   <FONT COLOR=green><EM>-- Events from Sdo command layer module</EM></FONT>
+   kEventSourceTimeru     : <b>constant</b> <A HREF="oplk-event__ads.htm#156_12">tEventSource</A> := 25;
+   <FONT COLOR=green><EM>-- Events from Timeru module</EM></FONT>
+   kEventSourceCfgMau     : <b>constant</b> <A HREF="oplk-event__ads.htm#156_12">tEventSource</A> := 26;
+   <FONT COLOR=green><EM>-- Events from CfgMau module</EM></FONT>
+   kEventSourceEventu     : <b>constant</b> <A HREF="oplk-event__ads.htm#156_12">tEventSource</A> := 27;
+   <FONT COLOR=green><EM>-- Events from Eventu module</EM></FONT>
+   kEventSourceOplkApi    : <b>constant</b> <A HREF="oplk-event__ads.htm#156_12">tEventSource</A> := 28;
+   <FONT COLOR=green><EM>-- Events from Api module</EM></FONT>
+   kEventSourceLedu       : <b>constant</b> <A HREF="oplk-event__ads.htm#156_12">tEventSource</A> := 29;
+   <FONT COLOR=green><EM>-- Events from Ledu module</EM></FONT>
+   kEventSourceGw309Ascii : <b>constant</b> <A HREF="oplk-event__ads.htm#156_12">tEventSource</A> := 30;
+   <FONT COLOR=green><EM>-- Events from GW309ASCII module</EM></FONT>
+   kEventSourceErru       : <b>constant</b> <A HREF="oplk-event__ads.htm#156_12">tEventSource</A> := 31;
+   <FONT COLOR=green><EM>-- Events from User Error handler module</EM></FONT>
+   kEventSourceSdoTest    : <b>constant</b> <A HREF="oplk-event__ads.htm#156_12">tEventSource</A> := 32;
+   <FONT COLOR=green><EM>-- Events from SDO testing module</EM></FONT>
+   kEventSourceInvalid    : <b>constant</b> <A HREF="oplk-event__ads.htm#156_12">tEventSource</A> := 255;
+   <FONT COLOR=green><EM>-- Identifies an invalid event source                 -- ./oplk/event.h:171</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief Enumerator for queue                                               --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- This enumerator identifies an event queue instance in order to differ    --</EM></FONT>
+<FONT COLOR=green><EM>-- between layer queues (kernel-to-user or user-to-kernel) and              --</EM></FONT>
+<FONT COLOR=green><EM>-- layer-internal queues (kernel- or user-internal).                        --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="218_9">tEventQueue</A></FONT> <b>is</b>
+     (kEventQueueK2U,
+      <FONT COLOR=green><EM>-- Kernel-to-user queue</EM></FONT>
+      kEventQueueKInt,
+      <FONT COLOR=green><EM>-- Kernel-internal queue</EM></FONT>
+      kEventQueueU2K,
+      <FONT COLOR=green><EM>-- User-to-kernel queue</EM></FONT>
+      kEventQueueUInt,
+      <FONT COLOR=green><EM>-- User-internal queue</EM></FONT>
+      KEventQueueNum
+      <FONT COLOR=green><EM>-- Maximum number of queues</EM></FONT>
+     );
+   <b>pragma</b> Convention (C, <A HREF="oplk-event__ads.htm#218_9">tEventQueue</A>);  <FONT COLOR=green><EM>-- ./oplk/event.h:187</EM></FONT>
+   
+
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief  Structure for events                                              --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- The structure defines an openPOWERLINK event.                            --</EM></FONT>
+<FONT COLOR=green><EM>--  (element order must not be changed!)                                    --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="239_9">tEvent</A></FONT> <b>is</b> <b>record</b>
+      eventType    : <b>aliased</b> <A HREF="oplk-event__ads.htm#23_12">tEventType</A>;
+      <FONT COLOR=green><EM>-- Type of this event</EM></FONT>
+      eventSink    : <b>aliased</b> <A HREF="oplk-event__ads.htm#114_12">tEventSink</A>;
+      <FONT COLOR=green><EM>-- Sink of this event</EM></FONT>
+      netTime      : <b>aliased</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-oplkinc__ads.htm#9_14">oplkinc</A>.<A HREF="oplk-oplkinc__ads.htm#16_9">tNetTime</A>;
+      <FONT COLOR=green><EM>-- Timestamp of the event</EM></FONT>
+      eventArgSize : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Size of the event argument</EM></FONT>
+      pEventArg    : System.Address;
+      <FONT COLOR=green><EM>-- Pointer to event argument</EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-event__ads.htm#239_9">tEvent</A>);  <FONT COLOR=green><EM>-- ./oplk/event.h:202</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief  Structure for OBD error information                               --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- The structure defines the error event information provided               --</EM></FONT>
+<FONT COLOR=green><EM>-- by the obd module.                                                       --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="260_9">tEventObdError</A></FONT> <b>is</b> <b>record</b>
+      index    : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Index of object</EM></FONT>
+      subIndex : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Sub index of object</EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-event__ads.htm#260_9">tEventObdError</A>);  <FONT COLOR=green><EM>-- ./oplk/event.h:214</EM></FONT>
+   
+
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief  Structure for error events                                        --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- The structure defines an error event.                                    --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="274_9">anon_85</A></FONT> (discr : unsigned := 0) <b>is</b> <b>record</b>
+      <b>case</b> discr <b>is</b>
+         <b>when</b> 0 =&gt;
+            byteArg : <b>aliased</b> unsigned_char;
+            <FONT COLOR=green><EM>-- BYTE argument</EM></FONT>
+         <b>when</b> 1 =&gt;
+            uintArg : <b>aliased</b> unsigned;
+            <FONT COLOR=green><EM>-- UINT32 argument</EM></FONT>
+         <b>when</b> 2 =&gt;
+            eventSource : <b>aliased</b> <A HREF="oplk-event__ads.htm#156_12">tEventSource</A>;
+            <FONT COLOR=green><EM>-- Argument from Eventk/u module (originating error source)</EM></FONT>
+         <b>when</b> 3 =&gt;
+            obdError : <b>aliased</b> <A HREF="oplk-event__ads.htm#260_9">tEventObdError</A>;
+            <FONT COLOR=green><EM>-- Argument from Obd module</EM></FONT>
+         <b>when</b> <b>others</b> =&gt;
+            eventSink : <b>aliased</b> <A HREF="oplk-event__ads.htm#114_12">tEventSink</A>;
+            <FONT COLOR=green><EM>-- Argument from Eventk/u module on oplkError == kErrorEventUnknownSink</EM></FONT>
+      <b>end</b> <b>case</b>;
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-event__ads.htm#274_9">anon_85</A>);
+   <b>pragma</b> Unchecked_Union (<A HREF="oplk-event__ads.htm#274_9">anon_85</A>);
+   <b>type</b> <FONT COLOR=red><A NAME="295_9">tEventError</A></FONT> <b>is</b> <b>record</b>
+      eventSource : <b>aliased</b> <A HREF="oplk-event__ads.htm#156_12">tEventSource</A>;
+      <FONT COLOR=green><EM>-- Module which posted this error event</EM></FONT>
+      oplkError   : <b>aliased</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+      <FONT COLOR=green><EM>-- Error which occurred</EM></FONT>
+      errorArg    : <A HREF="oplk-event__ads.htm#274_9">anon_85</A>;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-event__ads.htm#295_9">tEventError</A>);  <FONT COLOR=green><EM>-- ./oplk/event.h:233</EM></FONT>
+   
+
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief  Structure for DLL error events                                    --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- The structure defines an DLL error event.                                --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="311_9">tEventDllError</A></FONT> <b>is</b> <b>record</b>
+      dllErrorEvents : <b>aliased</b> unsigned_long;
+      <FONT COLOR=green><EM>-- Contains the DLL error (DLL_ERR_*)</EM></FONT>
+      nodeId         : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Node ID</EM></FONT>
+      nmtState       : <b>aliased</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-nmt__ads.htm#6_14">nmt</A>.<A HREF="oplk-nmt__ads.htm#50_12">tNmtState</A>;
+      <FONT COLOR=green><EM>-- NMT state</EM></FONT>
+      oplkError : <b>aliased</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+      <FONT COLOR=green><EM>-- openPOWERLINK error code</EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-event__ads.htm#311_9">tEventDllError</A>);  <FONT COLOR=green><EM>-- ./oplk/event.h:246</EM></FONT>
+   
+
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief  Callback function to get informed about sync event                --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- The function returns a tOplkError error code.                            --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="329_9">tSyncCb</A></FONT> <b>is</b> <b>access</b> <b>function</b> 
+                            <b>return</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <b>pragma</b> Convention (C, <A HREF="oplk-event__ads.htm#329_9">tSyncCb</A>);  <FONT COLOR=green><EM>-- ./oplk/event.h:253</EM></FONT>
+
+<b>end</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-event__ads.htm#13_14">event</A>;
+</PRE></BODY></HTML>

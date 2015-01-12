@@ -1,0 +1,1234 @@
+<HEAD><TITLE>oplk-oplk.ads</TITLE></HEAD>
+<BODY>
+<HR><DIV ALIGN="center"><H1> File : oplk-oplk.ads </H1></DIV><HR>
+<PRE>
+
+<FONT COLOR=green><EM>--  Definitions for openPOWERLINK API</EM></FONT>
+<FONT COLOR=green><EM>-- This file contains all definitions and declarations to use the openPOWERLINK API.</EM></FONT>
+
+<b>pragma</b> Ada_2005;
+<b>pragma</b> Style_Checks (Off);
+
+<b>with</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C; <b>use</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C;
+<b>with</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-nmt__ads.htm#6_14">nmt</A>;
+<b>with</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-led__ads.htm#10_14">led</A>;
+<b>with</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-frame__ads.htm#11_14">frame</A>;
+<b>with</b> System;
+<b>with</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-event__ads.htm#13_14">event</A>;
+<b>with</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-sdo__ads.htm#11_14">sdo</A>;
+<b>with</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-obd__ads.htm#14_14">obd</A>;
+<b>with</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-cfm__ads.htm#12_14">cfm</A>;
+<b>with</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>;
+<b>with</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C.Extensions;
+<b>with</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C.Strings;
+<b>with</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-oplkinc__ads.htm#9_14">oplkinc</A>;
+
+<b>package</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<FONT COLOR=red><A NAME="22_14">Oplk</A></FONT> <b>is</b>
+
+   <b>type</b> <FONT COLOR=red><A NAME="24_9">tOplkApiAsndFilter</A></FONT> <b>is</b>
+     (tOplkApiAsndFilterNone, 
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      tOplkApiAsndFilterLocal,
+      <FONT COLOR=green><EM>-- receive only ASnd frames with local or broadcast node ID</EM></FONT>
+      tOplkApiAsndFilterAny
+      <FONT COLOR=green><EM>-- receive any ASnd frame</EM></FONT>
+   );
+   <b>pragma</b> Convention (C, <A HREF="oplk-oplk__ads.htm#24_9">tOplkApiAsndFilter</A>);  <FONT COLOR=green><EM>-- oplk/oplk.h:67</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--  SDO stack                                                               --</EM></FONT>
+<FONT COLOR=green><EM>-- The following enum defines the different SDO stacks. The application can --</EM></FONT>
+<FONT COLOR=green><EM>-- switch between the SDO stacks.                                           --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="40_12">tOplkApiSdoStack</A></FONT> <b>is</b> unsigned;
+   tOplkApiStdSdoStack : <b>constant</b> <A HREF="oplk-oplk__ads.htm#40_12">tOplkApiSdoStack</A> := 0;
+   <FONT COLOR=green><EM>-- Use the standard SDO stack (default)</EM></FONT>
+   tOplkApiTestSdoCom  : <b>constant</b> <A HREF="oplk-oplk__ads.htm#40_12">tOplkApiSdoStack</A> := 16;
+   <FONT COLOR=green><EM>-- Use testing functions for SDO command layer</EM></FONT>
+   tOplkApiTestSdoSeq  : <b>constant</b> <A HREF="oplk-oplk__ads.htm#40_12">tOplkApiSdoStack</A> := 32;
+   <FONT COLOR=green><EM>-- Use testing functions for SDO sequence layer  -- oplk/oplk.h:80</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief Node event                                                         --</EM></FONT>
+<FONT COLOR=green><EM>-- The following structure specifies a node event on an MN.                 --</EM></FONT>
+<FONT COLOR=green><EM>-- The application will be                                                  --</EM></FONT>
+<FONT COLOR=green><EM>-- informed with this event if the state of the specified node has changed. --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="55_9">tOplkApiEventNode</A></FONT> <b>is</b> <b>record</b>
+      NodeId     : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Node ID of the node that changed the state</EM></FONT>
+      NmtState   : <b>aliased</b> <A HREF="oplk-nmt__ads.htm#6_14">Nmt</A>.<A HREF="oplk-nmt__ads.htm#50_12">tNmtState</A>;
+      <FONT COLOR=green><EM>-- The NMT state of the CN</EM></FONT>
+      NodeEvent  : <b>aliased</b> <A HREF="oplk-nmt__ads.htm#6_14">nmt</A>.<A HREF="oplk-nmt__ads.htm#195_9">tNmtNodeEvent</A>;
+      <FONT COLOR=green><EM>-- The event that happens at the node</EM></FONT>
+      ErrorCode  : <b>aliased</b> unsigned_short;
+      <FONT COLOR=green><EM>-- This variable contains an error code if nodeEvent = kNmtNodeEventError</EM></FONT>
+      fMandatory : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- Determines if it is a mandatory node (TRUE) or an optional node (FALSE)</EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-oplk__ads.htm#55_9">tOplkApiEventNode</A>);  <FONT COLOR=green><EM>-- oplk/oplk.h:96</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief Boot event                                                         --</EM></FONT>
+<FONT COLOR=green><EM>-- The following structure specifies a boot event.                          --</EM></FONT>
+<FONT COLOR=green><EM>-- It is used to inform the application                                     --</EM></FONT>
+<FONT COLOR=green><EM>-- about events concerning the entire boot-up process of the MN.            --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="76_9">tOplkApiEventBoot</A></FONT> <b>is</b> <b>record</b>
+      nmtState  : <b>aliased</b> <A HREF="oplk-nmt__ads.htm#6_14">nmt</A>.<A HREF="oplk-nmt__ads.htm#50_12">tNmtState</A>;
+      <FONT COLOR=green><EM>-- NMT state of the local node</EM></FONT>
+      bootEvent : <b>aliased</b> <A HREF="oplk-nmt__ads.htm#6_14">nmt</A>.<A HREF="oplk-nmt__ads.htm#257_9">tNmtBootEvent</A>;
+      <FONT COLOR=green><EM>-- Boot event that occured</EM></FONT>
+      errorCode : <b>aliased</b> unsigned_short;
+      <FONT COLOR=green><EM>-- Contains an error code if bootEvent = kNmtBootEventError</EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-oplk__ads.htm#76_9">tOplkApiEventBoot</A>);  <FONT COLOR=green><EM>-- oplk/oplk.h:109</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief LED event                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- This structure specifies a LED event.                                    --</EM></FONT>
+<FONT COLOR=green><EM>-- It contains change events for the POWERLINK status and error LEDs.       --</EM></FONT>
+<FONT COLOR=green><EM>-- It allows the application to change the status and error LEDs            --</EM></FONT>
+<FONT COLOR=green><EM>-- on the device according to the specification.                            --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="94_9">tOplkApiEventLed</A></FONT> <b>is</b> <b>record</b>
+      ledType : <b>aliased</b> <A HREF="oplk-led__ads.htm#10_14">led</A>.<A HREF="oplk-led__ads.htm#17_9">tLedType</A>;
+      <FONT COLOR=green><EM>-- Determines the type of the LED</EM></FONT>
+      fOn     : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- The state of the LED</EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-oplk__ads.htm#94_9">tOplkApiEventLed</A>);  <FONT COLOR=green><EM>-- oplk/oplk.h:123</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief CFM result event                                                   --</EM></FONT>
+<FONT COLOR=green><EM>-- The structure describes the CFM result event.                            --</EM></FONT>
+<FONT COLOR=green><EM>-- This includes the normal progress but also errors which occurred during  --</EM></FONT>
+<FONT COLOR=green><EM>-- the configuration process.                                               --</EM></FONT>
+<FONT COLOR=green><EM>-- It is only valid for an MN.                                              --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="110_9">tOplkApiEventCfmResult</A></FONT> <b>is</b> <b>record</b>
+      nodeId      : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Node ID of the CN which generated the event</EM></FONT>
+      nodeCommand : <b>aliased</b> <A HREF="oplk-nmt__ads.htm#6_14">nmt</A>.<A HREF="oplk-nmt__ads.htm#225_12">tNmtNodeCommand</A>;
+      <FONT COLOR=green><EM>-- Node command which will be issued to the CN as a result of</EM></FONT>
+      <FONT COLOR=green><EM>-- the configuration process. See \ref tNmtNodeCommand</EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention
+     (C_Pass_By_Copy, <A HREF="oplk-oplk__ads.htm#110_9">tOplkApiEventCfmResult</A>);  <FONT COLOR=green><EM>-- oplk/oplk.h:137</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief Received ASnd event                                                --</EM></FONT>
+<FONT COLOR=green><EM>-- This structure specifies the event for received ASnd frames.             --</EM></FONT>
+<FONT COLOR=green><EM>-- It is used to inform the application about received ASnd frames.         --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="126_9">tOplkApiEventRcvAsnd</A></FONT> <b>is</b> <b>record</b>
+      PFrame    : <b>access</b> <A HREF="oplk-frame__ads.htm#11_14">frame</A>.<A HREF="oplk-frame__ads.htm#460_9">tPlkFrame</A>;
+      <FONT COLOR=green><EM>-- Pointer to the received ASnd frame</EM></FONT>
+      frameSize : <b>aliased</b> size_t;
+      <FONT COLOR=green><EM>-- Size of the received ASnd frame</EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention
+     (C_Pass_By_Copy,
+      <A HREF="oplk-oplk__ads.htm#126_9">tOplkApiEventRcvAsnd</A>);  <FONT COLOR=green><EM>-- oplk/oplk.h:149</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief PDO changed event                                                  --</EM></FONT>
+<FONT COLOR=green><EM>-- This structure specifies the event for PDO changes.                      --</EM></FONT>
+<FONT COLOR=green><EM>-- It will be sent to the application if the PDO mapping has changed        --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="142_9">tOplkApiEventPdoChange</A></FONT> <b>is</b> <b>record</b>
+      fActivated      : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- Determines if mapping is activated.</EM></FONT>
+      fTx             : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- Determines if it is a TXPDO or RXPDO.</EM></FONT>
+      nodeId          : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- The node ID the mapping is related to.</EM></FONT>
+      mappParamIndex  : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- The object index of the mapping parameter object.</EM></FONT>
+      mappObjectCount : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- The number of mapped objects (channels).</EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention
+     (C_Pass_By_Copy, <A HREF="oplk-oplk__ads.htm#142_9">tOplkApiEventPdoChange</A>);  <FONT COLOR=green><EM>-- oplk/oplk.h:164</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief Received PRes event                                                --</EM></FONT>
+<FONT COLOR=green><EM>-- This structure specifies the event for received PRes frames.             --</EM></FONT>
+<FONT COLOR=green><EM>-- It is used to forward requested PRes frames to the application           --</EM></FONT>
+<FONT COLOR=green><EM>-- (e.g. for diagnosis).                                                    --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="164_9">tOplkApiEventReceivedPres</A></FONT> <b>is</b> <b>record</b>
+      nodeId    : <b>aliased</b> unsigned_short;
+      <FONT COLOR=green><EM>-- Node ID of the received PRes frame</EM></FONT>
+      frameSize : <b>aliased</b> unsigned_short;
+      <FONT COLOR=green><EM>-- Size of the received PRes frame</EM></FONT>
+      PFrame    : <b>access</b> <A HREF="oplk-frame__ads.htm#11_14">frame</A>.<A HREF="oplk-frame__ads.htm#460_9">tPlkFrame</A>;
+      <FONT COLOR=green><EM>-- Pointer to the received PRes frame</EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention
+     (C_Pass_By_Copy, <A HREF="oplk-oplk__ads.htm#164_9">tOplkApiEventReceivedPres</A>);  <FONT COLOR=green><EM>-- oplk/oplk.h:177</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief Received non-POWERLINK Ethernet frame event                        --</EM></FONT>
+<FONT COLOR=green><EM>-- This structure specifies the event for received Ethernet frames.         --</EM></FONT>
+<FONT COLOR=green><EM>-- It is used to inform the application about received Ethernet frames.     --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="181_9">tOplkApiEventReceivedNonPlk</A></FONT> <b>is</b> <b>record</b>
+      pFrame    : <b>access</b> <A HREF="oplk-frame__ads.htm#11_14">frame</A>.<A HREF="oplk-frame__ads.htm#460_9">tPlkFrame</A>;
+      <FONT COLOR=green><EM>-- Pointer to the received Ethernet frame</EM></FONT>
+      frameSize : <b>aliased</b> size_t;
+      <FONT COLOR=green><EM>-- Size of the received Ethernet frame</EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention
+     (C_Pass_By_Copy, <A HREF="oplk-oplk__ads.htm#181_9">tOplkApiEventReceivedNonPlk</A>); <FONT COLOR=green><EM>--oplk/oplk.h:189</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief Default gateway changed event                                      --</EM></FONT>
+<FONT COLOR=green><EM>-- This structure specifies the event for default gateway changed.          --</EM></FONT>
+<FONT COLOR=green><EM>-- It is used to inform the application about the changed default           --</EM></FONT>
+<FONT COLOR=green><EM>-- gateway address.                                                         --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="197_9">tOplkApiEventDefaultGwChange</A></FONT> <b>is</b> <b>record</b>
+      defaultGateway : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Default gateway</EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention
+     (C_Pass_By_Copy, <A HREF="oplk-oplk__ads.htm#197_9">tOplkApiEventDefaultGwChange</A>);<FONT COLOR=green><EM>--oplk/oplk.h:200</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief SDO command layer receive event                                    --</EM></FONT>
+<FONT COLOR=green><EM>-- This structure specifies the event for an received SDO command layer.    --</EM></FONT>
+<FONT COLOR=green><EM>-- It is used to inform the application about the received                  --</EM></FONT>
+<FONT COLOR=green><EM>-- SDO command layer.                                                       --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="211_9">tOplkApiEventReceivedSdoCom</A></FONT> <b>is</b> <b>record</b>
+      pAsySdoCom : <b>access</b> <A HREF="oplk-frame__ads.htm#11_14">frame</A>.<A HREF="oplk-frame__ads.htm#347_9">tAsySdoCom</A>;
+      <FONT COLOR=green><EM>-- Pointer to the SDO command layer</EM></FONT>
+      dataSize   : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Size of the received SDO command layer</EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention
+     (C_Pass_By_Copy, <A HREF="oplk-oplk__ads.htm#211_9">tOplkApiEventReceivedSdoCom</A>); <FONT COLOR=green><EM>--oplk/oplk.h:212</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief SDO sequence layer receive event                                   --</EM></FONT>
+<FONT COLOR=green><EM>-- This structure specifies the event for an received SDO sequence layer.   --</EM></FONT>
+<FONT COLOR=green><EM>-- It is used to inform the application about the received                  --</EM></FONT>
+<FONT COLOR=green><EM>-- SDO sequence layer.                                                      --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="227_9">tOplkApiEventReceivedSdoSeq</A></FONT> <b>is</b> <b>record</b>
+      pAsySdoSeq : <b>access</b> <A HREF="oplk-frame__ads.htm#11_14">frame</A>.<A HREF="oplk-frame__ads.htm#368_9">tAsySdoSeq</A>;
+      <FONT COLOR=green><EM>-- Pointer to the SDO sequence layer</EM></FONT>
+      DataSize   : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Size of the received SDO sequence layer</EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention
+     (C_Pass_By_Copy, <A HREF="oplk-oplk__ads.htm#227_9">tOplkApiEventReceivedSdoSeq</A>); <FONT COLOR=green><EM>--oplk/oplk.h:224</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief Application event types                                            --</EM></FONT>
+<FONT COLOR=green><EM>-- This enumeration specifies the valid application events which can be     --</EM></FONT>
+<FONT COLOR=green><EM>-- sent by the openPOWERLINK stack.                                         --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="242_12">tOplkApiEventType</A></FONT> <b>is</b> unsigned;
+   KOplkApiEventUserDef         : <b>constant</b> <A HREF="oplk-oplk__ads.htm#242_12">tOplkApiEventType</A> := 0;
+   <FONT COLOR=green><EM>-- User defined event. It is issued for sending user-defined events. It</EM></FONT>
+   <FONT COLOR=green><EM>-- can be used for e.g. synchronization purposes. The event argument contains</EM></FONT>
+   <FONT COLOR=green><EM>-- a pointer to the user specific argument.</EM></FONT>
+   KOplkApiEventNmtStateChange  : <b>constant</b> <A HREF="oplk-oplk__ads.htm#242_12">tOplkApiEventType</A> := 16;
+   <FONT COLOR=green><EM>-- NMT state change event. If kErrorReject is returned, the subsequent</EM></FONT>
+   <FONT COLOR=green><EM>-- NMT state will not be entered. In this case the application is in charge of</EM></FONT>
+   <FONT COLOR=green><EM>-- executing the appropriate NMT commands. The event argument contains an NMT</EM></FONT>
+   <FONT COLOR=green><EM>-- state change event tEventNmtStateChange .</EM></FONT>
+   KOplkApiEventCriticalError   : <b>constant</b> <A HREF="oplk-oplk__ads.htm#242_12">tOplkApiEventType</A> := 18;
+   <FONT COLOR=green><EM>-- Critical error event. If this event occurs, the NMT state machine will</EM></FONT>
+   <FONT COLOR=green><EM>-- be switched off with NMT event \ref kNmtEventCriticalError. The application</EM></FONT>
+   <FONT COLOR=green><EM>-- may restart the NMT state machine afterwards, but it is unlikely that the</EM></FONT>
+   <FONT COLOR=green><EM>-- openPOWERLINK stack will run stable, because this critical error or the</EM></FONT>
+   <FONT COLOR=green><EM>-- source of it often is a configuration error and not a run-time error. The</EM></FONT>
+   <FONT COLOR=green><EM>-- event argument contains an error event (\ref tEventError).</EM></FONT>
+   KOplkApiEventWarning         : <b>constant</b> <A HREF="oplk-oplk__ads.htm#242_12">tOplkApiEventType</A> := 19;
+   <FONT COLOR=green><EM>-- Warning event. The warning may be a run-time error, which should be</EM></FONT>
+   <FONT COLOR=green><EM>-- logged into an error log for further diagnostics. In any case the openPOWERLINK</EM></FONT>
+   <FONT COLOR=green><EM>-- stack proceeds. The event argument contains an error event. (\ref tEventError)</EM></FONT>
+   KOplkApiEventHistoryEntry    : <b>constant</b> <A HREF="oplk-oplk__ads.htm#242_12">tOplkApiEventType</A> := 20;
+   <FONT COLOR=green><EM>-- New error history event. The event argument contains an error history</EM></FONT>
+   <FONT COLOR=green><EM>-- entry (\ref tErrHistoryEntry).</EM></FONT>
+   kOplkApiEventNode            : <b>constant</b> <A HREF="oplk-oplk__ads.htm#242_12">tOplkApiEventType</A> := 32;
+   <FONT COLOR=green><EM>-- Node event on MN. The state of the specified CN has changed. The event</EM></FONT>
+   <FONT COLOR=green><EM>-- argument contains the node event information(\ref tOplkApiEventNode).</EM></FONT>
+   kOplkApiEventBoot            : <b>constant</b> <A HREF="oplk-oplk__ads.htm#242_12">tOplkApiEventType</A> := 33;
+   <FONT COLOR=green><EM>-- Boot event on MN. The MN reached the specified state in the boot-up</EM></FONT>
+   <FONT COLOR=green><EM>-- process. The event argument contains the boot event information</EM></FONT>
+   <FONT COLOR=green><EM>-- (\ref tOplkApiEventBoot).</EM></FONT>
+   kOplkApiEventSdo             : <b>constant</b> <A HREF="oplk-oplk__ads.htm#242_12">tOplkApiEventType</A> := 98;
+   <FONT COLOR=green><EM>-- SDO transfer finished. This event informs about a finished SDO transfer.</EM></FONT>
+   <FONT COLOR=green><EM>-- The event argument contains the SDO command layer information</EM></FONT>
+   <FONT COLOR=green><EM>-- (\ref tSdoComFinished).</EM></FONT>
+   kOplkApiEventObdAccess       : <b>constant</b> <A HREF="oplk-oplk__ads.htm#242_12">tOplkApiEventType</A> := 105;
+   <FONT COLOR=green><EM>-- Object dictionary access. This event informs about an access of the</EM></FONT>
+   <FONT COLOR=green><EM>-- object dictionary. The event argument contains an OBD callback parameter</EM></FONT>
+   <FONT COLOR=green><EM>-- (\ref tObdCbParam).</EM></FONT>
+   kOplkApiEventLed             : <b>constant</b> <A HREF="oplk-oplk__ads.htm#242_12">tOplkApiEventType</A> := 112;
+   <FONT COLOR=green><EM>-- Status and error LED event. The event allows the application to perform</EM></FONT>
+   <FONT COLOR=green><EM>-- the signaling of the POWERLINK LEDs according to the specification. The event</EM></FONT>
+   <FONT COLOR=green><EM>-- argument contains a LED event (\ref kOplkApiEventLed).</EM></FONT>
+   kOplkApiEventCfmProgress     : <b>constant</b> <A HREF="oplk-oplk__ads.htm#242_12">tOplkApiEventType</A> := 113;
+   <FONT COLOR=green><EM>-- CFM progress event. This event informs the application about the progress</EM></FONT>
+   <FONT COLOR=green><EM>-- of the configuration of a specific CN. The event argument contains the CN</EM></FONT>
+   <FONT COLOR=green><EM>-- progress information (\ref tCfmEventCnProgress).</EM></FONT>
+   kOplkApiEventCfmResult       : <b>constant</b> <A HREF="oplk-oplk__ads.htm#242_12">tOplkApiEventType</A> := 114;
+   <FONT COLOR=green><EM>-- CFM result event. This event informs the application about the result</EM></FONT>
+   <FONT COLOR=green><EM>-- of the configuration of a specific CN. The event argument contains the</EM></FONT>
+   <FONT COLOR=green><EM>-- CFM result information (\ref tOplkApiEventCfmResult).</EM></FONT>
+   kOplkApiEventReceivedAsnd    : <b>constant</b> <A HREF="oplk-oplk__ads.htm#242_12">tOplkApiEventType</A> := 115;
+   <FONT COLOR=green><EM>-- Received ASnd event. This event informs the application about a received</EM></FONT>
+   <FONT COLOR=green><EM>-- ASnd frame. This event is forwarded only if the application has enabled</EM></FONT>
+   <FONT COLOR=green><EM>-- the forwarding of ASnd frames by oplk_setAsndForward(). The event argument</EM></FONT>
+   <FONT COLOR=green><EM>-- contains information on the received ASnd frame (\ref tOplkApiEventRcvAsnd).</EM></FONT>
+   kOplkApiEventPdoChange       : <b>constant</b> <A HREF="oplk-oplk__ads.htm#242_12">tOplkApiEventType</A> := 116;
+   <FONT COLOR=green><EM>-- PDO changed event. This event informs the application about a changed</EM></FONT>
+   <FONT COLOR=green><EM>-- PDO mapping.</EM></FONT>
+   KOplkApiEventReceivedPres    : <b>constant</b> <A HREF="oplk-oplk__ads.htm#242_12">tOplkApiEventType</A> := 128;
+   <FONT COLOR=green><EM>-- Received PRes event. This event informs the application that a requested</EM></FONT>
+   <FONT COLOR=green><EM>-- PRes frame was received. It can be used for diagnosis purpose.</EM></FONT>
+   kOplkApiEventReceivedNonPlk  : <b>constant</b> <A HREF="oplk-oplk__ads.htm#242_12">tOplkApiEventType</A> := 129;
+   <FONT COLOR=green><EM>-- Received Ethernet frame event. This event informs the application about</EM></FONT>
+   <FONT COLOR=green><EM>-- a received Ethernet frame. The event argument contains information on the</EM></FONT>
+   <FONT COLOR=green><EM>-- received Ethernet frame (\ref tOplkApiEventReceivedNonPlk).</EM></FONT>
+   kOplkApiEventDefaultGwChange : <b>constant</b> <A HREF="oplk-oplk__ads.htm#242_12">tOplkApiEventType</A> := 130;
+   <FONT COLOR=green><EM>-- Default gateway changed event. This event informs the application about</EM></FONT>
+   <FONT COLOR=green><EM>-- a changed default gateway. The event argument gives the default gateway</EM></FONT>
+   <FONT COLOR=green><EM>-- (\ref tOplkApiEventDefaultGwChange).</EM></FONT>
+   KOplkApiEventReceivedSdoCom  : <b>constant</b> <A HREF="oplk-oplk__ads.htm#242_12">tOplkApiEventType</A> := 131;
+   <FONT COLOR=green><EM>-- Received SDO command layer. This event informs the application about</EM></FONT>
+   <FONT COLOR=green><EM>-- a received SDO command layer. This event argument contains information on the</EM></FONT>
+   <FONT COLOR=green><EM>-- received SDO command layer. (\ref tOplkApiEventReceivedSdoCom).</EM></FONT>
+   kOplkApiEventReceivedSdoSeq  : <b>constant</b> <A HREF="oplk-oplk__ads.htm#242_12">tOplkApiEventType</A> := 132;
+   <FONT COLOR=green><EM>-- Received SDO sequence layer. This event informs the application about</EM></FONT>
+   <FONT COLOR=green><EM>-- a received SDO sequence layer. This event argument contains information on the</EM></FONT>
+   <FONT COLOR=green><EM>-- received SDO sequence layer. (\ref tOplkApiEventReceivedSdoSeq).</EM></FONT>
+                                                          <FONT COLOR=green><EM>--   oplk/oplk.h:330</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief Event argument                                                     --</EM></FONT>
+<FONT COLOR=green><EM>-- This union specifies all data that can be specified as an event argument.--</EM></FONT>
+<FONT COLOR=green><EM>-- Depending on the event type (\ref tOplkApiEventType) the according member--</EM></FONT>
+<FONT COLOR=green><EM>-- of this union is used.                                                   --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="329_9">tOplkApiEventArg</A></FONT> (discr : unsigned := 0) <b>is</b> <b>record</b>
+      <b>case</b> discr <b>is</b>
+         <b>when</b> 0 =&gt;
+            pUserArg : System.Address;
+            <FONT COLOR=green><EM>-- User argument (\ref kOplkApiEventUserDef)</EM></FONT>
+         <b>when</b> 1 =&gt;
+            nmtStateChange : <b>aliased</b> <A HREF="oplk-nmt__ads.htm#6_14">nmt</A>.<A HREF="oplk-nmt__ads.htm#162_9">tEventNmtStateChange</A>;
+            <FONT COLOR=green><EM>-- NMT state change information (\ref kOplkApiEventNmtStateChange)</EM></FONT>
+         <b>when</b> 2 =&gt;
+            internalError     : <b>aliased</b> <A HREF="oplk-event__ads.htm#13_14">event</A>.<A HREF="oplk-event__ads.htm#295_9">tEventError</A>;
+            <FONT COLOR=green><EM>-- Internal stack error</EM></FONT>
+            <FONT COLOR=green><EM>-- (\ref kOplkApiEventCriticalError, \ref kOplkApiEventWarning)</EM></FONT>
+         <b>when</b> 3 =&gt;
+            sdoInfo           : <b>aliased</b> <A HREF="oplk-sdo__ads.htm#11_14">sdo</A>.<A HREF="oplk-sdo__ads.htm#83_9">tSdoComFinished</A>;
+            <FONT COLOR=green><EM>-- SDO information (\ref kOplkApiEventSdo)</EM></FONT>
+         <b>when</b> 4 =&gt;
+            obdCbParam        : <b>aliased</b> <A HREF="oplk-obd__ads.htm#14_14">obd</A>.<A HREF="oplk-obd__ads.htm#428_9">tObdCbParam</A>;
+            <FONT COLOR=green><EM>-- OBD callback parameter (\ref kOplkApiEventObdAccess)</EM></FONT>
+         <b>when</b> 5 =&gt;
+            nodeEvent         : <b>aliased</b> <A HREF="oplk-oplk__ads.htm#55_9">tOplkApiEventNode</A>;
+            <FONT COLOR=green><EM>-- Node event information (\ref kOplkApiEventNode)</EM></FONT>
+         <b>when</b> 6 =&gt;
+            bootEvent         : <b>aliased</b> <A HREF="oplk-oplk__ads.htm#76_9">tOplkApiEventBoot</A>;
+            <FONT COLOR=green><EM>-- Boot event information (\ref kOplkApiEventBoot)</EM></FONT>
+         <b>when</b> 7 =&gt;
+            ledEvent          : <b>aliased</b> <A HREF="oplk-oplk__ads.htm#94_9">tOplkApiEventLed</A>;
+            <FONT COLOR=green><EM>-- LED event information (\ref kOplkApiEventLed)</EM></FONT>
+         <b>when</b> 8 =&gt;
+            cfmProgress       : <b>aliased</b> <A HREF="oplk-cfm__ads.htm#12_14">cfm</A>.<A HREF="oplk-cfm__ads.htm#19_9">tCfmEventCnProgress</A>;
+            <FONT COLOR=green><EM>-- CFM progress information (\ref kOplkApiEventCfmProgress)</EM></FONT>
+         <b>when</b> 9 =&gt;
+            cfmResult         : <b>aliased</b> <A HREF="oplk-oplk__ads.htm#110_9">tOplkApiEventCfmResult</A>;
+            <FONT COLOR=green><EM>-- CFM result information (\ref kOplkApiEventCfmResult)</EM></FONT>
+         <b>when</b> 10 =&gt;
+            errorHistoryEntry : <b>aliased</b> <A HREF="oplk-frame__ads.htm#11_14">frame</A>.<A HREF="oplk-frame__ads.htm#213_9">tErrHistoryEntry</A>;
+            <FONT COLOR=green><EM>-- Error history entry (\ref kOplkApiEventHistoryEntry)</EM></FONT>
+         <b>when</b> 11 =&gt;
+            receivedAsnd      : <b>aliased</b> <A HREF="oplk-oplk__ads.htm#126_9">tOplkApiEventRcvAsnd</A>;
+            <FONT COLOR=green><EM>-- Received ASnd frame information (\ref kOplkApiEventReceivedAsnd)</EM></FONT>
+         <b>when</b> 12 =&gt;
+            pdoChange         : <b>aliased</b> <A HREF="oplk-oplk__ads.htm#142_9">tOplkApiEventPdoChange</A>;
+            <FONT COLOR=green><EM>-- PDO change event (\ref kOplkApiEventPdoChange)</EM></FONT>
+         <b>when</b> 13 =&gt;
+            receivedPres      : <b>aliased</b> <A HREF="oplk-oplk__ads.htm#164_9">tOplkApiEventReceivedPres</A>;
+            <FONT COLOR=green><EM>-- Received PRes frame (\ref kOplkApiEventReceivedPres)</EM></FONT>
+         <b>when</b> 14 =&gt;
+            receivedEth       : <b>aliased</b> <A HREF="oplk-oplk__ads.htm#181_9">tOplkApiEventReceivedNonPlk</A>;
+            <FONT COLOR=green><EM>-- Received Ethernet frame (\ref kOplkApiEventReceivedNonPlk)</EM></FONT>
+         <b>when</b> 15 =&gt;
+            defaultGwChange   : <b>aliased</b> <A HREF="oplk-oplk__ads.htm#197_9">tOplkApiEventDefaultGwChange</A>;
+            <FONT COLOR=green><EM>-- Default gateway change event (\ref kOplkApiEventDefaultGwChange)</EM></FONT>
+         <b>when</b> 16 =&gt;
+            receivedSdoCom    : <b>aliased</b> <A HREF="oplk-oplk__ads.htm#211_9">tOplkApiEventReceivedSdoCom</A>;
+            <FONT COLOR=green><EM>-- Received SDO command layer (\ref kOplkApiEventReceivedSdoCom)</EM></FONT>
+         <b>when</b> <b>others</b> =&gt;
+            receivedSdoSeq    : <b>aliased</b> <A HREF="oplk-oplk__ads.htm#227_9">tOplkApiEventReceivedSdoSeq</A>;
+            <FONT COLOR=green><EM>-- Received SDO sequence layer (\ref kOplkApiEventReceivedSdoSeq)</EM></FONT>
+      <b>end</b> <b>case</b>;
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-oplk__ads.htm#329_9">tOplkApiEventArg</A>);
+   <b>pragma</b> Unchecked_Union (<A HREF="oplk-oplk__ads.htm#329_9">tOplkApiEventArg</A>);               <FONT COLOR=green><EM>-- oplk/oplk.h:360</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief Type for API event callback function pointer                       --</EM></FONT>
+<FONT COLOR=green><EM>-- This type defines a function pointer to an API event callback function.  --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="396_9">tOplkApiCbEvent</A></FONT> <b>is</b> <b>access</b> <b>function</b>
+     (arg1 : <A HREF="oplk-oplk__ads.htm#242_12">tOplkApiEventType</A>;
+      <FONT COLOR=green><EM>-- The type of the event</EM></FONT>
+      arg2 : <b>access</b> <A HREF="oplk-oplk__ads.htm#329_9">tOplkApiEventArg</A>;
+      <FONT COLOR=green><EM>-- Pointer to the event argument</EM></FONT>
+      arg3 : System.Address
+      <FONT COLOR=green><EM>-- Pointer to the user defined argument</EM></FONT>
+     ) <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- The function returns a tOplkError error code</EM></FONT>
+   <b>pragma</b> Convention (C, <A HREF="oplk-oplk__ads.htm#396_9">tOplkApiCbEvent</A>);                  <FONT COLOR=green><EM>-- oplk/oplk.h:373</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief openPOWERLINK initialization parameters                            --</EM></FONT>
+<FONT COLOR=green><EM>-- The structure defines the openPOWERLINK initialization parameters.       --</EM></FONT>
+<FONT COLOR=green><EM>-- The openPOWERLINK stack will be initialized with these parameters when   --</EM></FONT>
+<FONT COLOR=green><EM>-- oplk_init() is called. Most of the parameters will be stored in the      --</EM></FONT>
+<FONT COLOR=green><EM>-- object dictionary.                                                       --</EM></FONT>
+<FONT COLOR=green><EM>-- Some of these objects are constant (read-only) objects and the           --</EM></FONT>
+<FONT COLOR=green><EM>-- initialization parameters are the only way of setting their values.      --</EM></FONT>
+<FONT COLOR=green><EM>-- Writable objects could be overwritten later at the boot-up process.      --</EM></FONT>
+<FONT COLOR=green><EM>-- This could be done by reading a CDC file for an MN or by configuration   --</EM></FONT>
+<FONT COLOR=green><EM>-- of a CN from an MN via SDO transfers.                                    --</EM></FONT>
+<FONT COLOR=green><EM>-- \note The elements of the parameter structure must be specified in       --</EM></FONT>
+<FONT COLOR=green><EM>-- platform byte order!                                                     --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> tOplkApiInitParam_aMacAddress_array <b>is</b>
+     <b>array</b> (0 .. 5) <b>of</b> <b>aliased</b> unsigned_char;
+   <b>type</b> tOplkApiInitParam_sHostname_array <b>is</b>
+     <b>array</b> (0 .. 31) <b>of</b> <b>aliased</b> unsigned_char;
+   <b>type</b> tOplkApiInitParam_aVendorSpecificExt2_array <b>is</b>
+     <b>array</b> (0 .. 47) <b>of</b> <b>aliased</b> unsigned_char;
+
+   <b>type</b> <FONT COLOR=red><A NAME="429_9">tOplkApiInitParam</A></FONT> <b>is</b> <b>record</b>
+      sizeOfInitParam         : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- This field contains the size of the initialization parameter structure.</EM></FONT>
+      fAsyncOnly              : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- Determines if this node is an async-only node.</EM></FONT>
+      <FONT COLOR=green><EM>-- If TRUE the node communicates only asynchronously.</EM></FONT>
+      nodeId                  : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- The node ID of this node.</EM></FONT>
+      aMacAddress             : <b>aliased</b> tOplkApiInitParam_aMacAddress_array;
+      <FONT COLOR=green><EM>-- The MAC address of this node.</EM></FONT>
+      featureFlags            : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- The POWERLINK feature flags of this node (0x1F82: NMT_FeatureFlags_U32)</EM></FONT>
+      cycleLen                : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- The cycle Length (0x1006: NMT_CycleLen_U32) in [us]</EM></FONT>
+      isochrTxMaxPayload      : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Maximum isochronous transmit payload</EM></FONT>
+      <FONT COLOR=green><EM>-- (0x1F98.1: IsochrTxMaxPayload_U16) Const!</EM></FONT>
+      isochrRxMaxPayload      : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Maximum isochronous receive payload</EM></FONT>
+      <FONT COLOR=green><EM>-- (0x1F98.2: IsochrRxMaxPayload_U16) Const!</EM></FONT>
+      presMaxLatency          : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Maximum PRes latency in ns (0x1F98.3: PResMaxLatency_U32) Read-only!</EM></FONT>
+      preqActPayloadLimit     : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Actual PReq payload limit (0x1F98.4: PReqActPayloadLimit_U16)</EM></FONT>
+      presActPayloadLimit     : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Actual PRes payload limit (0x1F98.5: PResActPayloadLimit_U16)</EM></FONT>
+      asndMaxLatency          : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Maximum ASnd latency in ns (0x1F98.6: ASndMaxLatency_U32) Const!</EM></FONT>
+      multiplCylceCnt         : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Multiplexed cycle count (0x1F98.7: MultiplCycleCnt_U8)</EM></FONT>
+      asyncMtu                : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Asynchronous MTU (0x1F98.8: AsyncMTU_U16)</EM></FONT>
+      prescaler               : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- SoC prescaler (0x1F98.9: Prescaler_U16)</EM></FONT>
+      lossOfFrameTolerance    : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Loss of frame tolerance in ns (0x1C14: DLL_LossOfFrameTolerance_U32)</EM></FONT>
+      waitSocPreq             : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Wait time for first PReq in ns (0x1F8A.1: WaitSoCPReq_U32) Only for MN!</EM></FONT>
+      asyncSlotTimeout        : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Asynchronous slot timeout in ns (0x1F8A.2: AsyncSlotTimeout_U32)</EM></FONT>
+      <FONT COLOR=green><EM>-- Only for MN!</EM></FONT>
+      deviceType              : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- The device type of this node (0x1000.0: NMT_DeviceType_U32) Const!</EM></FONT>
+      vendorId                : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- The vendor ID of this node</EM></FONT>
+      <FONT COLOR=green><EM>-- (0x1018.1: NMT_IdentityObject_REC.VendorId_U32) Const!</EM></FONT>
+      productCode             : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- The product code of this node</EM></FONT>
+      <FONT COLOR=green><EM>-- (0x1018.2: NMT_IdentityObject_REC.ProductCode_U32) Const!</EM></FONT>
+      revisionNumber          : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- The revision number of this node</EM></FONT>
+      <FONT COLOR=green><EM>-- (0x1018.3: NMT_IdentityObject_REC.RevisionNo_U32) Const!</EM></FONT>
+      serialNumber : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- The serial number of this node</EM></FONT>
+      <FONT COLOR=green><EM>-- (0x1018.4: NMT_IdentityObject_REC.SerialNo_U32) Const!</EM></FONT>
+      vendorSpecificExt1      : <b>aliased</b> Extensions.unsigned_long_long;
+      <FONT COLOR=green><EM>-- Vendor specific extensions 1 listed in the IdentResponse frame</EM></FONT>
+      verifyConfigurationDate : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Local configuration date (0x1020.1 CFM_VerifyConfiguration_REC.ConfDate_U32)</EM></FONT>
+      verifyConfigurationTime : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Local configuration time (0x1020.2 CFM_VerifyConfiguration_REC.ConfTime_U32)</EM></FONT>
+      applicationSwDate       : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Local program Date (0x1F52.1 PDL_LocVerApplSw_REC.ApplSwDate_U32)</EM></FONT>
+      applicationSwTime       : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Local program Time (0x1F52.2 PDL_LocVerApplSw_REC.ApplSwTime_U32)</EM></FONT>
+      ipAddress               : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- IP address of the node</EM></FONT>
+      subnetMask              : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Subnet mask of the node</EM></FONT>
+      defaultGateway          : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Default gateway used by this node</EM></FONT>
+      sHostname               : <b>aliased</b> tOplkApiInitParam_sHostname_array;
+      <FONT COLOR=green><EM>-- DNS host name of the node (maximum length: 32 characters!)</EM></FONT>
+      aVendorSpecificExt2     : <b>aliased</b> tOplkApiInitParam_aVendorSpecificExt2_array;
+      <FONT COLOR=green><EM>-- Vendor specific extensions 2 listed in the IdentResponse frame</EM></FONT>
+      pDevName                : <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C.Strings.chars_ptr;
+      <FONT COLOR=green><EM>-- Pointer to manufacturer device name</EM></FONT>
+      <FONT COLOR=green><EM>-- (0x1008.0: NMT_ManufactDevName_VS) Const!</EM></FONT>
+      pHwVersion              : <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C.Strings.chars_ptr;
+      <FONT COLOR=green><EM>-- Pointer to manufacturer hardware version</EM></FONT>
+      <FONT COLOR=green><EM>-- (0x1009.0: NMT_ManufactHwVers_VS) Const!</EM></FONT>
+      pSwVersion              : <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C.Strings.chars_ptr;
+      <FONT COLOR=green><EM>-- Pointer to manufacturer software version</EM></FONT>
+      <FONT COLOR=green><EM>-- (0x100A.0: NMT_ManufactSwVers_VS) Const!</EM></FONT>
+      pfnCbEvent              : <A HREF="oplk-oplk__ads.htm#396_9">tOplkApiCbEvent</A>;
+      <FONT COLOR=green><EM>-- Pointer to the applications event handling function.</EM></FONT>
+      pEventUserArg           : System.Address;
+      <FONT COLOR=green><EM>-- Pointer to a user argument that is supplied to the event callback function</EM></FONT>
+      <FONT COLOR=green><EM>-- (\ref tOplkApiCbEvent)</EM></FONT>
+      pfnCbSync               : <A HREF="oplk-event__ads.htm#13_14">event</A>.<A HREF="oplk-event__ads.htm#329_9">tSyncCb</A>;
+      <FONT COLOR=green><EM>-- Pointer to the application sync callback function.</EM></FONT>
+      <FONT COLOR=green><EM>-- It is used for single process systems where the whole openPOWERLINK stack</EM></FONT>
+      <FONT COLOR=green><EM>-- is linked to the application. In this case the stack calls the provided</EM></FONT>
+      <FONT COLOR=green><EM>-- application callback function when synchronous data can be exchanged.</EM></FONT>
+      <FONT COLOR=green><EM>-- If a split stack is used (e.g. Linux user/kernel) it must be initialized</EM></FONT>
+      <FONT COLOR=green><EM>-- with NULL. In this case the application must use oplk_waitSyncEvent()</EM></FONT>
+      <FONT COLOR=green><EM>-- for waiting on synchronous data.</EM></FONT>
+      hwParam                 : <b>aliased</b> <A HREF="oplk-oplkinc__ads.htm#9_14">oplkinc</A>.<A HREF="oplk-oplkinc__ads.htm#30_9">tHwParam</A>;
+      <FONT COLOR=green><EM>-- The hardware parameters of the node</EM></FONT>
+      syncResLatency          : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Constant response latency for SyncRes in ns</EM></FONT>
+      syncNodeId              : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Specifies the synchronization point for the MN.</EM></FONT>
+      <FONT COLOR=green><EM>-- The synchronization take place after a PRes from a CN with this node-ID</EM></FONT>
+      <FONT COLOR=green><EM>-- (0 = SoC, 255 = SoA)</EM></FONT>
+      fSyncOnPrcNode          : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- If it is TRUE, Sync on PRes chained CN; FALSE: conventional CN (PReq/PRes)</EM></FONT>
+      sdoStackType            : <b>aliased</b> <A HREF="oplk-oplk__ads.htm#40_12">tOplkApiSdoStack</A>;
+      <FONT COLOR=green><EM>-- Specifies the SDO stack that should be used.</EM></FONT>
+      <FONT COLOR=green><EM>-- It is used for switching between the standard SDO stack and</EM></FONT>
+      <FONT COLOR=green><EM>-- alternative SDO stacks.</EM></FONT>
+      <FONT COLOR=green><EM>-- The available SDO stacks are defined by the tOplkApiSdoStack enumeration.</EM></FONT>
+      <FONT COLOR=green><EM>-- If the standard SDO stack is used it must be initialized with 0x00.</EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-oplk__ads.htm#429_9">tOplkApiInitParam</A>);  <FONT COLOR=green><EM>-- oplk/oplk.h:441</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief  Process image information structure                               --</EM></FONT>
+<FONT COLOR=green><EM>-- This structure provides information about a process image.               --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="550_9">tOplkApiProcessImage</A></FONT> <b>is</b> <b>record</b>
+      pImage : System.Address;
+      <FONT COLOR=green><EM>-- Pointer to the process image</EM></FONT>
+      imageSize : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Size of the process image</EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention
+     (C_Pass_By_Copy,
+      <A HREF="oplk-oplk__ads.htm#550_9">tOplkApiProcessImage</A>);                                <FONT COLOR=green><EM>-- oplk/oplk.h:452</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>-- function prototypes                                                      --</EM></FONT>
+<FONT COLOR=green><EM>--    Generic API functions                                                 --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+
+   <b>function</b> <A HREF="oplk-oplk__ads.htm#579_22">Oplk_Init</A><FONT COLOR=red><A NAME="566_13"></A></FONT>
+     (pInitParam_p : <b>access</b> <A HREF="oplk-oplk__ads.htm#429_9">tOplkApiInitParam</A>)
+     <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">Errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- pInitParam_p : Pointer to the init parameters. The init</EM></FONT>
+   <FONT COLOR=green><EM>--                parameters must be set by the application.</EM></FONT>
+   <FONT COLOR=green><EM>-- tOplkError   :</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk     Stack was successfully initialized.</EM></FONT>
+   <FONT COLOR=green><EM>--   Other        Error occurred while initializing the openPOWERLINK stack.</EM></FONT>
+   <FONT COLOR=green><EM>--</EM></FONT>
+   <FONT COLOR=green><EM>-- The function initializes the openPOWERLINK stack. After the stack is</EM></FONT>
+   <FONT COLOR=green><EM>-- initialized the application must start it by performing a software reset.</EM></FONT>
+   <FONT COLOR=green><EM>-- This is done by sending the NMT event \ref kNmtEventSwReset. The event</EM></FONT>
+   <FONT COLOR=green><EM>-- can be sent by calling oplk_execNmtCommand(kNmtEventSwReset).</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-oplk__ads.htm#566_13">oplk_init</A><FONT COLOR=red><A NAME="579_22"></A></FONT>, "oplk_init");
+   
+   
+   <b>function</b> <A HREF="oplk-oplk__ads.htm#591_22">oplk_shutdown</A><FONT COLOR=red><A NAME="582_13"></A></FONT> 
+     <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">Errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- tOplkError   :</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk     Stack was successfully shut down.</EM></FONT>
+   <FONT COLOR=green><EM>--   Other        Error occurred while shutting down the openPOWERLINK stack.</EM></FONT>
+   <FONT COLOR=green><EM>--</EM></FONT>
+   <FONT COLOR=green><EM>-- The function shuts down the openPOWERLINK stack. Before shutting down the stack</EM></FONT>
+   <FONT COLOR=green><EM>-- it should be stopped by sending the NMT command kNmtEventSwitchOff. The command</EM></FONT>
+   <FONT COLOR=green><EM>-- can be sent by calling oplk_execNmtCommand(kNmtEventSwitchOff);</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-oplk__ads.htm#582_13">oplk_shutdown</A><FONT COLOR=red><A NAME="591_22"></A></FONT>, "oplk_shutdown");
+   
+   
+   <b>function</b> <A HREF="oplk-oplk__ads.htm#604_22">oplk_execNmtCommand</A><FONT COLOR=red><A NAME="594_13"></A></FONT>
+     (NmtEvent_p : <A HREF="oplk-nmt__ads.htm#6_14">Nmt</A>.<A HREF="oplk-nmt__ads.htm#79_12">tNmtEvent</A>)
+     <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">Errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- NmtEvent_p : NMT command to send.</EM></FONT>
+   <FONT COLOR=green><EM>-- The function returns a tOplkError error code.</EM></FONT>
+   <FONT COLOR=green><EM>--</EM></FONT>
+   <FONT COLOR=green><EM>-- The function executes an NMT command, i.e. post the NMT event to the NMT module.</EM></FONT>
+   <FONT COLOR=green><EM>-- NMT commands which are not appropriate in the current NMT state are silently</EM></FONT>
+   <FONT COLOR=green><EM>-- ignored. Please keep in mind that the NMT state may change until the NMT command</EM></FONT>
+   <FONT COLOR=green><EM>-- is actually executed.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-oplk__ads.htm#594_13">oplk_execNmtCommand</A><FONT COLOR=red><A NAME="604_22"></A></FONT>, "oplk_execNmtCommand");
+   
+   
+   <b>function</b> <A HREF="oplk-oplk__ads.htm#635_22">oplk_linkObject</A><FONT COLOR=red><A NAME="607_13"></A></FONT>
+     (objIndex_p      : unsigned;
+      pVar_p          : System.Address;
+      pVarEntries_p   : <b>access</b> unsigned;
+      pEntrySize_p    : <b>access</b> <A HREF="oplk-obd__ads.htm#14_14">Obd</A>.<A HREF="oplk-obd__ads.htm#214_12">tObdSize</A>;
+      firstSubindex_p : unsigned)
+     <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">Errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- objIndex_p      : Index of the object to link the variable to.</EM></FONT>
+   <FONT COLOR=green><EM>-- pVar_p          : Pointer to the application variable that should be</EM></FONT>
+   <FONT COLOR=green><EM>--                   linked.</EM></FONT>
+   <FONT COLOR=green><EM>-- pVarEntries_p   : Pointer to the number of entries to link. The function</EM></FONT>
+   <FONT COLOR=green><EM>--                   stores the number of actually used entries at this</EM></FONT>
+   <FONT COLOR=green><EM>--                   location.</EM></FONT>
+   <FONT COLOR=green><EM>-- pEntrySize_p    : Pointer to the size of one entry. If the size is</EM></FONT>
+   <FONT COLOR=green><EM>--                   zero, the actual size will be read from the object</EM></FONT>
+   <FONT COLOR=green><EM>--                   dictionary. The function stores the entire size of</EM></FONT>
+   <FONT COLOR=green><EM>--                   all linked entries at this location.</EM></FONT>
+   <FONT COLOR=green><EM>-- firstSubindex_p : Specifies the first subindex to be linked.</EM></FONT>
+   <FONT COLOR=green><EM>-- tOplkError      :</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk        The variables are successfully linked to the</EM></FONT>
+   <FONT COLOR=green><EM>--                   object dictionary.</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorObdIndexNotExist    The object index does not exist in the object</EM></FONT>
+   <FONT COLOR=green><EM>--                             dictionary.</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorObdSubindexNotExist The subindex does not exist in the object</EM></FONT>
+   <FONT COLOR=green><EM>--                             dictionary.</EM></FONT>
+   <FONT COLOR=green><EM>--</EM></FONT>
+   <FONT COLOR=green><EM>-- The function links an array of application variables onto the specified object</EM></FONT>
+   <FONT COLOR=green><EM>-- in the object dictionary (OD).</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-oplk__ads.htm#607_13">oplk_linkObject</A><FONT COLOR=red><A NAME="635_22"></A></FONT>, "oplk_linkObject");         <FONT COLOR=green><EM>-- oplk/oplk.h:465</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-oplk__ads.htm#671_22">oplk_readObject</A><FONT COLOR=red><A NAME="638_13"></A></FONT>
+     (pSdoComConHdl_p : <b>access</b> <A HREF="oplk-sdo__ads.htm#11_14">Sdo</A>.<A HREF="oplk-sdo__ads.htm#21_12">tSdoComConHdl</A>;
+      nodeId_p        : unsigned;
+      index_p         : unsigned;
+      subindex_p      : unsigned;
+      pDstData_le_p   : System.Address;
+      pSize_p         : <b>access</b> unsigned;
+      sdoType_p       : <A HREF="oplk-sdo__ads.htm#11_14">Sdo</A>.<A HREF="oplk-sdo__ads.htm#29_9">tSdoType</A>;
+      pUserArg_p      : System.Address)
+     <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">Errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- pSdoComConHdl_p : A pointer to the SDO connection handle. It may be</EM></FONT>
+   <FONT COLOR=green><EM>--                   NULL in case of local OD access.</EM></FONT>
+   <FONT COLOR=green><EM>-- nodeId_p        : Node ID of the node to read. If node ID is 0, the</EM></FONT>
+   <FONT COLOR=green><EM>--                   local OD will be read.</EM></FONT>
+   <FONT COLOR=green><EM>-- index_p         : The index of the object to read.</EM></FONT>
+   <FONT COLOR=green><EM>-- subindex_p      : The subindex of the object to read.</EM></FONT>
+   <FONT COLOR=green><EM>-- pDstData_le_p   : Pointer where to store the read data. The data is in</EM></FONT>
+   <FONT COLOR=green><EM>--                   little endian byte order.</EM></FONT>
+   <FONT COLOR=green><EM>-- pSize_p         : Pointer to the size of the buffer. For local reads</EM></FONT>
+   <FONT COLOR=green><EM>--                   the function stores the size of the object at this</EM></FONT>
+   <FONT COLOR=green><EM>--                   location.</EM></FONT>
+   <FONT COLOR=green><EM>-- sdoType_p       : The type of the SDO transfer (SDO over ASnd, SDO over</EM></FONT>
+   <FONT COLOR=green><EM>--                   UDP or SDO over PDO)</EM></FONT>
+   <FONT COLOR=green><EM>-- pUserArg_p      : User defined argument which will be passed to the</EM></FONT>
+   <FONT COLOR=green><EM>--                   event callback function.</EM></FONT>
+   <FONT COLOR=green><EM>-- tOplkError      :</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk          Entry was successfully read from OD.</EM></FONT>
+   <FONT COLOR=green><EM>--   Other             Error occurred while reading the OD.</EM></FONT>
+   <FONT COLOR=green><EM>--</EM></FONT>
+   <FONT COLOR=green><EM>-- The function reads the specified entry from the object dictionary of the specified</EM></FONT>
+   <FONT COLOR=green><EM>-- node. If this node is a remote node, it performs an SDO transfer. In such case this</EM></FONT>
+   <FONT COLOR=green><EM>-- function returns kErrorApiTaskDeferred and the application is informed via the</EM></FONT>
+   <FONT COLOR=green><EM>-- event callback function when the task is completed.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-oplk__ads.htm#638_13">oplk_readObject</A><FONT COLOR=red><A NAME="671_22"></A></FONT>, "oplk_readObject");           <FONT COLOR=green><EM>-- oplk/oplk.h:467</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-oplk__ads.htm#705_22">oplk_writeObject</A><FONT COLOR=red><A NAME="674_13"></A></FONT>
+     (pSdoComConHdl_p : <b>access</b> <A HREF="oplk-sdo__ads.htm#11_14">Sdo</A>.<A HREF="oplk-sdo__ads.htm#21_12">tSdoComConHdl</A>;
+      nodeId_p        : unsigned;
+      index_p         : unsigned;
+      subindex_p      : unsigned;
+      pSrcData_le_p   : System.Address;
+      size_p          : unsigned;
+      sdoType_p       : <A HREF="oplk-sdo__ads.htm#11_14">Sdo</A>.<A HREF="oplk-sdo__ads.htm#29_9">tSdoType</A>;
+      pUserArg_p      : System.Address)
+     <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">Errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- pSdoComConHdl_p : A pointer to the SDO connection handle. It may be</EM></FONT>
+   <FONT COLOR=green><EM>--                   NULL in case of local OD access.</EM></FONT>
+   <FONT COLOR=green><EM>-- nodeId_p        : Node ID of the node to write. If node ID is 0, the</EM></FONT>
+   <FONT COLOR=green><EM>--                   local OD will be read.</EM></FONT>
+   <FONT COLOR=green><EM>-- index_p         : The index of the object to write.</EM></FONT>
+   <FONT COLOR=green><EM>-- subindex_p      : The subindex of the object to write.</EM></FONT>
+   <FONT COLOR=green><EM>-- pSrcData_le_p   : Pointer to data. The data must be in little endian</EM></FONT>
+   <FONT COLOR=green><EM>--                   byte order.</EM></FONT>
+   <FONT COLOR=green><EM>-- size_p          : Size of the data to write.</EM></FONT>
+   <FONT COLOR=green><EM>-- sdoType_p       : The type of the SDO transfer (SDO over ASnd, SDO over</EM></FONT>
+   <FONT COLOR=green><EM>--                   UDP or SDO over PDO)</EM></FONT>
+   <FONT COLOR=green><EM>-- pUserArg_p      : User defined argument which will be passed to the</EM></FONT>
+   <FONT COLOR=green><EM>--                   event callback function.</EM></FONT>
+   <FONT COLOR=green><EM>-- tOplkError      :</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk          Entry was successfully written to the OD.</EM></FONT>
+   <FONT COLOR=green><EM>--   Other             Error occurred while writing to the OD.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function writes the specified entry to the object dictionary of the specified</EM></FONT>
+   <FONT COLOR=green><EM>-- node. If this node is a remote node, it performs an SDO transfer. In such case this</EM></FONT>
+   <FONT COLOR=green><EM>-- function returns kErrorApiTaskDeferred and the application is informed via the</EM></FONT>
+   <FONT COLOR=green><EM>-- event callback function when the task is completed.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-oplk__ads.htm#674_13">oplk_writeObject</A><FONT COLOR=red><A NAME="705_22"></A></FONT>, "oplk_writeObject");           <FONT COLOR=green><EM>-- oplk/oplk.h:470</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-oplk__ads.htm#719_22">oplk_freeSdoChannel</A><FONT COLOR=red><A NAME="708_13"></A></FONT>
+     (sdoComConHdl_p : <A HREF="oplk-sdo__ads.htm#11_14">sdo</A>.<A HREF="oplk-sdo__ads.htm#21_12">tSdoComConHdl</A>)
+     <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- sdoComConHdl_p : The SDO connection handle.</EM></FONT>
+   <FONT COLOR=green><EM>-- tOplkError     :</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk          SDO channel was successfully freed.</EM></FONT>
+   <FONT COLOR=green><EM>--   Other             Error occurred while freeing the SDO channel.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function frees the specified SDO channel. It must be called when the SDO</EM></FONT>
+   <FONT COLOR=green><EM>-- channel to a remote node is not needed anymore. This may be done in the event</EM></FONT>
+   <FONT COLOR=green><EM>-- callback function when the last SDO transfer to a remote node has completed.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-oplk__ads.htm#708_13">oplk_freeSdoChannel</A><FONT COLOR=red><A NAME="719_22"></A></FONT>, "oplk_freeSdoChannel");  <FONT COLOR=green><EM>-- oplk/oplk.h:473</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-oplk__ads.htm#734_22">oplk_abortSdo</A><FONT COLOR=red><A NAME="722_13"></A></FONT>
+     (sdoComConHdl_p : <A HREF="oplk-sdo__ads.htm#11_14">Sdo</A>.<A HREF="oplk-sdo__ads.htm#21_12">tSdoComConHdl</A>;
+      abortCode_p    : unsigned)
+     <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">Errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- sdoComConHdl_p : The SDO connection handle.</EM></FONT>
+   <FONT COLOR=green><EM>-- abortCode_p    : The abort code which shall be sent to the remote</EM></FONT>
+   <FONT COLOR=green><EM>--                  node.</EM></FONT>
+   <FONT COLOR=green><EM>-- tOplkError     :</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk          SDO transfer was successfully freed.</EM></FONT>
+   <FONT COLOR=green><EM>--   Other             Error occurred while aborting the SDO transfer.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function aborts the running SDO transfer on the specified SDO channel.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-oplk__ads.htm#722_13">oplk_abortSdo</A><FONT COLOR=red><A NAME="734_22"></A></FONT>, "oplk_abortSdo");          <FONT COLOR=green><EM>-- oplk/oplk.h:474</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-oplk__ads.htm#754_22">oplk_readLocalObject</A><FONT COLOR=red><A NAME="737_13"></A></FONT>
+     (index_p    : unsigned;
+      subindex_p : unsigned;
+      pDstData_p : System.Address;
+      pSize_p    : <b>access</b> unsigned)
+     <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">Errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- index_p    : The index of the object to read.</EM></FONT>
+   <FONT COLOR=green><EM>-- subindex_p : The subindex of the object to read.</EM></FONT>
+   <FONT COLOR=green><EM>-- pDstData_p : Pointer where to store the read data. The data is in</EM></FONT>
+   <FONT COLOR=green><EM>--              platform byte order.</EM></FONT>
+   <FONT COLOR=green><EM>-- pSize_p    : Pointer to the size of the buffer. The function</EM></FONT>
+   <FONT COLOR=green><EM>--              stores the size of the object at this location.</EM></FONT>
+   <FONT COLOR=green><EM>-- tOplkError     :</EM></FONT>
+   <FONT COLOR=green><EM>-- kErrorOk          Entry was successfully read from local OD.</EM></FONT>
+   <FONT COLOR=green><EM>-- Other             Error occurred while reading the OD.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function reads the specified entry from the local object dictionary.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-oplk__ads.htm#737_13">oplk_readLocalObject</A><FONT COLOR=red><A NAME="754_22"></A></FONT>, "oplk_readLocalObject");  <FONT COLOR=green><EM>-- oplk/oplk.h:475</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-oplk__ads.htm#773_22">oplk_writeLocalObject</A><FONT COLOR=red><A NAME="757_13"></A></FONT>
+     (index_p    : unsigned;
+      subindex_p : unsigned;
+      pSrcData_p : System.Address;
+      size_p     : unsigned)
+     <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">Errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- index_p    : The index of the object to write.</EM></FONT>
+   <FONT COLOR=green><EM>-- subindex_p : The subindex of the object to write.</EM></FONT>
+   <FONT COLOR=green><EM>-- pSrcData_p : Pointer to data. The data must be in platform byte</EM></FONT>
+   <FONT COLOR=green><EM>--              order.</EM></FONT>
+   <FONT COLOR=green><EM>-- size_p     : Size of the data to write.</EM></FONT>
+   <FONT COLOR=green><EM>-- tOplkError     :</EM></FONT>
+   <FONT COLOR=green><EM>-- kErrorOk          Entry was successfully written to local OD.</EM></FONT>
+   <FONT COLOR=green><EM>-- Other             Error occurred while writing to the OD.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function writes the specified entry to the local object dictionary.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-oplk__ads.htm#757_13">oplk_writeLocalObject</A><FONT COLOR=red><A NAME="773_22"></A></FONT>, "oplk_writeLocalObject");  <FONT COLOR=green><EM>-- oplk/oplk.h:476</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-oplk__ads.htm#796_22">oplk_sendAsndFrame</A><FONT COLOR=red><A NAME="776_13"></A></FONT>
+     (dstNodeId_p  : unsigned_char;
+      pAsndFrame_p : <b>access</b> <A HREF="oplk-frame__ads.htm#11_14">Frame</A>.<A HREF="oplk-frame__ads.htm#426_9">tAsndFrame</A>;
+      asndSize_p   : size_t)
+     <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">Errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- dstNodeId_p  : Destination Node ID to send the ASnd frame to.</EM></FONT>
+   <FONT COLOR=green><EM>-- pAsndFrame_p : Pointer to ASnd frame which should be sent.</EM></FONT>
+   <FONT COLOR=green><EM>-- asndSize_p   : Size of ASnd frame to send. The size contains the</EM></FONT>
+   <FONT COLOR=green><EM>--                service ID and the payload. The size cannot</EM></FONT>
+   <FONT COLOR=green><EM>--                exceed the maximum asynchronous size configured</EM></FONT>
+   <FONT COLOR=green><EM>--                in AsyncMTU.</EM></FONT>
+   <FONT COLOR=green><EM>-- tOplkError     :</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk          The ASnd frame was successfully queued into the</EM></FONT>
+   <FONT COLOR=green><EM>--                     generic ASnd buffer.</EM></FONT>
+   <FONT COLOR=green><EM>--   Other             Error occurred while adding the ASnd frame into</EM></FONT>
+   <FONT COLOR=green><EM>--                     the generic ASnd buffer.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function sends a generic ASnd frame to the specified node. The function</EM></FONT>
+   <FONT COLOR=green><EM>-- queues the frame into the generic ASnd queue and immediately returns. The</EM></FONT>
+   <FONT COLOR=green><EM>-- sending of the frame is then controlled by the asynchronous scheduler.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-oplk__ads.htm#776_13">oplk_sendAsndFrame</A><FONT COLOR=red><A NAME="796_22"></A></FONT>, "oplk_sendAsndFrame");
+   
+   
+   <b>function</b> <A HREF="oplk-oplk__ads.htm#815_22">oplk_sendEthFrame</A><FONT COLOR=red><A NAME="799_13"></A></FONT>
+     (pFrame_p    : <b>access</b> <A HREF="oplk-frame__ads.htm#11_14">Frame</A>.<A HREF="oplk-frame__ads.htm#460_9">tPlkFrame</A>;
+      frameSize_p : unsigned)
+     <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">Errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- pFrame_p    : Pointer to frame which should be sent.</EM></FONT>
+   <FONT COLOR=green><EM>-- frameSize_p : Size of frame which should be sent.</EM></FONT>
+   <FONT COLOR=green><EM>--               The size shall include Ethernet header and payload</EM></FONT>
+   <FONT COLOR=green><EM>--               (e.g. min. Ethernet frame 14 byte + 46 byte = 60 byte).</EM></FONT>
+   <FONT COLOR=green><EM>-- tOplkError     :</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk                Ethernet frame was successfully sent.</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorInvalidOperation  EtherType set in frame is invalid.</EM></FONT>
+   <FONT COLOR=green><EM>--   Other                   Error occurred while sending the Ethernet frame.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function sends an Ethernet frame with generic priority. The given frame's</EM></FONT>
+   <FONT COLOR=green><EM>-- EtherType must be set to a valid pattern unequal 0x0000 and 0x88AB. The lower</EM></FONT>
+   <FONT COLOR=green><EM>-- layer inserts the node's MAC address if the source MAC address is set to 0.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-oplk__ads.htm#799_13">oplk_sendEthFrame</A><FONT COLOR=red><A NAME="815_22"></A></FONT>, "oplk_sendEthFrame");  <FONT COLOR=green><EM>-- oplk/oplk.h:478</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-oplk__ads.htm#832_22">oplk_setAsndForward</A><FONT COLOR=red><A NAME="818_13"></A></FONT>
+     (serviceId_p  : unsigned_char;
+      FilterType_p : <A HREF="oplk-oplk__ads.htm#24_9">tOplkApiAsndFilter</A>)
+     <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">Errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- serviceId_p  :The ASnd service ID for which the forwarding will</EM></FONT>
+   <FONT COLOR=green><EM>--               be set.</EM></FONT>
+   <FONT COLOR=green><EM>-- FilterType_p : Specifies which types of ASnd frames should be</EM></FONT>
+   <FONT COLOR=green><EM>--                received. Could be none, unicast or all frames.</EM></FONT>
+   <FONT COLOR=green><EM>-- tOplkError     :</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk          Forwarding was successfully set.</EM></FONT>
+   <FONT COLOR=green><EM>--   Other             Error occurred while setting ASnd forwarding.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function enables or disables the forwarding of received ASnd frames</EM></FONT>
+   <FONT COLOR=green><EM>-- to the application.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-oplk__ads.htm#818_13">oplk_setAsndForward</A><FONT COLOR=red><A NAME="832_22"></A></FONT>, "oplk_setAsndForward");  <FONT COLOR=green><EM>-- oplk/oplk.h:479</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-oplk__ads.htm#847_22">oplk_setNonPlkForward</A><FONT COLOR=red><A NAME="835_13"></A></FONT>
+     (fEnable_p : unsigned_char)
+     <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">Errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- fEnable_p : Enable received Ethernet frame forwarding with TRUE.</EM></FONT>
+   <FONT COLOR=green><EM>--             Disable received Ethernet frame forwarding with FALSE.</EM></FONT>
+   <FONT COLOR=green><EM>-- tOplkError     :</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk                Forwarding was successfully set.</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorIllegalInstance   Virtual Ethernet is not enabled.</EM></FONT>
+   <FONT COLOR=green><EM>--   Other                   Error occurred while setting Ethernet forwarding.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function enables or disables the forwarding of received non-POWERLINK</EM></FONT>
+   <FONT COLOR=green><EM>-- Ethernet frames to the application.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-oplk__ads.htm#835_13">oplk_setNonPlkForward</A><FONT COLOR=red><A NAME="847_22"></A></FONT>, "oplk_setNonPlkForward");  <FONT COLOR=green><EM>-- oplk/oplk.h:480</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-oplk__ads.htm#861_22">oplk_postUserEvent</A><FONT COLOR=red><A NAME="850_13"></A></FONT>
+     (pUserArg_p : System.Address)
+     <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">Errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- pUserArg_p : User defined pointer.</EM></FONT>
+   <FONT COLOR=green><EM>-- tOplkError     :</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk          Event was successfully posted.</EM></FONT>
+   <FONT COLOR=green><EM>--   Other             Error while posting the event.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function posts user-defined events to event processing thread, i.e. calls</EM></FONT>
+   <FONT COLOR=green><EM>-- user event callback function with event \ref kOplkApiEventUserDef. This function</EM></FONT>
+   <FONT COLOR=green><EM>-- is thread safe and is meant for synchronization.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-oplk__ads.htm#850_13">oplk_postUserEvent</A><FONT COLOR=red><A NAME="861_22"></A></FONT>, "oplk_postUserEvent");  <FONT COLOR=green><EM>-- oplk/oplk.h:481</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-oplk__ads.htm#876_22">oplk_triggerMnStateChange</A><FONT COLOR=red><A NAME="864_13"></A></FONT>
+     (nodeId_p      : unsigned;
+      nodeCommand_p : <A HREF="oplk-nmt__ads.htm#6_14">Nmt</A>.<A HREF="oplk-nmt__ads.htm#225_12">tNmtNodeCommand</A>)
+     <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">Errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- nodeId_p      : The Node ID for which the node command will be executed.</EM></FONT>
+   <FONT COLOR=green><EM>-- nodeCommand_p : The Node command to execute.</EM></FONT>
+   <FONT COLOR=green><EM>-- tOplkError     :</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk          NMT node command was successfully sent.</EM></FONT>
+   <FONT COLOR=green><EM>--   Other             Error occurred while sending NMT node command.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function triggers a NMT state change by sending the specified node command</EM></FONT>
+   <FONT COLOR=green><EM>-- for the specified node.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-oplk__ads.htm#864_13">oplk_triggerMnStateChange</A><FONT COLOR=red><A NAME="876_22"></A></FONT>, "oplk_triggerMnStateChange");  <FONT COLOR=green><EM>-- oplk/oplk.h:482</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-oplk__ads.htm#897_22">oplk_setCdcBuffer</A><FONT COLOR=red><A NAME="879_13"></A></FONT>
+     (pbCdc_p   : <b>access</b> unsigned_char;
+      cdcSize_p : unsigned)
+     <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">Errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- pbCdc_p   : Pointer to the concise device description.</EM></FONT>
+   <FONT COLOR=green><EM>-- cdcSize_p : Size of the concise device description</EM></FONT>
+   <FONT COLOR=green><EM>-- tOplkError     :</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk          The buffer has successfully been set.</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorApiInvalidParam       The function is not available due to missing</EM></FONT>
+   <FONT COLOR=green><EM>--                               CDC module.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function sets the concise device description (CDC) buffer to be used by</EM></FONT>
+   <FONT COLOR=green><EM>-- the stack to read the configuration. It can be used instead of</EM></FONT>
+   <FONT COLOR=green><EM>-- oplk_setCdcFilename() when no file system is available (e.g. on an</EM></FONT>
+   <FONT COLOR=green><EM>-- embedded system).</EM></FONT>
+   <FONT COLOR=green><EM>-- \note   The function is only used if the CDC functionality is included in the</EM></FONT>
+   <FONT COLOR=green><EM>-- openPOWERLINK stack.</EM></FONT>
+   <FONT COLOR=green><EM>-- \see oplk_setCdcFilename()</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-oplk__ads.htm#879_13">oplk_setCdcBuffer</A><FONT COLOR=red><A NAME="897_22"></A></FONT>, "oplk_setCdcBuffer");  <FONT COLOR=green><EM>-- oplk/oplk.h:483</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-oplk__ads.htm#913_22">oplk_setCdcFilename</A><FONT COLOR=red><A NAME="900_13"></A></FONT>
+     (pszCdcFilename_p : <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C.Strings.chars_ptr)
+     <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">Errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- pszCdcFilename_p : Filename to be used for reading the concise device</EM></FONT>
+   <FONT COLOR=green><EM>--                    description.</EM></FONT>
+   <FONT COLOR=green><EM>-- tOplkError     :</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk                    The filename has successfully been set.</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorApiInvalidParam       The function is not available due to missing</EM></FONT>
+   <FONT COLOR=green><EM>--                               CDC module.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function sets the concise device description (CDC) file to be used by</EM></FONT>
+   <FONT COLOR=green><EM>-- the stack to read the configuration.</EM></FONT>
+   <FONT COLOR=green><EM>-- \see oplk_setCdcBuffer()</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-oplk__ads.htm#900_13">oplk_setCdcFilename</A><FONT COLOR=red><A NAME="913_22"></A></FONT>, "oplk_setCdcFilename");  <FONT COLOR=green><EM>-- oplk/oplk.h:484</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-oplk__ads.htm#924_22">oplk_process</A><FONT COLOR=red><A NAME="916_13"></A></FONT>
+     <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">Errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- tOplkError     :</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk</EM></FONT>
+   <FONT COLOR=green><EM>--   Other</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The process function is used in single threaded environments e.g. without any OS.</EM></FONT>
+   <FONT COLOR=green><EM>-- It gives processing time to several tasks in the openPOWERLINK stack.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-oplk__ads.htm#916_13">oplk_process</A><FONT COLOR=red><A NAME="924_22"></A></FONT>, "oplk_process");  <FONT COLOR=green><EM>-- oplk/oplk.h:485</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-oplk__ads.htm#941_22">oplk_getIdentResponse</A><FONT COLOR=red><A NAME="927_13"></A></FONT>
+     (nodeId_p          : unsigned;
+      ppIdentResponse_p : System.Address)
+     <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">Errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- nodeId_p          : Node ID of which to get the Ident Response frame.</EM></FONT>
+   <FONT COLOR=green><EM>-- ppIdentResponse_p : Pointer to store the address of the IdentResponse</EM></FONT>
+   <FONT COLOR=green><EM>--                     frame.</EM></FONT>
+   <FONT COLOR=green><EM>-- tOplkError     :</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk</EM></FONT>
+   <FONT COLOR=green><EM>--   Other           On a CN it returns always \ref kErrorApiInvalidParam. </EM></FONT>
+   <FONT COLOR=green><EM>--</EM></FONT>
+   <FONT COLOR=green><EM>-- The function returns the stored IdentResponse frame of the specified node.</EM></FONT>
+   <FONT COLOR=green><EM>-- \note   The function is only used on an MN. On a CN it returns always</EM></FONT>
+   <FONT COLOR=green><EM>--          \ref kErrorApiInvalidParam.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-oplk__ads.htm#927_13">oplk_getIdentResponse</A><FONT COLOR=red><A NAME="941_22"></A></FONT>, "oplk_getIdentResponse");  <FONT COLOR=green><EM>-- oplk/oplk.h:486</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-oplk__ads.htm#956_22">oplk_getEthMacAddr</A><FONT COLOR=red><A NAME="944_13"></A></FONT>
+     (pMacAddr_p : <b>access</b> unsigned_char)
+     <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">Errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- pMacAddr_p : Pointer to memory buffer which is used to copy the MAC</EM></FONT>
+   <FONT COLOR=green><EM>--              address into. The memory buffer must have a size of</EM></FONT>
+   <FONT COLOR=green><EM>--              6 bytes!</EM></FONT>
+   <FONT COLOR=green><EM>-- tOplkError     :</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk</EM></FONT>
+   <FONT COLOR=green><EM>--   Other           </EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function provides the Ethernet Interface MAC address used by the</EM></FONT>
+   <FONT COLOR=green><EM>-- Ethernet controller.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-oplk__ads.htm#944_13">oplk_getEthMacAddr</A><FONT COLOR=red><A NAME="956_22"></A></FONT>, "oplk_getEthMacAddr");  <FONT COLOR=green><EM>-- oplk/oplk.h:487</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-oplk__ads.htm#965_22">oplk_checkKernelStack</A><FONT COLOR=red><A NAME="959_13"></A></FONT> <b>return</b> unsigned_char;
+   <FONT COLOR=green><EM>-- Returns the status of the kernel stack.</EM></FONT>
+   <FONT COLOR=green><EM>--   TRUE        The kernel stack is alive.</EM></FONT>
+   <FONT COLOR=green><EM>--   FALSE       The kernel stack is dead.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function checks if the kernel part of the stack is alive.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-oplk__ads.htm#959_13">oplk_checkKernelStack</A><FONT COLOR=red><A NAME="965_22"></A></FONT>, "oplk_checkKernelStack");  <FONT COLOR=green><EM>-- oplk/oplk.h:488</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-oplk__ads.htm#985_22">oplk_waitSyncEvent</A><FONT COLOR=red><A NAME="968_13"></A></FONT>
+     (timeout_p : unsigned_long)
+     <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">Errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- timeout_p : Specifies a timeout in microseconds. If 0 it waits</EM></FONT>
+   <FONT COLOR=green><EM>--             forever.</EM></FONT>
+   <FONT COLOR=green><EM>-- tOplkError     :</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk            The sync event occurred.</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorGeneralError  An error or timeout occurred while waiting for the</EM></FONT>
+   <FONT COLOR=green><EM>--                       sync event.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function waits for a sync event. It blocks until the sync event occurred or</EM></FONT>
+   <FONT COLOR=green><EM>-- the specified timeout elapsed.</EM></FONT>
+   <FONT COLOR=green><EM>-- \note In a single process solution where the whole stack is linked to the</EM></FONT>
+   <FONT COLOR=green><EM>--       application, the function immediately returns! In this case, the</EM></FONT>
+   <FONT COLOR=green><EM>--       application must register its sync function as callback function so that</EM></FONT>
+   <FONT COLOR=green><EM>--       it is directly called from the stack (see pfnCbSync in</EM></FONT>
+   <FONT COLOR=green><EM>--       \ref tOplkApiInitParam).</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-oplk__ads.htm#968_13">oplk_waitSyncEvent</A><FONT COLOR=red><A NAME="985_22"></A></FONT>, "oplk_waitSyncEvent");  <FONT COLOR=green><EM>-- oplk/oplk.h:489</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>-- function prototypes                                                      --</EM></FONT>
+<FONT COLOR=green><EM>--   Process image API functions  (from   processimage.c)                   --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>function</b> <A HREF="oplk-oplk__ads.htm#1005_22">oplk_allocProcessImage</A><FONT COLOR=red><A NAME="992_13"></A></FONT>
+     (sizeProcessImageIn_p  : unsigned;
+      sizeProcessImageOut_p : unsigned)
+     <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">Errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- sizeProcessImageIn_p  : Size for input process image.</EM></FONT>
+   <FONT COLOR=green><EM>-- sizeProcessImageOut_p : Size for output process image.</EM></FONT>
+   <FONT COLOR=green><EM>-- tOplkError     :</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk                        Process images are successfully allocated.</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorApiPIAlreadyAllocated     Process images were already allocated.</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorApiPIOutOfMemory          Process images could not be allocated.</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorApiNotInitialized         openPOWERLINK stack is not initialized.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function allocates memory for the input and output process images.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-oplk__ads.htm#992_13">oplk_allocProcessImage</A><FONT COLOR=red><A NAME="1005_22"></A></FONT>, "oplk_allocProcessImage");  <FONT COLOR=green><EM>-- oplk/oplk.h:492</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-oplk__ads.htm#1015_22">oplk_freeProcessImage</A><FONT COLOR=red><A NAME="1008_13"></A></FONT>
+     <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">Errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- tOplkError     :</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk                        Process images are successfully freed.</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorApiNotInitialized         openPOWERLINK stack is not initialized.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function frees the allocated process images</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-oplk__ads.htm#1008_13">oplk_freeProcessImage</A><FONT COLOR=red><A NAME="1015_22"></A></FONT>, "oplk_freeProcessImage");  <FONT COLOR=green><EM>-- oplk/oplk.h:493</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-oplk__ads.htm#1046_10">oplk_linkProcessImageObject</A><FONT COLOR=red><A NAME="1018_13"></A></FONT>
+     (objIndex_p      : unsigned;
+      firstSubindex_p : unsigned;
+      offsetPI_p      : unsigned;
+      fOutputPI_p     : unsigned_char;
+      entrySize_p     : <A HREF="oplk-obd__ads.htm#14_14">Obd</A>.<A HREF="oplk-obd__ads.htm#214_12">tObdSize</A>;
+      pVarEntries_p   : <b>access</b> unsigned)
+     <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">Errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- objIndex_p      : The object index of the object to link.</EM></FONT>
+   <FONT COLOR=green><EM>-- firstSubindex_p : The sub-index of the object where the first</EM></FONT>
+   <FONT COLOR=green><EM>--                   variable should be linked to.</EM></FONT>
+   <FONT COLOR=green><EM>-- offsetPI_p      : The offset of the first process variable in the</EM></FONT>
+   <FONT COLOR=green><EM>--                   process image.</EM></FONT>
+   <FONT COLOR=green><EM>-- fOutputPI_p     : Determines if input image or output image should</EM></FONT>
+   <FONT COLOR=green><EM>--                   be used: TRUE = output image, FALSE = imput image</EM></FONT>
+   <FONT COLOR=green><EM>-- entrySize_p     : The size of one process variable.</EM></FONT>
+   <FONT COLOR=green><EM>-- pVarEntries_p   : The number of process variables, which shall be</EM></FONT>
+   <FONT COLOR=green><EM>--                   linked to the object dictionary. It returns the</EM></FONT>
+   <FONT COLOR=green><EM>--                   actual number of process variables which were</EM></FONT>
+   <FONT COLOR=green><EM>--                   linked to the object dictionary.</EM></FONT>
+   <FONT COLOR=green><EM>-- tOplkError        :</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk                    Object is successfully linked.</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorApiInvalidParam       Invalid parameters specified.</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorApiPISizeExceeded     Size of process image is exceeded.</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorApiNotInitialized     openPOWERLINK stack is not initialized.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function links an object in the OD into a location in the process image.</EM></FONT>
+   <b>pragma</b> Import
+     (C, <A HREF="oplk-oplk__ads.htm#1018_13">oplk_linkProcessImageObject</A><FONT COLOR=red><A NAME="1046_10"></A></FONT>, "oplk_linkProcessImageObject");  <FONT COLOR=green><EM>-- oplk/oplk.h:494</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-oplk__ads.htm#1058_10">oplk_exchangeProcessImageIn</A><FONT COLOR=red><A NAME="1049_13"></A></FONT>
+     <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">Errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- tOplkError        :</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk                    Input process image is successfully exchanged.</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorApiPINotAllocated     Memory for process images is not allocated.</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorApiNotInitialized     openPOWERLINK stack is not initialized.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function exchanges the input process image.</EM></FONT>
+   <b>pragma</b> Import
+     (C, <A HREF="oplk-oplk__ads.htm#1049_13">oplk_exchangeProcessImageIn</A><FONT COLOR=red><A NAME="1058_10"></A></FONT>, "oplk_exchangeProcessImageIn");  <FONT COLOR=green><EM>-- oplk/oplk.h:496</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-oplk__ads.htm#1070_10">oplk_exchangeProcessImageOut</A><FONT COLOR=red><A NAME="1061_13"></A></FONT>
+     <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">Errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- tOplkError        :</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk                    Output process image is successfully exchanged.</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorApiPINotAllocated     Memory for process images is not allocated.</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorApiNotInitialized     openPOWERLINK stack is not initialized.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function exchanges the output process image.</EM></FONT>
+   <b>pragma</b> Import
+     (C, <A HREF="oplk-oplk__ads.htm#1061_13">oplk_exchangeProcessImageOut</A><FONT COLOR=red><A NAME="1070_10"></A></FONT>, "oplk_exchangeProcessImageOut");  <FONT COLOR=green><EM>-- oplk/oplk.h:497</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-oplk__ads.htm#1079_22">oplk_getProcessImageIn</A><FONT COLOR=red><A NAME="1073_13"></A></FONT> 
+     <b>return</b> System.Address;
+   <FONT COLOR=green><EM>-- The function returns a pointer to the input process image or NULL if the</EM></FONT>
+   <FONT COLOR=green><EM>-- stack is not initialized.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function returns the pointer to the input process image.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-oplk__ads.htm#1073_13">oplk_getProcessImageIn</A><FONT COLOR=red><A NAME="1079_22"></A></FONT>, "oplk_getProcessImageIn");  <FONT COLOR=green><EM>-- oplk/oplk.h:498</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-oplk__ads.htm#1088_22">oplk_getProcessImageOut</A><FONT COLOR=red><A NAME="1082_13"></A></FONT> 
+     <b>return</b> System.Address;
+   <FONT COLOR=green><EM>--  The function returns a pointer to the output process image or NULL if</EM></FONT>
+   <FONT COLOR=green><EM>--  the stack is not initialized.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function returns the pointer to the output process image.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-oplk__ads.htm#1082_13">oplk_getProcessImageOut</A><FONT COLOR=red><A NAME="1088_22"></A></FONT>, "oplk_getProcessImageOut");  <FONT COLOR=green><EM>-- oplk/oplk.h:499</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>-- function prototypes                                                      --</EM></FONT>
+<FONT COLOR=green><EM>--    objdict specific process image functions                              --</EM></FONT>
+<FONT COLOR=green><EM>--  (from  processimage-cia302.c)                                           --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>function</b> <A HREF="oplk-oplk__ads.htm#1103_22">oplk_setupProcessImage</A><FONT COLOR=red><A NAME="1096_13"></A></FONT>
+     <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">Errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- tOplkError        :</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk</EM></FONT>
+   <FONT COLOR=green><EM>--   Other</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function sets up a process image according to the CiA profile 302_4.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-oplk__ads.htm#1096_13">oplk_setupProcessImage</A><FONT COLOR=red><A NAME="1103_22"></A></FONT>, "oplk_setupProcessImage");  <FONT COLOR=green><EM>-- oplk/oplk.h:502</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>-- function prototypes                                                      --</EM></FONT>
+<FONT COLOR=green><EM>--    Request forwarding of Pres frame from DLL -&gt; API (from  generic.c)    --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>function</b> <A HREF="oplk-oplk__ads.htm#1124_22">oplk_triggerPresForward</A><FONT COLOR=red><A NAME="1110_13"></A></FONT>
+     (nodeId_p : unsigned)
+     <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">Errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- nodeId_p : Node ID of which to get the PRes frame.</EM></FONT>
+   <FONT COLOR=green><EM>-- tOplkError        :</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk</EM></FONT>
+   <FONT COLOR=green><EM>--   Other</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function triggers the forwarding of a PRes frame from Node \p nodeId_p</EM></FONT>
+   <FONT COLOR=green><EM>-- to the application. It can be used by the application for diagnosis purpose</EM></FONT>
+   <FONT COLOR=green><EM>-- (e.g. conformance test). After request "one" PRes frame form the specified</EM></FONT>
+   <FONT COLOR=green><EM>-- node will be forwarded to the application. The PRes frame is forwarded by</EM></FONT>
+   <FONT COLOR=green><EM>-- a \ref kOplkApiEventReceivedPres event. The application has to handle this event</EM></FONT>
+   <FONT COLOR=green><EM>-- to get the frame.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-oplk__ads.htm#1110_13">oplk_triggerPresForward</A><FONT COLOR=red><A NAME="1124_22"></A></FONT>, "oplk_triggerPresForward");  <FONT COLOR=green><EM>-- oplk/oplk.h:505</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>-- function prototypes                                                      --</EM></FONT>
+<FONT COLOR=green><EM>--    SDO Test Api functions    (from    sdotest.c)                         --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>procedure</b> <A HREF="oplk-oplk__ads.htm#1137_22">oplk_testSdoSetVal</A><FONT COLOR=red><A NAME="1131_14"></A></FONT>
+     (pInitParam_p : <b>access</b> <A HREF="oplk-oplk__ads.htm#429_9">tOplkApiInitParam</A>);
+   <FONT COLOR=green><EM>-- pInitParam_p : Pointer to the init parameters. The init</EM></FONT>
+   <FONT COLOR=green><EM>--                parameters must be set by the application.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function stores the init paramter struct for further use.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-oplk__ads.htm#1131_14">oplk_testSdoSetVal</A><FONT COLOR=red><A NAME="1137_22"></A></FONT>, "oplk_testSdoSetVal");  <FONT COLOR=green><EM>-- oplk/oplk.h:508</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-oplk__ads.htm#1147_22">oplk_testSdoComInit</A><FONT COLOR=red><A NAME="1140_13"></A></FONT>
+     <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">Errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- tOplkError        :</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk                Stack was successfully initialized.</EM></FONT>
+   <FONT COLOR=green><EM>--   other                   Error occurred while initializing stack.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function initializes the SDO test command layer stack.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-oplk__ads.htm#1140_13">oplk_testSdoComInit</A><FONT COLOR=red><A NAME="1147_22"></A></FONT>, "oplk_testSdoComInit");  <FONT COLOR=green><EM>-- oplk/oplk.h:509</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-oplk__ads.htm#1157_22">oplk_testSdoSeqInit</A><FONT COLOR=red><A NAME="1150_13"></A></FONT>
+     <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">Errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- tOplkError        :</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk                Stack was successfully initialized.</EM></FONT>
+   <FONT COLOR=green><EM>--   Other                   Error occurred while initializing stack.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function initializes the SDO test sequence layer stack.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-oplk__ads.htm#1150_13">oplk_testSdoSeqInit</A><FONT COLOR=red><A NAME="1157_22"></A></FONT>, "oplk_testSdoSeqInit");  <FONT COLOR=green><EM>-- oplk/oplk.h:510</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>-- function prototypes                                                      --</EM></FONT>
+<FONT COLOR=green><EM>--    Testing functions for SDO command layer                               --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>function</b> <A HREF="oplk-oplk__ads.htm#1180_22">oplk_testSdoComSend</A><FONT COLOR=red><A NAME="1164_13"></A></FONT>
+     (uiNodeId_p : unsigned;
+      SdoType_p  : <A HREF="oplk-sdo__ads.htm#11_14">Sdo</A>.<A HREF="oplk-sdo__ads.htm#29_9">tSdoType</A>;
+      pSdoCom_p  : <b>access</b> <A HREF="oplk-frame__ads.htm#11_14">Frame</A>.<A HREF="oplk-frame__ads.htm#347_9">tAsySdoCom</A>;
+      SdoSize_p  : size_t)
+     <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">Errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- uiNodeId_p : Node ID of target node</EM></FONT>
+   <FONT COLOR=green><EM>-- SdoType_p  : Type of SDO lower layer (Asnd/Udp)</EM></FONT>
+   <FONT COLOR=green><EM>-- pSdoCom_p  : Pointer to SDO command layer frame</EM></FONT>
+   <FONT COLOR=green><EM>-- SdoSize_p  : Size of SDO command layer frame</EM></FONT>
+   <FONT COLOR=green><EM>-- tOplkError        :</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk                The function returns sucessfully if </EM></FONT>
+   <FONT COLOR=green><EM>--                            the request was forwarded.</EM></FONT>
+   <FONT COLOR=green><EM>--   Other                   Error occurred while sending the frame.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function forwards the Send request to the SDO command testing layer.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-oplk__ads.htm#1164_13">oplk_testSdoComSend</A><FONT COLOR=red><A NAME="1180_22"></A></FONT>, "oplk_testSdoComSend");  <FONT COLOR=green><EM>-- oplk/oplk.h:512</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-oplk__ads.htm#1192_22">oplk_testSdoComDelCon</A><FONT COLOR=red><A NAME="1183_13"></A></FONT>
+     <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">Errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- tOplkError        :</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk                The function returns sucessfully if </EM></FONT>
+   <FONT COLOR=green><EM>--                            the connection was deleted.</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorInvalidOperation  Error occurred while deleting the </EM></FONT>
+   <FONT COLOR=green><EM>--                            command layer connection.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The functions deletes the SDO command testing layer.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-oplk__ads.htm#1183_13">oplk_testSdoComDelCon</A><FONT COLOR=red><A NAME="1192_22"></A></FONT>, "oplk_testSdoComDelCon");  <FONT COLOR=green><EM>-- oplk/oplk.h:514</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>-- function prototypes                                                      --</EM></FONT>
+<FONT COLOR=green><EM>--    Testing functions for SDO sequence layer                              --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>function</b> <A HREF="oplk-oplk__ads.htm#1215_22">oplk_testSdoSeqSend</A><FONT COLOR=red><A NAME="1199_13"></A></FONT>
+     (uiNodeId_p : unsigned;
+      SdoType_p  : <A HREF="oplk-sdo__ads.htm#11_14">Sdo</A>.<A HREF="oplk-sdo__ads.htm#29_9">tSdoType</A>;
+      pSdoCom_p  : <b>access</b> <A HREF="oplk-frame__ads.htm#11_14">Frame</A>.<A HREF="oplk-frame__ads.htm#368_9">tAsySdoSeq</A>;
+      SdoSize_p  : size_t)
+     <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- uiNodeId_p : Node ID of target node</EM></FONT>
+   <FONT COLOR=green><EM>-- SdoType_p  : Type of SDO lower layer (Asnd/Udp)</EM></FONT>
+   <FONT COLOR=green><EM>-- pSdoCom_p  : Pointer to SDO sequence layer frame</EM></FONT>
+   <FONT COLOR=green><EM>-- SdoSize_p  : Size of SDO sequence layer frame</EM></FONT>
+   <FONT COLOR=green><EM>-- tOplkError        :</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk                The function returns sucessfully if </EM></FONT>
+   <FONT COLOR=green><EM>--                             the request was forwarded.</EM></FONT>
+   <FONT COLOR=green><EM>--   Other                   Error occurred while sending the frame.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The functions forwards the send request to the SDO sequence testing layer.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-oplk__ads.htm#1199_13">oplk_testSdoSeqSend</A><FONT COLOR=red><A NAME="1215_22"></A></FONT>, "oplk_testSdoSeqSend");  <FONT COLOR=green><EM>-- oplk/oplk.h:516</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-oplk__ads.htm#1227_22">oplk_testSdoSeqDelCon</A><FONT COLOR=red><A NAME="1218_13"></A></FONT>
+     <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">Errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- tOplkError        :</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk                The function returns sucessfully if </EM></FONT>
+   <FONT COLOR=green><EM>--                            the connection was deleted.</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorInvalidOperation  Error occurred while deleting the </EM></FONT>
+   <FONT COLOR=green><EM>--                            sequence layer connection.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function deletes the SDO sequence testing layer.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-oplk__ads.htm#1218_13">oplk_testSdoSeqDelCon</A><FONT COLOR=red><A NAME="1227_22"></A></FONT>, "oplk_testSdoSeqDelCon");  <FONT COLOR=green><EM>-- oplk/oplk.h:518</EM></FONT>
+
+<b>end</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-oplk__ads.htm#22_14">Oplk</A>;
+</PRE></BODY></HTML>

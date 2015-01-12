@@ -1,0 +1,110 @@
+<HEAD><TITLE>oplk-sdo.ads</TITLE></HEAD>
+<BODY>
+<HR><DIV ALIGN="center"><H1> File : oplk-sdo.ads </H1></DIV><HR>
+<PRE>
+
+<FONT COLOR=green><EM>-- \brief  Definitions for SDO module</EM></FONT>
+<FONT COLOR=green><EM>--  This file contains definitions for the SDO module.</EM></FONT>
+
+<b>pragma</b> Ada_2005;
+<b>pragma</b> Style_Checks (Off);
+
+<b>with</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C; <b>use</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C;
+<b>with</b> System;
+
+<b>package</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<FONT COLOR=red><A NAME="11_14">sdo</A></FONT> <b>is</b>
+
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>-- Type definitions                                                         --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>-- Data type for handle between SDO Command Layer and application           --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="21_12">tSdoComConHdl</A></FONT> <b>is</b> unsigned;  <FONT COLOR=green><EM>-- ./oplk/sdo.h:62</EM></FONT>
+   
+
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief Enumeration for SDO types                                          --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- This enumeration lists all valid SDO types.                              --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="29_9">tSdoType</A></FONT> <b>is</b> (kSdoTypeAuto, 
+                     <FONT COLOR=green><EM>-- SDO connection type is automatically selected</EM></FONT>
+                     kSdoTypeUdp, 
+                     <FONT COLOR=green><EM>-- Use SDO via UDP</EM></FONT>
+                     kSdoTypeAsnd, 
+                     <FONT COLOR=green><EM>-- Use SDO via ASnd</EM></FONT>
+                     KSdoTypePdo
+                     <FONT COLOR=green><EM>-- Use SDO via PDO</EM></FONT>
+                    );
+   <b>pragma</b> Convention (C, <A HREF="oplk-sdo__ads.htm#29_9">tSdoType</A>);  <FONT COLOR=green><EM>-- ./oplk/sdo.h:75</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief Enumeration lists valid SDO Command Layer connection states        --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- This enumeration lists all valid SDO Command Layer connection states.    --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="46_9">tSdoComConState</A></FONT> <b>is</b>
+     (kSdoComTransferNotActive,
+      <FONT COLOR=green><EM>-- SDO transfer is not active</EM></FONT>
+      kSdoComTransferRunning,
+      <FONT COLOR=green><EM>-- SDO transfer is currently running</EM></FONT>
+      kSdoComTransferTxAborted,
+      <FONT COLOR=green><EM>-- SDO transfer is aborted (abort code is going to be sent)</EM></FONT>
+      kSdoComTransferRxAborted,
+      <FONT COLOR=green><EM>-- SDO transfer has been aborted by the remote side</EM></FONT>
+      kSdoComTransferFinished,
+      <FONT COLOR=green><EM>-- SDO transfer is finished</EM></FONT>
+      KSdoComTransferLowerLayerAbort
+      <FONT COLOR=green><EM>-- SDO transfer has been aborted by the SDO sequence layer</EM></FONT>
+     );
+   <b>pragma</b> Convention (C, <A HREF="oplk-sdo__ads.htm#46_9">tSdoComConState</A>);  <FONT COLOR=green><EM>-- ./oplk/sdo.h:90</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief Enumeration for SDO access types                                   --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- This enumeration lists all valid SDO access types.                       --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="68_9">tSdoAccessType</A></FONT> <b>is</b> 
+     (kSdoAccessTypeRead, 
+      <FONT COLOR=green><EM>-- SDO read access</EM></FONT>
+      KSdoAccessTypeWrite
+      <FONT COLOR=green><EM>-- SDO write access</EM></FONT>
+     );
+   <b>pragma</b> Convention (C, <A HREF="oplk-sdo__ads.htm#68_9">tSdoAccessType</A>);  <FONT COLOR=green><EM>-- ./oplk/sdo.h:101</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief Structure for finished SDO transfer                                --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- This structure is used to inform the application about a finished        --</EM></FONT>
+<FONT COLOR=green><EM>-- SDO transfer.                                                            --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="83_9">tSdoComFinished</A></FONT> <b>is</b> <b>record</b>
+      sdoComConHdl     : <b>aliased</b> <A HREF="oplk-sdo__ads.htm#21_12">tSdoComConHdl</A>;
+      <FONT COLOR=green><EM>-- Handle to SDO Command Layer connection</EM></FONT>
+      sdoComConState   : <b>aliased</b> <A HREF="oplk-sdo__ads.htm#46_9">tSdoComConState</A>;
+      <FONT COLOR=green><EM>-- Status of SDO Command Layer connection</EM></FONT>
+      abortCode        : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- SDO abort code</EM></FONT>
+      sdoAccessType    : <b>aliased</b> <A HREF="oplk-sdo__ads.htm#68_9">tSdoAccessType</A>;
+      <FONT COLOR=green><EM>-- SDO access type</EM></FONT>
+      nodeId           : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- The node ID of the target</EM></FONT>
+      targetIndex      : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Index which was accessed</EM></FONT>
+      targetSubIndex   : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Sub-index which was accessed</EM></FONT>
+      transferredBytes : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- The number of bytes transferred</EM></FONT>
+      pUserArg         : System.Address;
+      <FONT COLOR=green><EM>-- The user defined argument pointer</EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-sdo__ads.htm#83_9">tSdoComFinished</A>);  <FONT COLOR=green><EM>-- ./oplk/sdo.h:119</EM></FONT>
+
+<b>end</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-sdo__ads.htm#11_14">sdo</A>;
+</PRE></BODY></HTML>

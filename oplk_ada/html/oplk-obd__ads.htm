@@ -1,0 +1,904 @@
+<HEAD><TITLE>oplk-obd.ads</TITLE></HEAD>
+<BODY>
+<HR><DIV ALIGN="center"><H1> File : oplk-obd.ads </H1></DIV><HR>
+<PRE>
+<FONT COLOR=green><EM>-- \brief  Definitions for OBD module</EM></FONT>
+<FONT COLOR=green><EM>--  This file contains definitions for the OBD module</EM></FONT>
+
+<b>pragma</b> Ada_2005;
+<b>pragma</b> Style_Checks (Off);
+
+<b>with</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C; <b>use</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C;
+<b>with</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-oplkinc__ads.htm#9_14">oplkinc</A>;
+<b>with</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C.Extensions;
+<b>with</b> System;
+<b>with</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C.Strings;
+<b>with</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>;
+
+<b>package</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<FONT COLOR=red><A NAME="14_14">obd</A></FONT> <b>is</b>
+
+   <FONT COLOR=red><A NAME="16_4">OBD_TABLE_INDEX_END</A></FONT>               : <b>constant</b> := 16#FFFF#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   
+   <FONT COLOR=red><A NAME="19_4">OBD_TRUE</A></FONT>                          : <b>constant</b> := 16#01#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=red><A NAME="21_4">OBD_FALSE</A></FONT>                         : <b>constant</b> := 16#00#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   
+   <FONT COLOR=red><A NAME="24_4">OBD_NODE_ID_INDEX</A></FONT>                 : <b>constant</b> := 16#1F93#;
+   <FONT COLOR=green><EM>-- default OD index for Node id</EM></FONT>
+   <FONT COLOR=red><A NAME="26_4">OBD_NODE_ID_SUBINDEX</A></FONT>              : <b>constant</b> := 16#01#;
+   <FONT COLOR=green><EM>-- default subindex for NodeId in OD</EM></FONT>
+   <FONT COLOR=red><A NAME="28_4">OBD_NODE_ID_HWBOOL_SUBINDEX</A></FONT>       : <b>constant</b> := 16#02#;
+   <FONT COLOR=green><EM>-- default subindex for NodeIDByHW_BOOL</EM></FONT>
+   
+   <FONT COLOR=green><EM>--   object IDs of error handling objects   --</EM></FONT>
+   <FONT COLOR=red><A NAME="32_4">OID_DLL_MN_CRCERROR_REC</A></FONT>           : <b>constant</b> := 16#1C00#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=red><A NAME="34_4">OID_DLL_MN_CYCTIME_EXCEED_REC</A></FONT>     : <b>constant</b> := 16#1C02#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=red><A NAME="36_4">OID_DLL_CN_LOSSSOC_REC</A></FONT>            : <b>constant</b> := 16#1C0B#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=red><A NAME="38_4">OID_DLL_CN_LOSSPREQ_REC</A></FONT>           : <b>constant</b> := 16#1C0D#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=red><A NAME="40_4">OID_DLL_CN_CRCERROR_REC</A></FONT>           : <b>constant</b> := 16#1C0F#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   
+   <FONT COLOR=red><A NAME="43_4">SUBIDX_DLL_ERROR_CUM_CNT</A></FONT>          : <b>constant</b> := 1;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=red><A NAME="45_4">SUBIDX_DLL_ERROR_THR_CNT</A></FONT>          : <b>constant</b> := 2;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=red><A NAME="47_4">SUBIDX_DLL_ERROR_THRESHOLD</A></FONT>        : <b>constant</b> := 3;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   
+   <FONT COLOR=red><A NAME="50_4">NUM_DLL_MNCN_LOSSPRES_OBJS</A></FONT>        : <b>constant</b> := 254;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=red><A NAME="52_4">OID_DLL_MNCN_LOSSPRES_CUMCNT_AU32</A></FONT> : <b>constant</b> := 16#1C07#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=red><A NAME="54_4">OID_DLL_MNCN_LOSSPRES_THRCNT_AU32</A></FONT> : <b>constant</b> := 16#1C08#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=red><A NAME="56_4">OID_DLL_MNCN_LOSSPRES_THRESHOLD_AU32</A></FONT> : <b>constant</b> := 16#1C09#;
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   
+   <FONT COLOR=green><EM>--   Definitions for parts of the OD (bit oriented)   --</EM></FONT>
+   kObdPartNo                        : <b>constant</b> Unsigned_Char := 16#00#;
+   <FONT COLOR=green><EM>-- Nothing</EM></FONT>
+   kObdPartGen                       : <b>constant</b> Unsigned_Char := 16#01#;
+   <FONT COLOR=green><EM>-- Communication part (0x1000 - 0x1FFF)</EM></FONT>
+   kObdPartMan                       : <b>constant</b> Unsigned_Char := 16#02#;
+   <FONT COLOR=green><EM>-- Manufacturer part (0x2000 - 0x5FFF)</EM></FONT>
+   kObdPartDev                       : <b>constant</b> Unsigned_Char := 16#04#;
+   <FONT COLOR=green><EM>-- Device part (0x6000 - 0x9FFF)</EM></FONT>
+   kObdPartUsr                       : <b>constant</b> Unsigned_Char := 16#08#;
+   <FONT COLOR=green><EM>-- Dynamic part e.g. for ICE61131-3</EM></FONT>
+   <FONT COLOR=red><A NAME="70_4">kObdPartApp</A></FONT> : <b>constant</b> := kObdPartMan <b>or</b> kObdPartDev <b>or</b> KObdPartUsr;
+   <FONT COLOR=green><EM>-- Manufacturer, device part and user OD</EM></FONT>
+   <FONT COLOR=red><A NAME="72_4">kObdPartAll</A></FONT> : <b>constant</b> := kObdPartGen <b>or</b> kObdPartMan <b>or</b> kObdPartDev <b>or</b> KObdPartUsr;
+   <FONT COLOR=green><EM>-- The whole OD</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--           \anchor sect_obdAccessRights                                   --</EM></FONT>
+<FONT COLOR=green><EM>-- \name   Access rights for objects                                        --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- The following macros define the access rights for objects.               --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   kObdAccRead                       : <b>constant</b> Unsigned_Char := 16#01#;
+   <FONT COLOR=green><EM>-- Object can be read</EM></FONT>
+   kObdAccWrite                      : <b>constant</b> Unsigned_Char := 16#02#;
+   <FONT COLOR=green><EM>-- Object can be written</EM></FONT>
+   kObdAccConst                      : <b>constant</b> Unsigned_Char := 16#04#;
+   <FONT COLOR=green><EM>-- Object contains a constant value</EM></FONT>
+   kObdAccPdo                        : <b>constant</b> Unsigned_Char := 16#08#;
+   <FONT COLOR=green><EM>-- Object can be mapped to a PDO (always in conjunction with kObdAccVar)</EM></FONT>
+   kObdAccArray                      : <b>constant</b> Unsigned_Char := 16#10#;
+   <FONT COLOR=green><EM>-- Object contains an array of numerical values</EM></FONT>
+   kObdAccRange                      : <b>constant</b> Unsigned_Char := 16#20#;
+   <FONT COLOR=green><EM>-- Object contains lower and upper limit</EM></FONT>
+   kObdAccVar                        : <b>constant</b> Unsigned_Char := 16#40#;
+   <FONT COLOR=green><EM>-- Object data is placed in application </EM></FONT>
+   <FONT COLOR=green><EM>-- (contains a variable information structure)</EM></FONT>
+   kObdAccStore                      : <b>constant</b> Unsigned_Char := 16#80#;
+   <FONT COLOR=green><EM>-- Object data can be stored to non-volatile memory</EM></FONT>
+   
+   <FONT COLOR=green><EM>--   combinations (not all combinations are required)    --</EM></FONT>
+   <FONT COLOR=red><A NAME="101_4">KObdAccR</A></FONT>     : <b>constant</b> := KObdAccRead;
+   <FONT COLOR=red><A NAME="102_4">KObdAccW</A></FONT>     : <b>constant</b> := KObdAccWrite;
+   <FONT COLOR=red><A NAME="103_4">KObdAccRW</A></FONT>    : <b>constant</b> := kObdAccWrite <b>or</b> KObdAccRead;
+   <FONT COLOR=red><A NAME="104_4">kObdAccCR</A></FONT>    : <b>constant</b> := kObdAccConst <b>or</b> KObdAccRead;
+   <FONT COLOR=red><A NAME="105_4">KObdAccGR</A></FONT>    : <b>constant</b> := kObdAccRange <b>or</b> KObdAccRead;
+   <FONT COLOR=red><A NAME="106_4">kObdAccGW</A></FONT>    : <b>constant</b> := kObdAccRange <b>or</b> KObdAccWrite;
+   <FONT COLOR=red><A NAME="107_4">KObdAccGRW</A></FONT>   : <b>constant</b> := kObdAccRange <b>or</b> kObdAccWrite <b>or</b> KObdAccRead;
+   <FONT COLOR=red><A NAME="108_4">KObdAccVR</A></FONT>    : <b>constant</b> := kObdAccVar   <b>or</b> KObdAccRead;
+   <FONT COLOR=red><A NAME="109_4">kObdAccVW</A></FONT>    : <b>constant</b> := kObdAccVar   <b>or</b> KObdAccWrite;
+   <FONT COLOR=red><A NAME="110_4">KObdAccVRW</A></FONT>   : <b>constant</b> := kObdAccVar   <b>or</b> kObdAccWrite <b>or</b> KObdAccRead;
+   <FONT COLOR=red><A NAME="111_4">KObdAccVPR</A></FONT>   : <b>constant</b> := kObdAccVar   <b>or</b> KObdAccPdo   <b>or</b> KObdAccRead;
+   <FONT COLOR=red><A NAME="112_4">kObdAccVPW</A></FONT>   : <b>constant</b> := KObdAccVar   <b>or</b> KObdAccPdo   <b>or</b> KObdAccWrite;
+   <FONT COLOR=red><A NAME="113_4">KObdAccVPRW</A></FONT>  : <b>constant</b> := kObdAccVar   <b>or</b> kObdAccPdo   <b>or</b> kObdAccWrite <b>or</b> KObdAccRead;
+   <FONT COLOR=red><A NAME="114_4">kObdAccVGR</A></FONT>   : <b>constant</b> := KObdAccVar   <b>or</b> KObdAccRange <b>or</b> KObdAccRead;
+   <FONT COLOR=red><A NAME="115_4">KObdAccVGW</A></FONT>   : <b>constant</b> := KObdAccVar   <b>or</b> kObdAccRange <b>or</b> KObdAccWrite;
+   <FONT COLOR=red><A NAME="116_4">KObdAccVGRW</A></FONT>  : <b>constant</b> := KObdAccVar   <b>or</b> kObdAccRange <b>or</b> kObdAccWrite <b>or</b> KObdAccRead;
+   <FONT COLOR=red><A NAME="117_4">kObdAccVGPR</A></FONT>  : <b>constant</b> := KObdAccVar   <b>or</b> kObdAccRange <b>or</b> KObdAccPdo   <b>or</b> KObdAccRead;
+   <FONT COLOR=red><A NAME="118_4">kObdAccVGPW</A></FONT>  : <b>constant</b> := KObdAccVar   <b>or</b> kObdAccRange <b>or</b> KObdAccPdo   <b>or</b> KObdAccWrite;
+   <FONT COLOR=red><A NAME="119_4">kObdAccVGPRW</A></FONT> : <b>constant</b> := KObdAccVar   <b>or</b> kObdAccRange <b>or</b> KObdAccPdo   <b>or</b> kObdAccWrite <b>or</b> KObdAccRead;
+   <FONT COLOR=red><A NAME="120_4">kObdAccSR</A></FONT>    : <b>constant</b> := KObdAccStore <b>or</b> KObdAccRead;
+   <FONT COLOR=red><A NAME="121_4">kObdAccSW</A></FONT>    : <b>constant</b> := kObdAccStore <b>or</b> KObdAccWrite;
+   <FONT COLOR=red><A NAME="122_4">kObdAccSRW</A></FONT>   : <b>constant</b> := kObdAccStore <b>or</b> kObdAccWrite <b>or</b> KObdAccRead;
+   <FONT COLOR=red><A NAME="123_4">kObdAccSCR</A></FONT>   : <b>constant</b> := kObdAccStore <b>or</b> kObdAccConst <b>or</b> KObdAccRead;
+   <FONT COLOR=red><A NAME="124_4">kObdAccSGR</A></FONT>   : <b>constant</b> := kObdAccStore <b>or</b> kObdAccRange <b>or</b> KObdAccRead;
+   <FONT COLOR=red><A NAME="125_4">kObdAccSGW</A></FONT>   : <b>constant</b> := kObdAccStore <b>or</b> kObdAccRange <b>or</b> KObdAccWrite;
+   <FONT COLOR=red><A NAME="126_4">kObdAccSGRW</A></FONT>  : <b>constant</b> := kObdAccStore <b>or</b> kObdAccRange <b>or</b> kObdAccWrite <b>or</b> KObdAccRead;
+   <FONT COLOR=red><A NAME="127_4">kObdAccSVR</A></FONT>   : <b>constant</b> := kObdAccStore <b>or</b> kObdAccVar   <b>or</b> KObdAccRead;
+   <FONT COLOR=red><A NAME="128_4">kObdAccSVW</A></FONT>   : <b>constant</b> := kObdAccStore <b>or</b> KObdAccVar   <b>or</b> KObdAccWrite;
+   <FONT COLOR=red><A NAME="129_4">kObdAccSVRW</A></FONT>  : <b>constant</b> := kObdAccStore <b>or</b> KObdAccVar   <b>or</b> kObdAccWrite <b>or</b> KObdAccRead;
+   <FONT COLOR=red><A NAME="130_4">kObdAccSVPR</A></FONT>  : <b>constant</b> := kObdAccStore <b>or</b> KObdAccVar   <b>or</b> KObdAccPdo   <b>or</b> KObdAccRead;
+   <FONT COLOR=red><A NAME="131_4">kObdAccSVPW</A></FONT>  : <b>constant</b> := kObdAccStore <b>or</b> KObdAccVar   <b>or</b> KObdAccPdo   <b>or</b> KObdAccWrite;
+   <FONT COLOR=red><A NAME="132_4">kObdAccSVPRW</A></FONT> : <b>constant</b> := kObdAccStore <b>or</b> KObdAccVar   <b>or</b> KObdAccPdo   <b>or</b> kObdAccWrite <b>or</b> KObdAccRead;
+   <FONT COLOR=red><A NAME="133_4">kObdAccSVGR</A></FONT>  : <b>constant</b> := kObdAccStore <b>or</b> KObdAccVar   <b>or</b> kObdAccRange <b>or</b> KObdAccRead;
+   <FONT COLOR=red><A NAME="134_4">kObdAccSVGW</A></FONT>  : <b>constant</b> := kObdAccStore <b>or</b> kObdAccVar   <b>or</b> kObdAccRange <b>or</b> KObdAccWrite;
+   <FONT COLOR=red><A NAME="135_4">kObdAccSVGRW</A></FONT> : <b>constant</b> := kObdAccStore <b>or</b> kObdAccVar   <b>or</b> kObdAccRange <b>or</b> kObdAccWrite <b>or</b> KObdAccRead;
+   <FONT COLOR=red><A NAME="136_4">kObdAccSVGPR</A></FONT> : <b>constant</b> := kObdAccStore <b>or</b> kObdAccVar   <b>or</b> kObdAccRange <b>or</b> kObdAccPdo   <b>or</b> KObdAccRead;
+   <FONT COLOR=red><A NAME="137_4">kObdAccSVGPW</A></FONT> : <b>constant</b> := kObdAccStore <b>or</b> kObdAccVar   <b>or</b> kObdAccRange <b>or</b> kObdAccPdo   <b>or</b> KObdAccWrite;
+   <FONT COLOR=red><A NAME="138_4">kObdAccSVGPRW</A></FONT> : <b>constant</b> := kObdAccStore <b>or</b> kObdAccVar  <b>or</b> kObdAccRange <b>or</b> kObdAccPdo   <b>or</b> kObdAccWrite <b>or</b> KObdAccRead;
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief Directions for access to object dictionary                         --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- This enumeration defines valid "directions" for accesses to the object   --</EM></FONT>
+<FONT COLOR=green><EM>-- dictionary.                                                              --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="146_12">tObdDir</A></FONT> <b>is</b> unsigned;
+   kObdDirInit     : <b>constant</b> <A HREF="oplk-obd__ads.htm#146_12">tObdDir</A> := 0;
+   <FONT COLOR=green><EM>-- Initialising after power on</EM></FONT>
+   kObdDirStore    : <b>constant</b> <A HREF="oplk-obd__ads.htm#146_12">tObdDir</A> := 1;
+   <FONT COLOR=green><EM>-- Store all object values to non volatile memory</EM></FONT>
+   kObdDirLoad     : <b>constant</b> <A HREF="oplk-obd__ads.htm#146_12">tObdDir</A> := 2;
+   <FONT COLOR=green><EM>-- Load all object values from non volatile memory</EM></FONT>
+   kObdDirRestore  : <b>constant</b> <A HREF="oplk-obd__ads.htm#146_12">tObdDir</A> := 3;
+   <FONT COLOR=green><EM>-- Deletes non volatile memory (restore)</EM></FONT>
+   kObdDirOBKCheck : <b>constant</b> <A HREF="oplk-obd__ads.htm#146_12">tObdDir</A> := 255;
+   <FONT COLOR=green><EM>-- Reserved</EM></FONT>
+                                                            <FONT COLOR=green><EM>-- ./oplk/obd.h:93</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief Valid OD store commands                                            --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- This enumeration defines valid store commands for the OD                 --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="165_12">tObdCommand</A></FONT> <b>is</b> unsigned;
+   kObdCmdOpenWrite  : <b>constant</b> <A HREF="oplk-obd__ads.htm#165_12">tObdCommand</A> := 1;
+   kObdCmdWriteObj   : <b>constant</b> <A HREF="oplk-obd__ads.htm#165_12">tObdCommand</A> := 2;
+   kObdCmdCloseWrite : <b>constant</b> <A HREF="oplk-obd__ads.htm#165_12">tObdCommand</A> := 3;
+   kObdCmdOpenRead   : <b>constant</b> <A HREF="oplk-obd__ads.htm#165_12">tObdCommand</A> := 4;
+   kObdCmdReadObj    : <b>constant</b> <A HREF="oplk-obd__ads.htm#165_12">tObdCommand</A> := 5;
+   kObdCmdCloseRead  : <b>constant</b> <A HREF="oplk-obd__ads.htm#165_12">tObdCommand</A> := 6;
+   kObdCmdClear      : <b>constant</b> <A HREF="oplk-obd__ads.htm#165_12">tObdCommand</A> := 7;  <FONT COLOR=green><EM>-- ./oplk/obd.h:109</EM></FONT>
+
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <FONT COLOR=green><EM>--\brief Events of object callback function                                 --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- This enumeration defines events that can be handled by the object        --</EM></FONT>
+<FONT COLOR=green><EM>-- callback function.                                                       --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="180_12">tObdEvent</A></FONT> <b>is</b> unsigned;
+   kObdEvCheckExist     : <b>constant</b> <A HREF="oplk-obd__ads.htm#180_12">tObdEvent</A> := 6;
+   <FONT COLOR=green><EM>-- Checking if object does exist (reading and writing).  pArg points to: NULL</EM></FONT>
+   kObdEvPreRead        : <b>constant</b> <A HREF="oplk-obd__ads.htm#180_12">tObdEvent</A> := 0;
+   <FONT COLOR=green><EM>-- Called before reading an object. pArg points to: source data buffer in OD</EM></FONT>
+   kObdEvPostRead       : <b>constant</b> <A HREF="oplk-obd__ads.htm#180_12">tObdEvent</A> := 1;
+   <FONT COLOR=green><EM>-- Called after reading an object. pArg points to: </EM></FONT>
+   <FONT COLOR=green><EM>-- destination data buffer from caller</EM></FONT>
+   kObdEvWrStringDomain : <b>constant</b> <A HREF="oplk-obd__ads.htm#180_12">tObdEvent</A> := 7;
+   <FONT COLOR=green><EM>-- Event for changing string/domain data pointer or size. pArg points to: </EM></FONT>
+   <FONT COLOR=green><EM>-- struct tObdVStringDomain in RAM</EM></FONT>
+   kObdEvInitWrite      : <b>constant</b> <A HREF="oplk-obd__ads.htm#180_12">tObdEvent</A> := 4;
+   <FONT COLOR=green><EM>-- Initializes writing an object (checking object size). pArg points to: </EM></FONT>
+   <FONT COLOR=green><EM>-- size of object in OD (tObdSize)</EM></FONT>
+   kObdEvPreWrite       : <b>constant</b> <A HREF="oplk-obd__ads.htm#180_12">tObdEvent</A> := 2;
+   <FONT COLOR=green><EM>-- Called before writing an object. pArg points to: </EM></FONT>
+   <FONT COLOR=green><EM>-- source data buffer from caller</EM></FONT>
+   kObdEvPostWrite      : <b>constant</b> <A HREF="oplk-obd__ads.htm#180_12">tObdEvent</A> := 3;
+   <FONT COLOR=green><EM>-- Called after writing an object. pArg points to: </EM></FONT>
+   <FONT COLOR=green><EM>-- destination data buffer in OD</EM></FONT>
+   kObdEvPostDefault    : <b>constant</b> <A HREF="oplk-obd__ads.htm#180_12">tObdEvent</A> := 8;
+   <FONT COLOR=green><EM>-- Called after setting default values. pArg points to: data buffer in OD</EM></FONT>
+                                                           <FONT COLOR=green><EM>-- ./oplk/obd.h:127</EM></FONT>
+
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>-- Data type for OD part definitions                                        --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="207_12">tObdPart</A></FONT> <b>is</b> unsigned;  <FONT COLOR=green><EM>-- ./oplk/obd.h:129</EM></FONT>
+
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--         Data type for OD access types                                    --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="212_12">tObdAccess</A></FONT> <b>is</b> unsigned;  <FONT COLOR=green><EM>-- ./oplk/obd.h:142</EM></FONT>
+
+   <b>subtype</b> <FONT COLOR=red><A NAME="214_12">tObdSize</A></FONT> <b>is</b> unsigned;  
+   <FONT COLOR=green><EM>-- For all objects as objects size are used an unsigned int.</EM></FONT>
+   <FONT COLOR=green><EM>-- ./oplk/obd.h:202</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief Enumeration for object data types (DS301)                          --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- This enumeration defines the data types of objects in object dictionary. --</EM></FONT>
+<FONT COLOR=green><EM>-- DS-301 defines these types as UINT16.                                    --</EM></FONT>
+<FONT COLOR=green><EM>-- openPOWERLINK supports only the listed data types. Other types are       --</EM></FONT>
+<FONT COLOR=green><EM>-- not supported in this version.                                           --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="227_12">tObdType</A></FONT> <b>is</b> unsigned;
+   kObdTypeBool      : <b>constant</b> <A HREF="oplk-obd__ads.htm#227_12">tObdType</A> := 1;
+   <FONT COLOR=green><EM>-- 0001 - BOOLEAN</EM></FONT>
+   kObdTypeInt8      : <b>constant</b> <A HREF="oplk-obd__ads.htm#227_12">tObdType</A> := 2;
+   <FONT COLOR=green><EM>-- 0002 - INTEGER8</EM></FONT>
+   kObdTypeInt16     : <b>constant</b> <A HREF="oplk-obd__ads.htm#227_12">tObdType</A> := 3;
+   <FONT COLOR=green><EM>-- 0003 - INTEGER16</EM></FONT>
+   kObdTypeInt32     : <b>constant</b> <A HREF="oplk-obd__ads.htm#227_12">tObdType</A> := 4;
+   <FONT COLOR=green><EM>-- 0004 - INTEGER32</EM></FONT>
+   kObdTypeUInt8     : <b>constant</b> <A HREF="oplk-obd__ads.htm#227_12">tObdType</A> := 5;
+   <FONT COLOR=green><EM>-- 0005 - UNSIGNED8</EM></FONT>
+   kObdTypeUInt16    : <b>constant</b> <A HREF="oplk-obd__ads.htm#227_12">tObdType</A> := 6;
+   <FONT COLOR=green><EM>-- 0006 - UNSIGNED16</EM></FONT>
+   kObdTypeUInt32    : <b>constant</b> <A HREF="oplk-obd__ads.htm#227_12">tObdType</A> := 7;
+   <FONT COLOR=green><EM>-- 0007 - UNSIGNED32</EM></FONT>
+   kObdTypeReal32    : <b>constant</b> <A HREF="oplk-obd__ads.htm#227_12">tObdType</A> := 8;
+   <FONT COLOR=green><EM>-- 0008 - REAL32</EM></FONT>
+   kObdTypeVString   : <b>constant</b> <A HREF="oplk-obd__ads.htm#227_12">tObdType</A> := 9;
+   <FONT COLOR=green><EM>-- 0009 - VISIBLE_STRING</EM></FONT>
+   kObdTypeOString   : <b>constant</b> <A HREF="oplk-obd__ads.htm#227_12">tObdType</A> := 10;
+   <FONT COLOR=green><EM>-- 000A - OCTET_STRING</EM></FONT>
+   kObdTypeTimeOfDay : <b>constant</b> <A HREF="oplk-obd__ads.htm#227_12">tObdType</A> := 12;
+   <FONT COLOR=green><EM>-- 000C - TIME_OF_DAY</EM></FONT>
+   kObdTypeTimeDiff  : <b>constant</b> <A HREF="oplk-obd__ads.htm#227_12">tObdType</A> := 13;
+   <FONT COLOR=green><EM>-- 000D - TIME_DIFFERENCE</EM></FONT>
+   kObdTypeDomain    : <b>constant</b> <A HREF="oplk-obd__ads.htm#227_12">tObdType</A> := 15;
+   <FONT COLOR=green><EM>-- 000F - DOMAIN</EM></FONT>
+   kObdTypeInt24     : <b>constant</b> <A HREF="oplk-obd__ads.htm#227_12">tObdType</A> := 16;
+   <FONT COLOR=green><EM>-- 0010 - INTEGER24</EM></FONT>
+   kObdTypeReal64    : <b>constant</b> <A HREF="oplk-obd__ads.htm#227_12">tObdType</A> := 17;
+   <FONT COLOR=green><EM>-- 0011 - REAL64</EM></FONT>
+   kObdTypeInt40     : <b>constant</b> <A HREF="oplk-obd__ads.htm#227_12">tObdType</A> := 18;
+   <FONT COLOR=green><EM>-- 0012 - INTEGER40</EM></FONT>
+   kObdTypeInt48     : <b>constant</b> <A HREF="oplk-obd__ads.htm#227_12">tObdType</A> := 19;
+   <FONT COLOR=green><EM>-- 0013 - INTEGER48</EM></FONT>
+   kObdTypeInt56     : <b>constant</b> <A HREF="oplk-obd__ads.htm#227_12">tObdType</A> := 20;
+   <FONT COLOR=green><EM>-- 0014 - INTEGER56</EM></FONT>
+   kObdTypeInt64     : <b>constant</b> <A HREF="oplk-obd__ads.htm#227_12">tObdType</A> := 21;
+   <FONT COLOR=green><EM>-- 0015 - INTEGER64</EM></FONT>
+   kObdTypeUInt24    : <b>constant</b> <A HREF="oplk-obd__ads.htm#227_12">tObdType</A> := 22;
+   <FONT COLOR=green><EM>-- 0016 - UNSIGNED24</EM></FONT>
+   kObdTypeUInt40    : <b>constant</b> <A HREF="oplk-obd__ads.htm#227_12">tObdType</A> := 24;
+   <FONT COLOR=green><EM>-- 0018 - UNSIGNED40</EM></FONT>
+   kObdTypeUInt48    : <b>constant</b> <A HREF="oplk-obd__ads.htm#227_12">tObdType</A> := 25;
+   <FONT COLOR=green><EM>-- 0019 - UNSIGNED48</EM></FONT>
+   kObdTypeUInt56    : <b>constant</b> <A HREF="oplk-obd__ads.htm#227_12">tObdType</A> := 26;
+   <FONT COLOR=green><EM>-- 001A - UNSIGNED56</EM></FONT>
+   kObdTypeUInt64    : <b>constant</b> <A HREF="oplk-obd__ads.htm#227_12">tObdType</A> := 27;
+   <FONT COLOR=green><EM>-- 001B - UNSIGNED64</EM></FONT>
+   kObdTypeMax       : <b>constant</b> <A HREF="oplk-obd__ads.htm#227_12">tObdType</A> := 28;
+   <FONT COLOR=green><EM>--                                                      -- ./oplk/obd.h:243</EM></FONT>
+   
+
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\name C type definitions for data types defined in POWERLINK DS301        --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- The following C data types are defined according to the POWERLINK DS301  --</EM></FONT>
+<FONT COLOR=green><EM>-- specification.                                                           --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="286_12">tObdBoolean</A></FONT>        <b>is</b> unsigned_char;
+   <FONT COLOR=green><EM>-- for DS301 data type \ref kObdTypeBool</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="288_12">tObdInteger8</A></FONT>       <b>is</b> signed_char;
+   <FONT COLOR=green><EM>-- for DS301 data type \ref kObdTypeInt8</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="290_12">tObdInteger16</A></FONT>      <b>is</b> short;
+   <FONT COLOR=green><EM>-- for DS301 data type \ref kObdTypeInt16</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="292_12">tObdInteger32</A></FONT>      <b>is</b> int;
+   <FONT COLOR=green><EM>-- for DS301 data type \ref kObdTypeInt32</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="294_12">tObdUnsigned8</A></FONT>      <b>is</b> unsigned_char;
+   <FONT COLOR=green><EM>-- for DS301 data type \ref kObdTypeUInt8</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="296_12">tObdUnsigned16</A></FONT>     <b>is</b> unsigned_short;
+   <FONT COLOR=green><EM>-- for DS301 data type \ref kObdTypeUInt16</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="298_12">tObdUnsigned32</A></FONT>     <b>is</b> unsigned;
+   <FONT COLOR=green><EM>-- for DS301 data type \ref kObdTypeUInt32</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="300_12">tObdReal32</A></FONT>         <b>is</b> Float;
+   <FONT COLOR=green><EM>-- for DS301 data type \ref kObdTypeReal32</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="302_12">tObdTimeOfDay</A></FONT>      <b>is</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-oplkinc__ads.htm#9_14">oplkinc</A>.<A HREF="oplk-oplkinc__ads.htm#43_9">tTimeOfDay</A>;
+   <FONT COLOR=green><EM>-- for DS301 data type \ref kObdTypeTimeOfDay</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="304_12">tObdTimeDifference</A></FONT> <b>is</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-oplkinc__ads.htm#9_14">oplkinc</A>.<A HREF="oplk-oplkinc__ads.htm#43_9">tTimeOfDay</A>;
+   <FONT COLOR=green><EM>-- for DS301 data type \ref kObdTypeTimeDiff</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="306_12">tObdDomain</A></FONT>         <b>is</b> unsigned_char;
+   <FONT COLOR=green><EM>-- for DS301 data type \ref kObdTypeDomain</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="308_12">tObdInteger24</A></FONT>      <b>is</b> int;
+   <FONT COLOR=green><EM>-- for DS301 data type \ref kObdTypeInt24</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="310_12">tObdReal64</A></FONT>         <b>is</b> double;
+   <FONT COLOR=green><EM>-- for DS301 data type \ref kObdTypeReal64</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="312_12">tObdInteger40</A></FONT>      <b>is</b> Long_Long_Integer;
+   <FONT COLOR=green><EM>-- for DS301 data type \ref kObdTypeInt40</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="314_12">tObdInteger48</A></FONT>      <b>is</b> Long_Long_Integer;
+   <FONT COLOR=green><EM>-- for DS301 data type \ref kObdTypeInt48</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="316_12">tObdInteger56</A></FONT>      <b>is</b> Long_Long_Integer;
+   <FONT COLOR=green><EM>-- for DS301 data type \ref kObdTypeInt56</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="318_12">tObdInteger64</A></FONT>      <b>is</b> Long_Long_Integer;
+   <FONT COLOR=green><EM>-- for DS301 data type \ref kObdTypeInt64</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="320_12">tObdUnsigned24</A></FONT>     <b>is</b> unsigned;
+   <FONT COLOR=green><EM>-- for DS301 data type \ref kObdTypeUInt24</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="322_12">tObdUnsigned40</A></FONT>     <b>is</b> Extensions.unsigned_long_long;
+   <FONT COLOR=green><EM>-- for DS301 data type \ref kObdTypeUInt40</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="324_12">tObdUnsigned48</A></FONT>     <b>is</b> Extensions.unsigned_long_long;
+   <FONT COLOR=green><EM>-- for DS301 data type \ref kObdTypeUInt48</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="326_12">tObdUnsigned56</A></FONT>     <b>is</b> Extensions.unsigned_long_long;
+   <FONT COLOR=green><EM>-- for DS301 data type \ref kObdTypeUInt56</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="328_12">tObdUnsigned64</A></FONT>     <b>is</b> Extensions.unsigned_long_long;  
+   <FONT COLOR=green><EM>-- for DS301 data type \ref kObdTypeUInt64</EM></FONT>
+   <FONT COLOR=green><EM>-- ./oplk/obd.h:276</EM></FONT>
+   
+   
+   <FONT COLOR=green><EM>--   currently only size and data are implemented and used  --</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="334_12">tVarParamValid</A></FONT> <b>is</b> unsigned;
+   kVarValidSize : <b>constant</b> <A HREF="oplk-obd__ads.htm#334_12">tVarParamValid</A> := 1;
+   kVarValidData : <b>constant</b> <A HREF="oplk-obd__ads.htm#334_12">tVarParamValid</A> := 2;
+   kVarValidAll  : <b>constant</b> <A HREF="oplk-obd__ads.htm#334_12">tVarParamValid</A> := 3;  <FONT COLOR=green><EM>-- ./oplk/obd.h:284</EM></FONT>
+   
+   
+   <b>type</b> <FONT COLOR=red><A NAME="340_9">tVarParam</A></FONT> <b>is</b> <b>record</b>
+      validFlag : <b>aliased</b> <A HREF="oplk-obd__ads.htm#334_12">tVarParamValid</A>;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      index     : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      subindex  : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      size      : <b>aliased</b> <A HREF="oplk-obd__ads.htm#214_12">tObdSize</A>;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      pData     : System.Address;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-obd__ads.htm#340_9">tVarParam</A>);  <FONT COLOR=green><EM>-- ./oplk/obd.h:295</EM></FONT>
+   
+   
+   <b>type</b> <FONT COLOR=red><A NAME="355_9">tObdVarEntry</A></FONT> <b>is</b> <b>record</b>
+      pData : System.Address;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      size  : <b>aliased</b> <A HREF="oplk-obd__ads.htm#214_12">tObdSize</A>;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-obd__ads.htm#355_9">tObdVarEntry</A>);  <FONT COLOR=green><EM>-- ./oplk/obd.h:301</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--/ C type definition for DS301 data type \ref kObdTypeOString              --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="367_9">tObdOString</A></FONT> <b>is</b> <b>record</b>
+      size    : <b>aliased</b> <A HREF="oplk-obd__ads.htm#214_12">tObdSize</A>;
+      pString : <b>access</b> unsigned_char;
+   <b>end</b> <b>record</b>;                         <FONT COLOR=green><EM>-- 0009</EM></FONT>
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-obd__ads.htm#367_9">tObdOString</A>);  <FONT COLOR=green><EM>-- ./oplk/obd.h:308</EM></FONT>
+   
+   
+   <b>type</b> <FONT COLOR=red><A NAME="374_9">tObdOStringDef</A></FONT> <b>is</b> <b>record</b>
+      size       : <b>aliased</b> <A HREF="oplk-obd__ads.htm#214_12">tObdSize</A>;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      pDefString : <b>access</b> unsigned_char;
+      <FONT COLOR=green><EM>-- must be same offset as pString in tObdVString</EM></FONT>
+      pString    : <b>access</b> unsigned_char;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-obd__ads.htm#374_9">tObdOStringDef</A>);  <FONT COLOR=green><EM>-- ./oplk/obd.h:315</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--/ C type definition for DS301 data type \ref kObdTypeVString              --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="388_9">tObdVString</A></FONT> <b>is</b> <b>record</b>
+      size    : <b>aliased</b> <A HREF="oplk-obd__ads.htm#214_12">tObdSize</A>;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      pString : <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C.Strings.chars_ptr;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+   <b>end</b> <b>record</b>;                         <FONT COLOR=green><EM>-- 000A</EM></FONT>
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-obd__ads.htm#388_9">tObdVString</A>);  <FONT COLOR=green><EM>-- ./oplk/obd.h:323</EM></FONT>
+   
+   
+   <b>type</b> <FONT COLOR=red><A NAME="397_9">tObdVStringDef</A></FONT> <b>is</b> <b>record</b>
+      size       : <b>aliased</b> <A HREF="oplk-obd__ads.htm#214_12">tObdSize</A>;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      pDefString : <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C.Strings.chars_ptr;
+      <FONT COLOR=green><EM>-- must be same offset as pString in tObdVString</EM></FONT>
+      pString    : <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C.Strings.chars_ptr;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-obd__ads.htm#397_9">tObdVStringDef</A>);  <FONT COLOR=green><EM>-- ./oplk/obd.h:330</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>-- r.d. parameter struct for changing object size and/or pointer to data of --</EM></FONT>
+<FONT COLOR=green><EM>--  Strings or Domains                                                        --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="412_9">tObdVStringDomain</A></FONT> <b>is</b> <b>record</b>
+      downloadSize : <b>aliased</b> <A HREF="oplk-obd__ads.htm#214_12">tObdSize</A>;
+      <FONT COLOR=green><EM>-- download size from SDO or APP</EM></FONT>
+      objSize      : <b>aliased</b> <A HREF="oplk-obd__ads.htm#214_12">tObdSize</A>;
+      <FONT COLOR=green><EM>-- current object size from OD - should be changed from callback function</EM></FONT>
+      pData        : System.Address;
+      <FONT COLOR=green><EM>-- current object ptr  from OD - should be changed from callback function</EM></FONT>
+   <b>end</b> <b>record</b>;                         <FONT COLOR=green><EM>-- 000D</EM></FONT>
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-obd__ads.htm#412_9">tObdVStringDomain</A>);  <FONT COLOR=green><EM>-- ./oplk/obd.h:338</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief Parameters for callback function                                   --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- This structure defines the parameters for the OD callback function.      --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="428_9">tObdCbParam</A></FONT> <b>is</b> <b>record</b>
+      obdEvent  : <b>aliased</b> <A HREF="oplk-obd__ads.htm#180_12">tObdEvent</A>;
+      <FONT COLOR=green><EM>-- Event that caused calling the function.</EM></FONT>
+      index     : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Index of the accessed object.</EM></FONT>
+      subIndex  : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Subindex of the accessed object.</EM></FONT>
+      pArg      : System.Address;
+      <FONT COLOR=green><EM>-- Additional argument.</EM></FONT>
+      abortCode : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Abort Code.</EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-obd__ads.htm#428_9">tObdCbParam</A>);  <FONT COLOR=green><EM>-- ./oplk/obd.h:352</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>-- define type for callback function: pParam_p points to tObdCbParam        --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="446_9">tObdCallback</A></FONT> <b>is</b> <b>access</b> <b>function</b>
+     (arg1 : <b>access</b> <A HREF="oplk-obd__ads.htm#428_9">tObdCbParam</A>) <b>return</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <b>pragma</b> Convention (C, <A HREF="oplk-obd__ads.htm#446_9">tObdCallback</A>);  <FONT COLOR=green><EM>-- ./oplk/obd.h:355</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief Structure for subindices                                           --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- This structure defines a subindex in the OD.                             --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="456_9">tObdSubEntry</A></FONT> <b>is</b> <b>record</b>
+      subIndex : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Subindex of the object</EM></FONT>
+      c_type   : <b>aliased</b> <A HREF="oplk-obd__ads.htm#227_12">tObdType</A>;
+      <FONT COLOR=green><EM>-- Data type of the object</EM></FONT>
+      c_access : <b>aliased</b> <A HREF="oplk-obd__ads.htm#212_12">tObdAccess</A>;
+      <FONT COLOR=green><EM>-- Access type of the object</EM></FONT>
+      pDefault : System.Address;
+      <FONT COLOR=green><EM>-- Pointer to default data</EM></FONT>
+      pCurrent : System.Address;
+      <FONT COLOR=green><EM>-- Pointer to data (points always to RAM)</EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-obd__ads.htm#456_9">tObdSubEntry</A>);  <FONT COLOR=green><EM>-- ./oplk/obd.h:369</EM></FONT>
+
+   <b>type</b> <FONT COLOR=red><A NAME="470_9">tObdSubEntryPtr</A></FONT> <b>is</b> <b>access</b> <b>all</b> <A HREF="oplk-obd__ads.htm#456_9">tObdSubEntry</A>;  <FONT COLOR=green><EM>-- ./oplk/obd.h:371</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief Structure for indices                                              --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- This structure defines an index in the OD.                               --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="478_9">tObdEntry</A></FONT> <b>is</b> <b>record</b>
+      index       : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Index of the object</EM></FONT>
+      pSubIndex   : <A HREF="oplk-obd__ads.htm#470_9">tObdSubEntryPtr</A>;
+      <FONT COLOR=green><EM>-- Points to subindex structures of this object</EM></FONT>
+      count       : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- number of subindices.</EM></FONT>
+      pfnCallback : <A HREF="oplk-obd__ads.htm#446_9">tObdCallback</A>;
+      <FONT COLOR=green><EM>-- function is called back if object access</EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-obd__ads.htm#478_9">tObdEntry</A>);  <FONT COLOR=green><EM>-- ./oplk/obd.h:385</EM></FONT>
+
+   <b>type</b> <FONT COLOR=red><A NAME="490_9">tObdEntryPtr</A></FONT> <b>is</b> <b>access</b> <b>all</b> <A HREF="oplk-obd__ads.htm#478_9">tObdEntry</A>;  <FONT COLOR=green><EM>-- ./oplk/obd.h:387</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief Structure for OBD init parameters                                  --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- This structure defines the init parameters of the OBD module.            --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="498_9">u_tObdInitParam</A></FONT> <b>is</b> <b>record</b>
+      pGenericPart      : <A HREF="oplk-obd__ads.htm#490_9">tObdEntryPtr</A>;
+      <FONT COLOR=green><EM>-- Pointer to generic part of OD</EM></FONT>
+      numGeneric        : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Number of entries in generic partition</EM></FONT>
+      pManufacturerPart : <A HREF="oplk-obd__ads.htm#490_9">tObdEntryPtr</A>;
+      <FONT COLOR=green><EM>-- Pointer to manufacturer part of OD</EM></FONT>
+      numManufacturer   : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Number of entries in manufacturer partition</EM></FONT>
+      pDevicePart       : <A HREF="oplk-obd__ads.htm#490_9">tObdEntryPtr</A>;
+      <FONT COLOR=green><EM>-- Pointer to device part of OD</EM></FONT>
+      numDevice         : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Number of entries in device partition</EM></FONT>
+<FONT COLOR=green><EM>--  #if (defined (OBD_USER_OD) &amp;&amp; (OBD_USER_OD != FALSE))</EM></FONT>
+<FONT COLOR=green><EM>--       pUserPart         : tObdEntryPtr;</EM></FONT>
+<FONT COLOR=green><EM>--       -- Pointer to user part of OD</EM></FONT>
+<FONT COLOR=green><EM>--       NumUser           : aliased unsigned;</EM></FONT>
+<FONT COLOR=green><EM>--       -- Number of entries in user partition</EM></FONT>
+<FONT COLOR=green><EM>--  #endif</EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-obd__ads.htm#498_9">u_tObdInitParam</A>);  <FONT COLOR=green><EM>-- ./oplk/obd.h:394</EM></FONT>
+
+   <b>subtype</b> <FONT COLOR=red><A NAME="520_12">tObdInitParam</A></FONT> <b>is</b> <A HREF="oplk-obd__ads.htm#498_9">u_tObdInitParam</A>;
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief Structure for parameters of the store/restore commands             --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- This structure specifies the parameters for the store/restore commands.  --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="528_9">tObdCbStoreParam</A></FONT> <b>is</b> <b>record</b>
+      command       : <b>aliased</b> <A HREF="oplk-obd__ads.htm#165_12">tObdCommand</A>;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      currentOdPart : <b>aliased</b> <A HREF="oplk-obd__ads.htm#207_12">tObdPart</A>;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      pData         : System.Address;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      objSize       : <b>aliased</b> <A HREF="oplk-obd__ads.htm#214_12">tObdSize</A>;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-obd__ads.htm#528_9">tObdCbStoreParam</A>);  <FONT COLOR=green><EM>-- ./oplk/obd.h:421</EM></FONT>
+   
+   
+   <b>type</b> <FONT COLOR=red><A NAME="541_9">tInitTabEntryCallback</A></FONT> <b>is</b> <b>access</b> <b>function</b>
+     (arg1 : System.Address;
+      arg2 : unsigned) 
+     <b>return</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <b>pragma</b> Convention (C, <A HREF="oplk-obd__ads.htm#541_9">tInitTabEntryCallback</A>);  <FONT COLOR=green><EM>-- ./oplk/obd.h:423</EM></FONT>
+   
+   
+   <b>type</b> <FONT COLOR=red><A NAME="548_9">tObdStoreLoadCallback</A></FONT> <b>is</b> <b>access</b> <b>function</b>
+     (arg1 : <b>access</b> <A HREF="oplk-obd__ads.htm#528_9">tObdCbStoreParam</A>) 
+     <b>return</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <b>pragma</b> Convention (C, <A HREF="oplk-obd__ads.htm#548_9">tObdStoreLoadCallback</A>);  <FONT COLOR=green><EM>-- ./oplk/obd.h:424</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief Enumeration for Node ID setting types                              --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- This structure defines constants for the types of setting the node ID.   --</EM></FONT>
+<FONT COLOR=green><EM>-- They are used in the function obd_setNodeId()                            --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="560_9">tObdNodeIdType</A></FONT> <b>is</b>
+     (kObdNodeIdUnknown, 
+      <FONT COLOR=green><EM>-- unknown how the node id was set</EM></FONT>
+      kObdNodeIdSoftware, 
+      <FONT COLOR=green><EM>-- node id set by software</EM></FONT>
+      KObdNodeIdHardware
+      <FONT COLOR=green><EM>-- node id set by hardware</EM></FONT>
+     );
+   <b>pragma</b> Convention (C, <A HREF="oplk-obd__ads.htm#560_9">tObdNodeIdType</A>);  <FONT COLOR=green><EM>-- ./oplk/obd.h:437</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>-- function prototypes                                                      --</EM></FONT>
+<FONT COLOR=green><EM>--   from obd.c                                                             --</EM></FONT>
+<FONT COLOR=green><EM>-- Implementation of object dictionary (OD) module                          --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>function</b> <A HREF="oplk-obd__ads.htm#585_22">obd_init</A><FONT COLOR=red><A NAME="576_13"></A></FONT>
+     (pInitParam_p : <b>access</b> <A HREF="oplk-obd__ads.htm#520_12">tObdInitParam</A>)
+     <b>return</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- pInitParam_p : Pointer to OD initialization parameters.</EM></FONT>
+   <FONT COLOR=green><EM>-- tOplkError      : </EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorObdIllegalPart      illegal OD part was specified!</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function initializes the OD module.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-obd__ads.htm#576_13">obd_init</A><FONT COLOR=red><A NAME="585_22"></A></FONT>, "obd_init");  <FONT COLOR=green><EM>-- ./oplk/obd.h:446</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-obd__ads.htm#594_10">obd_deleteInstance</A><FONT COLOR=red><A NAME="588_13"></A></FONT>
+     <b>return</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- tOplkError      : </EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk                  always</EM></FONT>
+   <FONT COLOR=green><EM>-- The function de-initializes the OD module, but is not implemented</EM></FONT>
+   <b>pragma</b> Import 
+     (C, <A HREF="oplk-obd__ads.htm#588_13">obd_deleteInstance</A><FONT COLOR=red><A NAME="594_10"></A></FONT>, "obd_deleteInstance");  <FONT COLOR=green><EM>-- ./oplk/obd.h:447</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-obd__ads.htm#618_22">obd_writeEntry</A><FONT COLOR=red><A NAME="597_13"></A></FONT>
+     (index_p    : unsigned;
+      subIndex_p : unsigned;
+      pSrcData_p : System.Address;
+      size_p     : <A HREF="oplk-obd__ads.htm#214_12">tObdSize</A>) 
+     <b>return</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- index_p    : Index to write.</EM></FONT>
+   <FONT COLOR=green><EM>-- subIndex_p : Sub-index to write.</EM></FONT>
+   <FONT COLOR=green><EM>-- pSrcData_p : Pointer to data which should be written.</EM></FONT>
+   <FONT COLOR=green><EM>-- size_p     : Size of data to write.</EM></FONT>
+   <FONT COLOR=green><EM>-- tOplkError      : </EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorObdAccessViolation </EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorObdValueLengthError source string is not 0-terminated and / or </EM></FONT>
+   <FONT COLOR=green><EM>--                             destination buffer is too short</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorObdIndexNotExist</EM></FONT>
+   <FONT COLOR=green><EM>--   </EM></FONT>
+   <FONT COLOR=green><EM>--   and many more</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk                  all checks are ok</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function writes data to an OD entry. Strings are stored with </EM></FONT>
+   <FONT COLOR=green><EM>-- added '\0' character.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-obd__ads.htm#597_13">obd_writeEntry</A><FONT COLOR=red><A NAME="618_22"></A></FONT>, "obd_writeEntry");  <FONT COLOR=green><EM>-- ./oplk/obd.h:448</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-obd__ads.htm#644_22">obd_readEntry</A><FONT COLOR=red><A NAME="621_13"></A></FONT>
+     (index_p    : unsigned;
+      subIndex_p : unsigned;
+      pDstData_p : System.Address;
+      pSize_p    : <b>access</b> <A HREF="oplk-obd__ads.htm#214_12">tObdSize</A>)
+     <b>return</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- index_p    : Index to read.</EM></FONT>
+   <FONT COLOR=green><EM>-- subIndex_p : Sub-index to read.</EM></FONT>
+   <FONT COLOR=green><EM>-- pDstData_p : Pointer to store the read data.</EM></FONT>
+   <FONT COLOR=green><EM>-- pSize_p    : Pointer to size of buffer. The real data size will</EM></FONT>
+   <FONT COLOR=green><EM>--              be written to this location.</EM></FONT>
+   <FONT COLOR=green><EM>-- tOplkError      : </EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorInvalidInstanceParam </EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorObdIndexNotExist</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorObdIllegalPart</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorObdReadViolation</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorObdValueLengthError</EM></FONT>
+   <FONT COLOR=green><EM>--    and more</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk</EM></FONT>
+   <FONT COLOR=green><EM>--   </EM></FONT>
+   <FONT COLOR=green><EM>-- The function reads an OD entry. The object can always be read, even if the</EM></FONT>
+   <FONT COLOR=green><EM>-- attribute kObdAccRead is not set. The attribute is only checked for SDO</EM></FONT>
+   <FONT COLOR=green><EM>-- transfers.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-obd__ads.htm#621_13">obd_readEntry</A><FONT COLOR=red><A NAME="644_22"></A></FONT>, "obd_readEntry");  <FONT COLOR=green><EM>-- ./oplk/obd.h:449</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-obd__ads.htm#658_22">obd_accessOdPart</A><FONT COLOR=red><A NAME="647_13"></A></FONT>
+     (obdPart_p   : <A HREF="oplk-obd__ads.htm#207_12">tObdPart</A>;
+      direction_p : <A HREF="oplk-obd__ads.htm#146_12">tObdDir</A>)
+     <b>return</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- obdPart_p   : </EM></FONT>
+   <FONT COLOR=green><EM>-- direction_p : </EM></FONT>
+   <FONT COLOR=green><EM>-- tOplkError      : </EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorObdIllegalPart     illegal OD part was specified!</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- restores default values of one part of OD</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-obd__ads.htm#647_13">obd_accessOdPart</A><FONT COLOR=red><A NAME="658_22"></A></FONT>, "obd_accessOdPart");  <FONT COLOR=green><EM>-- ./oplk/obd.h:450</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-obd__ads.htm#671_22">obd_defineVar</A><FONT COLOR=red><A NAME="661_13"></A></FONT>
+     (pVarParam_p : <b>access</b> <A HREF="oplk-obd__ads.htm#340_9">tVarParam</A>)
+     <b>return</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- pVarParam_p : Pointer to the object variable structure.</EM></FONT>
+   <FONT COLOR=green><EM>-- tOplkError      : </EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorObdValueLengthError</EM></FONT>
+   <FONT COLOR=green><EM>--   and others</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function defines an OD variable.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-obd__ads.htm#661_13">obd_defineVar</A><FONT COLOR=red><A NAME="671_22"></A></FONT>, "obd_defineVar");  <FONT COLOR=green><EM>-- ./oplk/obd.h:451</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-obd__ads.htm#685_10">obd_getObjectDataPtr</A><FONT COLOR=red><A NAME="674_13"></A></FONT>
+     (index_p    : unsigned;
+      subIndex_p : unsigned) 
+     <b>return</b> System.Address;
+   <FONT COLOR=green><EM>-- index_p    : Index of the entry.</EM></FONT>
+   <FONT COLOR=green><EM>-- subIndex_p : Sub-index of the entry.</EM></FONT>
+   <FONT COLOR=green><EM>-- The function returns the pointer to the object data</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function returns the current data pointer. If object is a</EM></FONT>
+   <FONT COLOR=green><EM>-- constant object it returns the default pointer.</EM></FONT>
+   <b>pragma</b> Import 
+     (C, <A HREF="oplk-obd__ads.htm#674_13">obd_getObjectDataPtr</A><FONT COLOR=red><A NAME="685_10"></A></FONT>, "obd_getObjectDataPtr");  <FONT COLOR=green><EM>-- ./oplk/obd.h:452</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-obd__ads.htm#697_10">obd_registerUserOd</A><FONT COLOR=red><A NAME="688_13"></A></FONT>
+     (pUserOd_p : <A HREF="oplk-obd__ads.htm#490_9">tObdEntryPtr</A>)
+     <b>return</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- pUserOd_p : Pointer to user OD.</EM></FONT>
+   <FONT COLOR=green><EM>-- tOplkError      : </EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk          always.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function registers a user object dictionary.</EM></FONT>
+   <b>pragma</b> Import 
+     (C, <A HREF="oplk-obd__ads.htm#688_13">obd_registerUserOd</A><FONT COLOR=red><A NAME="697_10"></A></FONT>, "obd_registerUserOd");  <FONT COLOR=green><EM>-- ./oplk/obd.h:453</EM></FONT>
+   
+   
+   <b>procedure</b> <A HREF="oplk-obd__ads.htm#710_22">obd_initVarEntry</A><FONT COLOR=red><A NAME="700_14"></A></FONT>
+     (pVarEntry_p : <b>access</b> <A HREF="oplk-obd__ads.htm#355_9">tObdVarEntry</A>;
+      type_p      : <A HREF="oplk-obd__ads.htm#227_12">tObdType</A>;
+      obdSize_p   : <A HREF="oplk-obd__ads.htm#214_12">tObdSize</A>);
+   <FONT COLOR=green><EM>-- pVarEntry_p : Pointer to VarEntry structure.</EM></FONT>
+   <FONT COLOR=green><EM>-- type_p      : Object type.</EM></FONT>
+   <FONT COLOR=green><EM>-- obdSize_p   : Size of object data.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function initializes the VarEntry dependant on the object type.</EM></FONT>
+   <FONT COLOR=green><EM>-- The function will not be used for strings.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-obd__ads.htm#700_14">obd_initVarEntry</A><FONT COLOR=red><A NAME="710_22"></A></FONT>, "obd_initVarEntry");  <FONT COLOR=green><EM>-- ./oplk/obd.h:454</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-obd__ads.htm#724_22">obd_getDataSize</A><FONT COLOR=red><A NAME="713_13"></A></FONT>
+     (index_p    : unsigned;
+      subIndex_p : unsigned) 
+     <b>return</b> <A HREF="oplk-obd__ads.htm#214_12">tObdSize</A>;
+   <FONT COLOR=green><EM>-- index_p    : </EM></FONT>
+   <FONT COLOR=green><EM>-- subIndex_p : </EM></FONT>
+   <FONT COLOR=green><EM>-- The function returns the data size.</EM></FONT>
+   <FONT COLOR=green><EM>--   tObdSize will be 0 on error.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function gets the data size of an object. For string objects it </EM></FONT>
+   <FONT COLOR=green><EM>-- returns the string length without terminating null-character.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-obd__ads.htm#713_13">obd_getDataSize</A><FONT COLOR=red><A NAME="724_22"></A></FONT>, "obd_getDataSize");  <FONT COLOR=green><EM>-- ./oplk/obd.h:455</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-obd__ads.htm#733_22">obd_getNodeId</A><FONT COLOR=red><A NAME="727_13"></A></FONT> 
+     <b>return</b> unsigned;
+   <FONT COLOR=green><EM>-- The function returns the node ID.</EM></FONT>
+   <FONT COLOR=green><EM>--   unsigned will be 0 on error.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function gets the node ID which is stored in object 0x1F93.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-obd__ads.htm#727_13">obd_getNodeId</A><FONT COLOR=red><A NAME="733_22"></A></FONT>, "obd_getNodeId");  <FONT COLOR=green><EM>-- ./oplk/obd.h:456</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-obd__ads.htm#749_22">obd_setNodeId</A><FONT COLOR=red><A NAME="736_13"></A></FONT>
+     (nodeId_p     : unsigned;
+      nodeIdType_p : <A HREF="oplk-obd__ads.htm#560_9">tObdNodeIdType</A>)
+     <b>return</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- nodeId_p     : Node ID to set.</EM></FONT>
+   <FONT COLOR=green><EM>-- nodeIdType_p : Node ID setting type.</EM></FONT>
+   <FONT COLOR=green><EM>-- tOplkError      : </EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorObdAccessViolation</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorObdValueLengthError</EM></FONT>
+   <FONT COLOR=green><EM>--   and others</EM></FONT>
+   <FONT COLOR=green><EM>--   kErrorOk</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function sets the node ID in object 0x1F93.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-obd__ads.htm#736_13">obd_setNodeId</A><FONT COLOR=red><A NAME="749_22"></A></FONT>, "obd_setNodeId");  <FONT COLOR=green><EM>-- ./oplk/obd.h:457</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-obd__ads.htm#764_22">obd_isNumerical</A><FONT COLOR=red><A NAME="752_13"></A></FONT>
+     (index_p            : unsigned;
+      subIndex_p         : unsigned;
+      pfEntryNumerical_p : <b>access</b> unsigned_char)
+     <b>return</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- index_p            : Index of object to check.</EM></FONT>
+   <FONT COLOR=green><EM>-- subIndex_p         : Sub-index of object to check.</EM></FONT>
+   <FONT COLOR=green><EM>-- pfEntryNumerical_p : Pointer to store result. TRUE if entry is numerical,</EM></FONT>
+   <FONT COLOR=green><EM>--                                          FALSE if entry is not numerical.</EM></FONT>
+   <FONT COLOR=green><EM>-- tOplkError             : </EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function checks if a entry is numerical or not.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-obd__ads.htm#752_13">obd_isNumerical</A><FONT COLOR=red><A NAME="764_22"></A></FONT>, "obd_isNumerical");  <FONT COLOR=green><EM>-- ./oplk/obd.h:458</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-obd__ads.htm#779_22">obd_getType</A><FONT COLOR=red><A NAME="767_13"></A></FONT>
+     (index_p    : unsigned;
+      subIndex_p : unsigned;
+      pType_p    : <b>access</b> <A HREF="oplk-obd__ads.htm#227_12">tObdType</A>)
+     <b>return</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- index_p    : Index of object to check.</EM></FONT>
+   <FONT COLOR=green><EM>-- subIndex_p : Sub-index of object to check.</EM></FONT>
+   <FONT COLOR=green><EM>-- pType_p    : Pointer to store the type of the entry.</EM></FONT>
+   <FONT COLOR=green><EM>-- tOplkError             : </EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function returns the data type of the specified entry.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-obd__ads.htm#767_13">obd_getType</A><FONT COLOR=red><A NAME="779_22"></A></FONT>, "obd_getType");  <FONT COLOR=green><EM>-- ./oplk/obd.h:459</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-obd__ads.htm#799_10">obd_writeEntryFromLe</A><FONT COLOR=red><A NAME="782_13"></A></FONT>
+     (index_p    : unsigned;
+      subIndex_p : unsigned;
+      pSrcData_p : System.Address;
+      size_p     : <A HREF="oplk-obd__ads.htm#214_12">tObdSize</A>) 
+     <b>return</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- index_p    : Index of object to write.</EM></FONT>
+   <FONT COLOR=green><EM>-- subIndex_p : Sub-index of object to write.</EM></FONT>
+   <FONT COLOR=green><EM>-- pSrcData_p : Pointer to the data which should be written.</EM></FONT>
+   <FONT COLOR=green><EM>-- size_p     : Size of the data to be written.</EM></FONT>
+   <FONT COLOR=green><EM>-- tOplkError             : </EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function writes an object entry and converts numerical types from </EM></FONT>
+   <FONT COLOR=green><EM>-- the little endian byte order into the system byte order. </EM></FONT>
+   <FONT COLOR=green><EM>-- For other types a normal write will be performed. </EM></FONT>
+   <FONT COLOR=green><EM>-- Strings are stored with added '\0' character.</EM></FONT>
+   <b>pragma</b> Import 
+     (C, <A HREF="oplk-obd__ads.htm#782_13">obd_writeEntryFromLe</A><FONT COLOR=red><A NAME="799_10"></A></FONT>, "obd_writeEntryFromLe");  <FONT COLOR=green><EM>-- ./oplk/obd.h:460</EM></FONT>
+
+   <b>function</b> <A HREF="oplk-obd__ads.htm#823_10">obd_readEntryToLe</A><FONT COLOR=red><A NAME="801_13"></A></FONT>
+     (index_p    : unsigned;
+      subIndex_p : unsigned;
+      pDstData_p : System.Address;
+      pSize_p    : <b>access</b> <A HREF="oplk-obd__ads.htm#214_12">tObdSize</A>)
+     <b>return</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- index_p    : Index of object to read.</EM></FONT>
+   <FONT COLOR=green><EM>-- subIndex_p : Sub-index of object to read.</EM></FONT>
+   <FONT COLOR=green><EM>-- pDstData_p : Pointer to location where to store the read data.</EM></FONT>
+   <FONT COLOR=green><EM>-- pSize_p    : Pointer to the size of the buffer. The function</EM></FONT>
+   <FONT COLOR=green><EM>--               stores the number of read bytes at this</EM></FONT>
+   <FONT COLOR=green><EM>--               location.</EM></FONT>
+   <FONT COLOR=green><EM>-- tOplkError             : </EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function reads an object entry and converts numerical types into the </EM></FONT>
+   <FONT COLOR=green><EM>-- little endian byte order for numerical types. </EM></FONT>
+   <FONT COLOR=green><EM>-- For other types a normal read will be performed. </EM></FONT>
+   <FONT COLOR=green><EM>-- This is useful for the PDO and SDO module.</EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The application can always read the data even if the attribute </EM></FONT>
+   <FONT COLOR=green><EM>-- kObdAccRead is not set. The attribute is only checked on SDO transfers.</EM></FONT>
+   <b>pragma</b> Import 
+     (C, <A HREF="oplk-obd__ads.htm#801_13">obd_readEntryToLe</A><FONT COLOR=red><A NAME="823_10"></A></FONT>, "obd_readEntryToLe");  <FONT COLOR=green><EM>-- ./oplk/obd.h:461</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-obd__ads.htm#839_10">obd_getAccessType</A><FONT COLOR=red><A NAME="826_13"></A></FONT>
+     (index_p       : unsigned;
+      subIndex_p    : unsigned;
+      pAccessType_p : <b>access</b> <A HREF="oplk-obd__ads.htm#212_12">tObdAccess</A>)
+     <b>return</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- index_p       : Index of object.</EM></FONT>
+   <FONT COLOR=green><EM>-- subIndex_p    : Sub-index of object.</EM></FONT>
+   <FONT COLOR=green><EM>-- pAccessType_p : Pointer to store the access type.</EM></FONT>
+   <FONT COLOR=green><EM>-- tOplkError             : </EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function gets the access type of the entry</EM></FONT>
+   <FONT COLOR=green><EM>--  (note that this is not the usual Ada definition of access type)</EM></FONT>
+   <b>pragma</b> Import 
+     (C, <A HREF="oplk-obd__ads.htm#826_13">obd_getAccessType</A><FONT COLOR=red><A NAME="839_10"></A></FONT>, "obd_getAccessType");  <FONT COLOR=green><EM>-- ./oplk/obd.h:462</EM></FONT>
+   
+   
+   <b>function</b> <A HREF="oplk-obd__ads.htm#854_10">obd_searchVarEntry</A><FONT COLOR=red><A NAME="842_13"></A></FONT>
+     (index_p      : unsigned;
+      subindex_p   : unsigned;
+      ppVarEntry_p : System.Address)
+     <b>return</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- index_p       : Index of object.</EM></FONT>
+   <FONT COLOR=green><EM>-- subIndex_p    : Sub-index of object.</EM></FONT>
+   <FONT COLOR=green><EM>-- ppVarEntry_p  : Pointer to store pointer to the VarEntry structure.</EM></FONT>
+   <FONT COLOR=green><EM>-- tOplkError             : </EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function gets the VarEntry structure of an object.</EM></FONT>
+   <b>pragma</b> Import 
+     (C, <A HREF="oplk-obd__ads.htm#842_13">obd_searchVarEntry</A><FONT COLOR=red><A NAME="854_10"></A></FONT>, "obd_searchVarEntry");  <FONT COLOR=green><EM>-- ./oplk/obd.h:463</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>-- function prototypes                                                      --</EM></FONT>
+<FONT COLOR=green><EM>-- from obdcreate.c                                                         --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --  </EM></FONT>
+<FONT COLOR=green><EM>--      Object dictionary creation                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- This file contains the OD data tables and the OD data structure </EM></FONT>
+<FONT COLOR=green><EM>-- initialization function.                                                 --</EM></FONT>
+<FONT COLOR=green><EM>--  (dont ask me what this means in the .c file)                            --</EM></FONT>
+<FONT COLOR=green><EM>-- The OD data structure initialization is a very tricky part of the        --</EM></FONT>
+<FONT COLOR=green><EM>-- openPOWERLINK stack.                                                     --</EM></FONT>
+<FONT COLOR=green><EM>-- To create the different tables and code parts a set of macros defined in --</EM></FONT>
+<FONT COLOR=green><EM>-- obdmacro.h is used. These macros are redefined depending on some other   --</EM></FONT>
+<FONT COLOR=green><EM>-- "type definition" macros. To create the different tables the specific    --</EM></FONT>
+<FONT COLOR=green><EM>-- "type definition" macro will be set, the file objdict.h is included and  --</EM></FONT>
+<FONT COLOR=green><EM>-- Therefore the specified data structures are created. Afterwards the      --</EM></FONT>
+<FONT COLOR=green><EM>-- "type definition" macro is unset, the next one is set and objdict.h is   --</EM></FONT>
+<FONT COLOR=green><EM>-- included again to Generate the next table.                               --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+
+   
+   <b>function</b> <A HREF="oplk-obd__ads.htm#884_22">obd_initObd</A><FONT COLOR=red><A NAME="877_13"></A></FONT>
+     (pInitParam_p : <b>access</b> <A HREF="oplk-obd__ads.htm#520_12">tObdInitParam</A>)
+     <b>return</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <FONT COLOR=green><EM>-- pInitParam_p : Pointer to OD initialization parameters.</EM></FONT>
+   <FONT COLOR=green><EM>-- tOplkError             : </EM></FONT>
+   <FONT COLOR=green><EM>-- </EM></FONT>
+   <FONT COLOR=green><EM>-- The function initializes the object dictionary data structures.</EM></FONT>
+   <b>pragma</b> Import (C, <A HREF="oplk-obd__ads.htm#877_13">obd_initObd</A><FONT COLOR=red><A NAME="884_22"></A></FONT>, "obd_initObd");  <FONT COLOR=green><EM>-- ./oplk/obd.h:465</EM></FONT>
+   
+   
+<FONT COLOR=green><EM>--  #if defined(CONFIG_OBD_USE_STORE_RESTORE) &amp;&amp; (CONFIG_OBD_USE_STORE_RESTORE != FALSE)</EM></FONT>
+<FONT COLOR=green><EM>--     function obd_storeLoadObjCallback</EM></FONT>
+<FONT COLOR=green><EM>--       (PfnCallback_P : tObdStoreLoadCallback)</EM></FONT>
+<FONT COLOR=green><EM>--       return Oplk.errordefs.tOplkError;</EM></FONT>
+<FONT COLOR=green><EM>-- -- PfnCallback_P : Pointer to the callback function.</EM></FONT>
+<FONT COLOR=green><EM>-- -- tOplkError             : </EM></FONT>
+<FONT COLOR=green><EM>-- -- </EM></FONT>
+<FONT COLOR=green><EM>-- -- The function sets the callback function for the load/store command.</EM></FONT>
+<FONT COLOR=green><EM>--     pragma Import </EM></FONT>
+<FONT COLOR=green><EM>--   (C, Obd_StoreLoadObjCallback, "obd_storeLoadObjCallback");  -- ./oplk/obd.h:468</EM></FONT>
+<FONT COLOR=green><EM>--  #endif</EM></FONT>
+   
+<b>end</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-obd__ads.htm#14_14">obd</A>;
+</PRE></BODY></HTML>

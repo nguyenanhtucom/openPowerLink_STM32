@@ -1,0 +1,43 @@
+<HEAD><TITLE>oplk-cfm.ads</TITLE></HEAD>
+<BODY>
+<HR><DIV ALIGN="center"><H1> File : oplk-cfm.ads </H1></DIV><HR>
+<PRE>
+
+  <FONT COLOR=green><EM>--\brief  General include file for configuration file manager (CFM)</EM></FONT>
+  <FONT COLOR=green><EM>--This file contains global definitions for the CFM module.</EM></FONT>
+
+
+<b>pragma</b> Ada_2005;
+<b>pragma</b> Style_Checks (Off);
+
+<b>with</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C; <b>use</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C;
+<b>with</b> <A HREF="oplk__ads.htm#10_9">oplk</A>.<A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>;
+
+<b>package</b> <A HREF="oplk__ads.htm#10_9">oplk</A>.<FONT COLOR=red><A NAME="12_14">cfm</A></FONT> <b>is</b>
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief Structure for CFM CN progress event                                --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- This structure contains all information of the CFMs CN progress event.   --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="19_9">tCfmEventCnProgress</A></FONT> <b>is</b> <b>record</b>
+      nodeId             : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Node ID of the CN</EM></FONT>
+      objectIndex        : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Index of object to be written</EM></FONT>
+      ObjectSubIndex     : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Subindex of object to be written</EM></FONT>
+      sdoAbortCode       : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- SDO abort code</EM></FONT>
+      error              : <b>aliased</b> <A HREF="oplk__ads.htm#10_9">oplk</A>.<A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+      <FONT COLOR=green><EM>-- Error which occured</EM></FONT>
+      totalNumberOfBytes : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Total number of bytes to transfer</EM></FONT>
+      BytesDownloaded    : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- Number of already downloaded bytes</EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-cfm__ads.htm#19_9">tCfmEventCnProgress</A>);  <FONT COLOR=green><EM>-- ./oplk/cfm.h:68</EM></FONT>
+   
+   
+<b>end</b> <A HREF="oplk__ads.htm#10_9">oplk</A>.<A HREF="oplk-cfm__ads.htm#12_14">cfm</A>;
+</PRE></BODY></HTML>

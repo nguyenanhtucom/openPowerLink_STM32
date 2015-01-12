@@ -1,0 +1,493 @@
+<HEAD><TITLE>oplk-frame.ads</TITLE></HEAD>
+<BODY>
+<HR><DIV ALIGN="center"><H1> File : oplk-frame.ads </H1></DIV><HR>
+<PRE>
+<FONT COLOR=green><EM>--\brief  Definitions for POWERLINK frames</EM></FONT>
+<FONT COLOR=green><EM>--This header file contains definitions describing POWERLINK frames.</EM></FONT>
+
+<b>pragma</b> Ada_2005;
+<b>pragma</b> Style_Checks (Off);
+
+<b>with</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C; <b>use</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C;
+<b>with</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-oplkinc__ads.htm#9_14">oplkinc</A>;
+<b>with</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C.Extensions;
+
+<b>package</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<FONT COLOR=red><A NAME="11_14">frame</A></FONT> <b>is</b>
+   
+   <FONT COLOR=green><EM>--   Defines for tFrameData.flag1 and tFrameData.flag2   --</EM></FONT>
+   <FONT COLOR=red><A NAME="14_4">PLK_FRAME_FLAG1_RD</A></FONT>                    : <b>constant</b> := 16#01#;
+   <FONT COLOR=green><EM>-- ready                                    (PReq, PRes)</EM></FONT>
+   <FONT COLOR=red><A NAME="16_4">PLK_FRAME_FLAG1_ER</A></FONT>                    : <b>constant</b> := 16#02#;
+   <FONT COLOR=green><EM>-- exception reset (error signalling)       (SoA)</EM></FONT>
+   <FONT COLOR=red><A NAME="18_4">PLK_FRAME_FLAG1_EA</A></FONT>                    : <b>constant</b> := 16#04#;
+   <FONT COLOR=green><EM>-- exception acknowledge (error signalling) (PReq, SoA)</EM></FONT>
+   <FONT COLOR=red><A NAME="20_4">PLK_FRAME_FLAG1_EC</A></FONT>                    : <b>constant</b> := 16#08#;
+   <FONT COLOR=green><EM>-- exception clear (error signalling)       (StatusRes)</EM></FONT>
+   <FONT COLOR=red><A NAME="22_4">PLK_FRAME_FLAG1_EN</A></FONT>                    : <b>constant</b> := 16#10#;
+   <FONT COLOR=green><EM>-- exception new (error signalling)         (PRes, StatusRes)</EM></FONT>
+   <FONT COLOR=red><A NAME="24_4">PLK_FRAME_FLAG1_MS</A></FONT>                    : <b>constant</b> := 16#20#;
+   <FONT COLOR=green><EM>-- multiplexed slot                         (PReq)</EM></FONT>
+   <FONT COLOR=red><A NAME="26_4">PLK_FRAME_FLAG1_PS</A></FONT>                    : <b>constant</b> := 16#40#;
+   <FONT COLOR=green><EM>-- prescaled slot                           (SoC)</EM></FONT>
+   <FONT COLOR=red><A NAME="28_4">PLK_FRAME_FLAG1_MC</A></FONT>                    : <b>constant</b> := 16#80#;
+   <FONT COLOR=green><EM>-- multiplexed cycle completed              (SoC)</EM></FONT>
+   <FONT COLOR=red><A NAME="30_4">PLK_FRAME_FLAG2_RS</A></FONT>                    : <b>constant</b> := 16#07#;
+   <FONT COLOR=green><EM>-- number of pending requests to send       (PRes, StatusRes, IdentRes)</EM></FONT>
+   <FONT COLOR=red><A NAME="32_4">PLK_FRAME_FLAG2_PR</A></FONT>                    : <b>constant</b> := 16#38#;
+   <FONT COLOR=green><EM>-- priority of requested asynch. frame      (PRes, StatusRes, IdentRes)</EM></FONT>
+   <FONT COLOR=red><A NAME="34_4">PLK_FRAME_FLAG2_PR_SHIFT</A></FONT>              : <b>constant</b> := 3;
+   <FONT COLOR=green><EM>-- shift of priority of requested asynch. frame</EM></FONT>
+   
+   <FONT COLOR=green><EM>--   error history/status entry types   --</EM></FONT>
+   <FONT COLOR=red><A NAME="38_4">ERR_ENTRYTYPE_STATUS</A></FONT>                  : <b>constant</b> := 16#8000#;
+   <FONT COLOR=red><A NAME="39_4">ERR_ENTRYTYPE_HISTORY</A></FONT>                 : <b>constant</b> := 16#0000#;
+   <FONT COLOR=red><A NAME="40_4">ERR_ENTRYTYPE_EMCY</A></FONT>                    : <b>constant</b> := 16#4000#;
+   <FONT COLOR=red><A NAME="41_4">ERR_ENTRYTYPE_MODE_ACTIVE</A></FONT>             : <b>constant</b> := 16#1000#;
+   <FONT COLOR=red><A NAME="42_4">ERR_ENTRYTYPE_MODE_CLEARED</A></FONT>            : <b>constant</b> := 16#2000#;
+   <FONT COLOR=red><A NAME="43_4">ERR_ENTRYTYPE_MODE_OCCURRED</A></FONT>           : <b>constant</b> := 16#3000#;
+   <FONT COLOR=red><A NAME="44_4">ERR_ENTRYTYPE_MODE_MASK</A></FONT>               : <b>constant</b> := 16#3000#;
+   <FONT COLOR=red><A NAME="45_4">ERR_ENTRYTYPE_PROF_VENDOR</A></FONT>             : <b>constant</b> := 16#0001#;
+   <FONT COLOR=red><A NAME="46_4">ERR_ENTRYTYPE_PROF_PLK</A></FONT>                : <b>constant</b> := 16#0002#;
+   <FONT COLOR=red><A NAME="47_4">ERR_ENTRYTYPE_PROF_MASK</A></FONT>               : <b>constant</b> := 16#0FFF#;
+   
+   <FONT COLOR=green><EM>--   defines for POWERLINK version / PDO version   --</EM></FONT>
+   <FONT COLOR=red><A NAME="50_4">PLK_VERSION_SUB</A></FONT>                       : <b>constant</b> := 16#0F#;
+   <FONT COLOR=green><EM>-- sub version</EM></FONT>
+   <FONT COLOR=red><A NAME="52_4">PLK_VERSION_MAIN</A></FONT>                      : <b>constant</b> := 16#F0#;
+   <FONT COLOR=green><EM>-- main version</EM></FONT>
+   
+   <FONT COLOR=red><A NAME="55_4">PLK_FRAME_OFFSET_DST_MAC</A></FONT>              : <b>constant</b> := 0;
+   <FONT COLOR=red><A NAME="56_4">PLK_FRAME_OFFSET_SRC_MAC</A></FONT>              : <b>constant</b> := 6;
+   <FONT COLOR=red><A NAME="57_4">PLK_FRAME_OFFSET_ETHER_TYPE</A></FONT>           : <b>constant</b> := 12;
+   <FONT COLOR=red><A NAME="58_4">PLK_FRAME_OFFSET_MSG_TYPE</A></FONT>             : <b>constant</b> := 14;
+   <FONT COLOR=red><A NAME="59_4">PLK_FRAME_OFFSET_DST_NODEID</A></FONT>           : <b>constant</b> := 15;
+   <FONT COLOR=red><A NAME="60_4">PLK_FRAME_OFFSET_SRC_NODEID</A></FONT>           : <b>constant</b> := 16;
+   <FONT COLOR=red><A NAME="61_4">PLK_FRAME_OFFSET_SDO_SEQU</A></FONT>             : <b>constant</b> := 18;
+   <FONT COLOR=red><A NAME="62_4">PLK_FRAME_OFFSET_SDO_COMU</A></FONT>             : <b>constant</b> := 22;
+   <FONT COLOR=red><A NAME="63_4">PLK_FRAME_OFFSET_PDO_PAYLOAD</A></FONT>          : <b>constant</b> := 24;
+   
+   <FONT COLOR=green><EM>--   defines for bit fields SyncControl and SyncStatus   --</EM></FONT>
+   <FONT COLOR=red><A NAME="66_4">PLK_SYNC_PRES_TIME_FIRST_VALID</A></FONT>        : <b>constant</b> := 16#00000001#;
+   <FONT COLOR=red><A NAME="67_4">PLK_SYNC_PRES_TIME_SECOND_VALID</A></FONT>       : <b>constant</b> := 16#00000002#;
+   <FONT COLOR=red><A NAME="68_4">PLK_SYNC_SYNC_MN_DELAY_FIRST_VALID</A></FONT>    : <b>constant</b> := 16#00000004#;
+   <FONT COLOR=red><A NAME="69_4">PLK_SYNC_SYNC_MN_DELAY_SECOND_VALID</A></FONT>   : <b>constant</b> := 16#00000008#;
+   <FONT COLOR=red><A NAME="70_4">PLK_SYNC_PRES_FALL_BACK_TIMEOUT_VALID</A></FONT> : <b>constant</b> := 16#00000010#;
+   <FONT COLOR=red><A NAME="71_4">PLK_SYNC_DEST_MAC_ADDRESS_VALID</A></FONT>       : <b>constant</b> := 16#00000020#;
+   <FONT COLOR=red><A NAME="72_4">PLK_SYNC_PRES_MODE_RESET</A></FONT>              : <b>constant</b> := 16#40000000#;
+   <FONT COLOR=red><A NAME="73_4">PLK_SYNC_PRES_MODE_SET</A></FONT>                : <b>constant</b> := 16#80000000#;
+   
+   <FONT COLOR=green><EM>--   defines for SDO command layer   --</EM></FONT>
+   <FONT COLOR=red><A NAME="76_4">SDO_CMDL_HDR_FIXED_SIZE</A></FONT>               : <b>constant</b> := 8;
+   <FONT COLOR=green><EM>-- size of fixed header part</EM></FONT>
+   <FONT COLOR=red><A NAME="78_4">SDO_CMDL_HDR_VAR_SIZE</A></FONT>                 : <b>constant</b> := 4;
+   <FONT COLOR=green><EM>-- size of variable header part</EM></FONT>
+   <FONT COLOR=red><A NAME="80_4">SDO_CMDL_HDR_WRITEBYINDEX_SIZE</A></FONT>        : <b>constant</b> := 4;
+   <FONT COLOR=green><EM>-- size of write by index header (index + subindex + reserved)</EM></FONT>
+   <FONT COLOR=red><A NAME="82_4">SDO_CMDL_HDR_READBYINDEX_SIZE</A></FONT>         : <b>constant</b> := 4;
+   <FONT COLOR=green><EM>-- size of read by index header (index + subindex + reserved)</EM></FONT>
+   
+   <FONT COLOR=green><EM>--   defines for SDO command layer flags   --</EM></FONT>
+   <FONT COLOR=red><A NAME="86_4">SDO_CMDL_FLAG_RESPONSE</A></FONT>                : <b>constant</b> := 16#80#;
+   <FONT COLOR=red><A NAME="87_4">SDO_CMDL_FLAG_ABORT</A></FONT>                   : <b>constant</b> := 16#40#;
+   <FONT COLOR=red><A NAME="88_4">SDO_CMDL_FLAG_EXPEDITED</A></FONT>               : <b>constant</b> := 16#00#;
+   <FONT COLOR=red><A NAME="89_4">SDO_CMDL_FLAG_SEGMINIT</A></FONT>                : <b>constant</b> := 16#10#;
+   <FONT COLOR=red><A NAME="90_4">SDO_CMDL_FLAG_SEGMENTED</A></FONT>               : <b>constant</b> := 16#20#;
+   <FONT COLOR=red><A NAME="91_4">SDO_CMDL_FLAG_SEGMCOMPL</A></FONT>               : <b>constant</b> := 16#30#;
+   <FONT COLOR=red><A NAME="92_4">SDO_CMDL_FLAG_SEGM_MASK</A></FONT>               : <b>constant</b> := 16#30#;
+
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>-- typedef                                                                  --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+
+   <b>type</b> <FONT COLOR=red><A NAME="98_9">tSocFrame</A></FONT> <b>is</b> <b>record</b>
+      reserved1      : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- Offset 17: reserved</EM></FONT>
+      flag1          : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- Offset 18: Flags: MC, PS</EM></FONT>
+      flag2          : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- Offset 19: Flags: res</EM></FONT>
+      netTimeLe      : <b>aliased</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-oplkinc__ads.htm#9_14">oplkinc</A>.<A HREF="oplk-oplkinc__ads.htm#16_9">tNetTime</A>;
+      <FONT COLOR=green><EM>-- Offset 20: supported if D_NMT_NetTimeIsRealTime_BOOL is set</EM></FONT>
+      relativeTimeLe : <b>aliased</b> Extensions.unsigned_long_long;
+      <FONT COLOR=green><EM>-- Offset 28: in us (supported if D_NMT_RelativeTime_BOOL is set)</EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-frame__ads.htm#98_9">tSocFrame</A>);  <FONT COLOR=green><EM>-- ./oplk/frame.h:136</EM></FONT>
+   
+   
+   <b>type</b> tPreqFrame_aPayload_array <b>is</b> <b>array</b> (0 .. 255) <b>of</b> <b>aliased</b> unsigned_char;
+   <b>type</b> <FONT COLOR=red><A NAME="114_9">tPreqFrame</A></FONT> <b>is</b> <b>record</b>
+      reserved1  : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- Offset 17: reserved</EM></FONT>
+      flag1      : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- Offset 18: Flags: MS, EA, RD</EM></FONT>
+      flag2      : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- Offset 19: Flags: res</EM></FONT>
+      pdoVersion : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- Offset 20: PDO Version</EM></FONT>
+      reserved2  : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- Offset 21: reserved</EM></FONT>
+      sizeLe     : <b>aliased</b> unsigned_short;
+      <FONT COLOR=green><EM>-- Offset 22:</EM></FONT>
+      aPayload   : <b>aliased</b> tPreqFrame_aPayload_array;
+      <FONT COLOR=green><EM>-- Offset 24: Payload</EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-frame__ads.htm#114_9">tPreqFrame</A>);  <FONT COLOR=green><EM>-- ./oplk/frame.h:147</EM></FONT>
+   
+   
+   <b>type</b> tPresFrame_aPayload_array <b>is</b> <b>array</b> (0 .. 255) <b>of</b> <b>aliased</b> unsigned_char;
+   <b>type</b> <FONT COLOR=red><A NAME="134_9">tPresFrame</A></FONT> <b>is</b> <b>record</b>
+      nmtStatus  : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- Offset 17: NMT state</EM></FONT>
+      flag1      : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- Offset 18: Flags: MS, EN, RD</EM></FONT>
+      flag2      : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- Offset 19: Flags: PR, RS</EM></FONT>
+      pdoVersion : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- Offset 20:</EM></FONT>
+      reserved2  : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- Offset 21: reserved</EM></FONT>
+      sizeLe     : <b>aliased</b> unsigned_short;
+      <FONT COLOR=green><EM>-- Offset 22:</EM></FONT>
+      aPayload   : <b>aliased</b> tPresFrame_aPayload_array;
+      <FONT COLOR=green><EM>-- Offset 24: Payload</EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-frame__ads.htm#134_9">tPresFrame</A>);  <FONT COLOR=green><EM>-- ./oplk/frame.h:158</EM></FONT>
+   
+   
+   <b>type</b> tSyncRequest_aDestMacAddress_array <b>is</b>
+     <b>array</b> (0 .. 5) <b>of</b> <b>aliased</b> unsigned_char;
+   <b>type</b> <FONT COLOR=red><A NAME="155_9">tSyncRequest</A></FONT> <b>is</b> <b>record</b>
+      reserved              : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- Offset 23:</EM></FONT>
+      syncControlLe         : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      presTimeFirstLe       : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      presTimeSecondLe      : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      syncMnDelayFirstLe    : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      syncMnDelaySecondLe   : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      presFallBackTimeoutLe : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      aDestMacAddress : <b>aliased</b> tSyncRequest_aDestMacAddress_array;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-frame__ads.htm#155_9">tSyncRequest</A>);  <FONT COLOR=green><EM>-- ./oplk/frame.h:170</EM></FONT>
+   
+   
+   <b>type</b> <FONT COLOR=red><A NAME="176_9">tSoaPayload</A></FONT> (discr : unsigned := 0) <b>is</b> <b>record</b>
+      <b>case</b> discr <b>is</b>
+         <b>when</b> <b>others</b> =&gt;
+            syncRequest : <b>aliased</b> <A HREF="oplk-frame__ads.htm#155_9">tSyncRequest</A>;
+            <FONT COLOR=green><EM>-- Offset 23</EM></FONT>
+      <b>end</b> <b>case</b>;
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-frame__ads.htm#176_9">tSoaPayload</A>);
+   <b>pragma</b> Unchecked_Union (<A HREF="oplk-frame__ads.htm#176_9">tSoaPayload</A>);  <FONT COLOR=green><EM>-- ./oplk/frame.h:175</EM></FONT>
+   
+   
+   <b>type</b> <FONT COLOR=red><A NAME="187_9">tSoaFrame</A></FONT> <b>is</b> <b>record</b>
+      nmtStatus        : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- Offset 17:NMT state</EM></FONT>
+      flag1            : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- Offset 18: Flags: EA, ER</EM></FONT>
+      flag2            : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- Offset 19: Flags: res</EM></FONT>
+      reqServiceId     : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- Offset 20:</EM></FONT>
+      reqServiceTarget : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- Offset 21:</EM></FONT>
+      powerlinkVersion : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- Offset 22:</EM></FONT>
+      payload          : <A HREF="oplk-frame__ads.htm#176_9">tSoaPayload</A>;
+      <FONT COLOR=green><EM>-- Offset 23:</EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-frame__ads.htm#187_9">tSoaFrame</A>);  <FONT COLOR=green><EM>-- ./oplk/frame.h:186</EM></FONT>
+   
+
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief Structure for error history entries                                --</EM></FONT>
+<FONT COLOR=green><EM>--                                                                          --</EM></FONT>
+<FONT COLOR=green><EM>-- The following structure defines an error history entry.                  --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> tErrHistoryEntry_aAddInfo_array <b>is</b>
+     <b>array</b> (0 .. 7) <b>of</b> <b>aliased</b> unsigned_char;
+   <b>type</b> <FONT COLOR=red><A NAME="213_9">tErrHistoryEntry</A></FONT> <b>is</b> <b>record</b>
+      entryType : <b>aliased</b> unsigned_short;
+      <FONT COLOR=green><EM>-- The type of the entry</EM></FONT>
+      errorCode : <b>aliased</b> unsigned_short;
+      <FONT COLOR=green><EM>-- The error code of the entry</EM></FONT>
+      timeStamp : <b>aliased</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-oplkinc__ads.htm#9_14">oplkinc</A>.<A HREF="oplk-oplkinc__ads.htm#16_9">tNetTime</A>;
+      <FONT COLOR=green><EM>-- The timestamp when the error was added</EM></FONT>
+      aAddInfo : <b>aliased</b> tErrHistoryEntry_aAddInfo_array;
+      <FONT COLOR=green><EM>-- Additional error information</EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-frame__ads.htm#213_9">tErrHistoryEntry</A>);  <FONT COLOR=green><EM>-- ./oplk/frame.h:199</EM></FONT>
+   
+   
+   <b>type</b> tStatusResponse_reserved1_array <b>is</b>
+     <b>array</b> (0 .. 2) <b>of</b> <b>aliased</b> unsigned_char;
+   <b>type</b> tStatusResponse_aErrorHistoryEntry_array <b>is</b>
+     <b>array</b> (0 .. 13) <b>of</b> <b>aliased</b> <A HREF="oplk-frame__ads.htm#213_9">tErrHistoryEntry</A>;
+   <b>type</b> <FONT COLOR=red><A NAME="230_9">tStatusResponse</A></FONT> <b>is</b> <b>record</b>
+      flag1         : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- Offset 18: Flags: EN, EC</EM></FONT>
+      flag2         : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- Offset 19: Flags: PR, RS</EM></FONT>
+      nmtStatus     : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- Offset 20: NMT state</EM></FONT>
+      reserved1     : <b>aliased</b> tStatusResponse_reserved1_array;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      staticErrorLe : <b>aliased</b> Extensions.unsigned_long_long;
+      <FONT COLOR=green><EM>-- static error bit field</EM></FONT>
+      aErrorHistoryEntry : <b>aliased</b> tStatusResponse_aErrorHistoryEntry_array;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-frame__ads.htm#230_9">tStatusResponse</A>);  <FONT COLOR=green><EM>-- ./oplk/frame.h:209</EM></FONT>
+   
+   
+   <b>type</b> tIdentResponse_sHostName_array <b>is</b>
+     <b>array</b> (0 .. 31) <b>of</b> <b>aliased</b> unsigned_char;
+   <b>type</b> tIdentResponse_aVendorSpecificExt2_array <b>is</b>
+     <b>array</b> (0 .. 47) <b>of</b> <b>aliased</b> unsigned_char;
+   <b>type</b> <FONT COLOR=red><A NAME="251_9">tIdentResponse</A></FONT> <b>is</b> <b>record</b>
+      flag1                   : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- Offset 18: Flags: res</EM></FONT>
+      flag2                   : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- Flags: PR, RS</EM></FONT>
+      nmtStatus               : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- NMT state</EM></FONT>
+      identResponseFlags      : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- Flags: FW</EM></FONT>
+      powerlinkProfileVersion : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      reserved1               : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      featureFlagsLe          : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- NMT_FeatureFlags_U32</EM></FONT>
+      mtuLe                   : <b>aliased</b> unsigned_short;
+      <FONT COLOR=green><EM>-- NMT_CycleTiming_REC.AsyncMTU_U16: C_IP_MIN_MTU - C_IP_MAX_MTU</EM></FONT>
+      pollInSizeLe            : <b>aliased</b> unsigned_short;
+      <FONT COLOR=green><EM>-- NMT_CycleTiming_REC.PReqActPayload_U16</EM></FONT>
+      pollOutSizeLe           : <b>aliased</b> unsigned_short;
+      <FONT COLOR=green><EM>-- NMT_CycleTiming_REC.PResActPayload_U16</EM></FONT>
+      responseTimeLe          : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- NMT_CycleTiming_REC.PResMaxLatency_U32</EM></FONT>
+      reserved2               : <b>aliased</b> unsigned_short;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      deviceTypeLe            : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- NMT_DeviceType_U32</EM></FONT>
+      vendorIdLe              : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- NMT_IdentityObject_REC.VendorId_U32</EM></FONT>
+      productCodeLe           : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- NMT_IdentityObject_REC.ProductCode_U32</EM></FONT>
+      revisionNumberLe        : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- NMT_IdentityObject_REC.RevisionNo_U32</EM></FONT>
+      serialNumberLe          : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- NMT_IdentityObject_REC.SerialNo_U32</EM></FONT>
+      vendorSpecificExt1Le    : <b>aliased</b> Extensions.unsigned_long_long;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      verifyConfigurationDateLe : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- CFM_VerifyConfiguration_REC.ConfDate_U32</EM></FONT>
+      verifyConfigurationTimeLe : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- CFM_VerifyConfiguration_REC.ConfTime_U32</EM></FONT>
+      applicationSwDateLe       : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- PDL_LocVerApplSw_REC.ApplSwDate_U32 on programmable device or </EM></FONT>
+      <FONT COLOR=green><EM>-- date portion of NMT_ManufactSwVers_VS on non-programmable device</EM></FONT>
+      applicationSwTimeLe       : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- PDL_LocVerApplSw_REC.ApplSwTime_U32 on programmable device or </EM></FONT>
+      <FONT COLOR=green><EM>-- time portion of NMT_ManufactSwVers_VS on non-programmable device</EM></FONT>
+      ipAddressLe               : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      subnetMaskLe              : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      defaultGatewayLe          : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      sHostName                 : <b>aliased</b> tIdentResponse_sHostName_array;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      aVendorSpecificExt2       : <b>aliased</b> tIdentResponse_aVendorSpecificExt2_array;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-frame__ads.htm#251_9">tIdentResponse</A>);  <FONT COLOR=green><EM>-- ./oplk/frame.h:240</EM></FONT>
+   
+   
+   <b>type</b> tNmtCommandService_aNmtCommandData_array <b>is</b>
+     <b>array</b> (0 .. 31) <b>of</b> <b>aliased</b> unsigned_char;
+   <b>type</b> <FONT COLOR=red><A NAME="314_9">tNmtCommandService</A></FONT> <b>is</b> <b>record</b>
+      nmtCommandId    : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- Offset 18:</EM></FONT>
+      reserved1       : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      aNmtCommandData : <b>aliased</b> tNmtCommandService_aNmtCommandData_array;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention
+     (C_Pass_By_Copy, <A HREF="oplk-frame__ads.htm#314_9">tNmtCommandService</A>);  <FONT COLOR=green><EM>-- ./oplk/frame.h:247</EM></FONT>
+   
+   
+   <b>type</b> <FONT COLOR=red><A NAME="326_9">tSyncResponse</A></FONT> <b>is</b> <b>record</b>
+      reserved         : <b>aliased</b> unsigned_short;
+      <FONT COLOR=green><EM>-- Offset 18:</EM></FONT>
+      syncStatusLe     : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      latencyLe        : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      syncNodeNumberLe : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      syncDelayLe      : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      presTimeFirstLe  : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      presTimeSecondLe : <b>aliased</b> unsigned;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-frame__ads.htm#326_9">tSyncResponse</A>);  <FONT COLOR=green><EM>-- ./oplk/frame.h:258</EM></FONT>
+   
+   
+   <b>type</b> tAsySdoCom_aCommandData_array <b>is</b>
+     <b>array</b> (0 .. 7) <b>of</b> <b>aliased</b> unsigned_char;
+   <b>type</b> <FONT COLOR=red><A NAME="347_9">tAsySdoCom</A></FONT> <b>is</b> <b>record</b>
+      reserved1     : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      transactionId : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      flags         : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      commandId     : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      segmentSizeLe : <b>aliased</b> unsigned_short;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      reserved2     : <b>aliased</b> unsigned_short;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      aCommandData : <b>aliased</b> tAsySdoCom_aCommandData_array;
+      <FONT COLOR=green><EM>-- just reserve a minimum number of bytes as a placeholder</EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-frame__ads.htm#347_9">tAsySdoCom</A>);  <FONT COLOR=green><EM>-- ./oplk/frame.h:269</EM></FONT>
+   
+   
+   <FONT COLOR=green><EM>--  asynchronous SDO Sequence Header   --</EM></FONT>
+   <b>type</b> tAsySdoSeq_aReserved_array <b>is</b> <b>array</b> (0 .. 1) <b>of</b> <b>aliased</b> unsigned_char;
+   <b>type</b> <FONT COLOR=red><A NAME="368_9">tAsySdoSeq</A></FONT> <b>is</b> <b>record</b>
+      recvSeqNumCon : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      sendSeqNumCon : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      aReserved     : <b>aliased</b> tAsySdoSeq_aReserved_array;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      sdoSeqPayload : <b>aliased</b> <A HREF="oplk-frame__ads.htm#347_9">tAsySdoCom</A>;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-frame__ads.htm#368_9">tAsySdoSeq</A>);  <FONT COLOR=green><EM>-- ./oplk/frame.h:279</EM></FONT>
+   
+   
+   <b>type</b> tNmtRequestService_aNmtCommandData_array <b>is</b>
+     <b>array</b> (0 .. 31) <b>of</b> <b>aliased</b> unsigned_char;
+   <b>type</b> <FONT COLOR=red><A NAME="383_9">tNmtRequestService</A></FONT> <b>is</b> <b>record</b>
+      nmtCommandId    : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- Offset 18</EM></FONT>
+      targetNodeId    : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+      aNmtCommandData : <b>aliased</b> tNmtRequestService_aNmtCommandData_array;
+      <FONT COLOR=green><EM>-- </EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention
+     (C_Pass_By_Copy, <A HREF="oplk-frame__ads.htm#383_9">tNmtRequestService</A>);  <FONT COLOR=green><EM>-- ./oplk/frame.h:287</EM></FONT>
+   
+   
+   <b>type</b> tAsndPayload_aPayload_array <b>is</b>
+     <b>array</b> (0 .. 255) <b>of</b> <b>aliased</b> unsigned_char;
+   <b>type</b> <FONT COLOR=red><A NAME="397_9">tAsndPayload</A></FONT> (discr : unsigned := 0) <b>is</b> <b>record</b>
+      <b>case</b> discr <b>is</b>
+         <b>when</b> 0 =&gt;
+            statusResponse : <b>aliased</b> <A HREF="oplk-frame__ads.htm#230_9">tStatusResponse</A>;
+            <FONT COLOR=green><EM>-- Offset 18:</EM></FONT>
+         <b>when</b> 1 =&gt;
+            identResponse : <b>aliased</b> <A HREF="oplk-frame__ads.htm#251_9">tIdentResponse</A>;
+            <FONT COLOR=green><EM>-- </EM></FONT>
+         <b>when</b> 2 =&gt;
+            nmtCommandService : <b>aliased</b> <A HREF="oplk-frame__ads.htm#314_9">tNmtCommandService</A>;
+            <FONT COLOR=green><EM>-- </EM></FONT>
+         <b>when</b> 3 =&gt;
+            nmtRequestService : <b>aliased</b> <A HREF="oplk-frame__ads.htm#383_9">tNmtRequestService</A>;
+            <FONT COLOR=green><EM>-- </EM></FONT>
+         <b>when</b> 4 =&gt;
+            sdoSequenceFrame : <b>aliased</b> <A HREF="oplk-frame__ads.htm#368_9">tAsySdoSeq</A>;
+            <FONT COLOR=green><EM>-- </EM></FONT>
+         <b>when</b> 5 =&gt;
+            syncResponse : <b>aliased</b> <A HREF="oplk-frame__ads.htm#326_9">tSyncResponse</A>;
+            <FONT COLOR=green><EM>-- </EM></FONT>
+         <b>when</b> <b>others</b> =&gt;
+            aPayload : <b>aliased</b> tAsndPayload_aPayload_array;
+            <FONT COLOR=green><EM>-- </EM></FONT>
+      <b>end</b> <b>case</b>;
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-frame__ads.htm#397_9">tAsndPayload</A>);
+   <b>pragma</b> Unchecked_Union (<A HREF="oplk-frame__ads.htm#397_9">tAsndPayload</A>);  <FONT COLOR=green><EM>-- ./oplk/frame.h:299</EM></FONT>
+   
+   
+   <b>type</b> <FONT COLOR=red><A NAME="426_9">tAsndFrame</A></FONT> <b>is</b> <b>record</b>
+      serviceId : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- Offset 17</EM></FONT>
+      payload   : <A HREF="oplk-frame__ads.htm#397_9">tAsndPayload</A>;
+      <FONT COLOR=green><EM>-- Offset 18</EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-frame__ads.htm#426_9">tAsndFrame</A>);  <FONT COLOR=green><EM>-- ./oplk/frame.h:305</EM></FONT>
+   
+   
+   <b>type</b> <FONT COLOR=red><A NAME="435_9">tFrameData</A></FONT> (discr : unsigned := 0) <b>is</b> <b>record</b>
+      <b>case</b> discr <b>is</b>
+         <b>when</b> 0 =&gt;
+            soc : <b>aliased</b> <A HREF="oplk-frame__ads.htm#98_9">tSocFrame</A>;
+            <FONT COLOR=green><EM>-- Offset 17</EM></FONT>
+         <b>when</b> 1 =&gt;
+            preq : <b>aliased</b> <A HREF="oplk-frame__ads.htm#114_9">tPreqFrame</A>;
+            <FONT COLOR=green><EM>-- </EM></FONT>
+         <b>when</b> 2 =&gt;
+            pres : <b>aliased</b> <A HREF="oplk-frame__ads.htm#134_9">tPresFrame</A>;
+            <FONT COLOR=green><EM>-- </EM></FONT>
+         <b>when</b> 3 =&gt;
+            soa : <b>aliased</b> <A HREF="oplk-frame__ads.htm#187_9">tSoaFrame</A>;
+            <FONT COLOR=green><EM>-- </EM></FONT>
+         <b>when</b> <b>others</b> =&gt;
+            asnd : <b>aliased</b> <A HREF="oplk-frame__ads.htm#426_9">tAsndFrame</A>;
+            <FONT COLOR=green><EM>-- </EM></FONT>
+      <b>end</b> <b>case</b>;
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-frame__ads.htm#435_9">tFrameData</A>);
+   <b>pragma</b> Unchecked_Union (<A HREF="oplk-frame__ads.htm#435_9">tFrameData</A>);  <FONT COLOR=green><EM>-- ./oplk/frame.h:314</EM></FONT>
+   
+   
+   <b>type</b> tPlkFrame_aDstMac_array <b>is</b> <b>array</b> (0 .. 5) <b>of</b> <b>aliased</b> unsigned_char;
+   <b>type</b> tPlkFrame_aSrcMac_array <b>is</b> <b>array</b> (0 .. 5) <b>of</b> <b>aliased</b> unsigned_char;
+   <b>type</b> <FONT COLOR=red><A NAME="460_9">tPlkFrame</A></FONT> <b>is</b> <b>record</b>
+      aDstMac     : <b>aliased</b> tPlkFrame_aDstMac_array;
+      <FONT COLOR=green><EM>-- Offset 0: MAC address of the addressed nodes</EM></FONT>
+      aSrcMac     : <b>aliased</b> tPlkFrame_aSrcMac_array;
+      <FONT COLOR=green><EM>-- Offset 6: MAC address of the transmitting node</EM></FONT>
+      etherType   : <b>aliased</b> unsigned_short;
+      <FONT COLOR=green><EM>-- Offset 12: Ethernet message type (big endian)</EM></FONT>
+      messageType : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- Offset 14: POWERLINK message type</EM></FONT>
+      dstNodeId   : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- Offset 15: POWERLINK node ID of the addressed nodes</EM></FONT>
+      srcNodeId   : <b>aliased</b> unsigned_char;
+      <FONT COLOR=green><EM>-- Offset 16: POWERLINK node ID of the transmitting node</EM></FONT>
+      data        : <A HREF="oplk-frame__ads.htm#435_9">tFrameData</A>;
+      <FONT COLOR=green><EM>-- Offset 17:</EM></FONT>
+   <b>end</b> <b>record</b>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-frame__ads.htm#460_9">tPlkFrame</A>);  <FONT COLOR=green><EM>-- ./oplk/frame.h:325</EM></FONT>
+   
+   
+   <b>subtype</b> <FONT COLOR=red><A NAME="479_12">tMsgType</A></FONT> <b>is</b> unsigned;
+   kMsgTypeNonPowerlink : <b>constant</b> <A HREF="oplk-frame__ads.htm#479_12">tMsgType</A> := 0;
+   kMsgTypeSoc          : <b>constant</b> <A HREF="oplk-frame__ads.htm#479_12">tMsgType</A> := 1;
+   kMsgTypePreq         : <b>constant</b> <A HREF="oplk-frame__ads.htm#479_12">tMsgType</A> := 3;
+   kMsgTypePres         : <b>constant</b> <A HREF="oplk-frame__ads.htm#479_12">tMsgType</A> := 4;
+   kMsgTypeSoa          : <b>constant</b> <A HREF="oplk-frame__ads.htm#479_12">tMsgType</A> := 5;
+   kMsgTypeAsnd         : <b>constant</b> <A HREF="oplk-frame__ads.htm#479_12">tMsgType</A> := 6;
+   kMsgTypeAInv         : <b>constant</b> <A HREF="oplk-frame__ads.htm#479_12">tMsgType</A> := 13;  <FONT COLOR=green><EM>-- ./oplk/frame.h:342</EM></FONT>
+
+<b>end</b> <A HREF="oplk__ads.htm#10_9">Oplk</A>.<A HREF="oplk-frame__ads.htm#11_14">frame</A>;
+</PRE></BODY></HTML>
