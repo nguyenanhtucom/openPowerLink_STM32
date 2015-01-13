@@ -1,4 +1,7 @@
 
+--\brief  Definitions for Ethernet driver module
+--This file contains definitions for the Ethernet driver module.
+
 pragma Ada_2005;
 pragma Style_Checks (Off);
 
@@ -11,6 +14,7 @@ with oplk.oplkinc;
 with Interfaces.C.Strings;
 
 package oplk.Edrv is
+   pragma Elaborate_Body;
    
    EDRV_MAX_MTU : constant := 1500;
    -- 
@@ -48,16 +52,20 @@ package oplk.Edrv is
    CONFIG_EDRV_CYCLIC_USE_DIAGNOSTICS         : Boolean := False;
    --
    
+------------------------------------------------------------------------------
+-- Type Definitions                                                         --
+------------------------------------------------------------------------------
+   
    type sEdrvTxBuffer;
    subtype tEdrvTxBuffer is sEdrvTxBuffer;
 
    type sEdrvRxBuffer;
    subtype tEdrvRxBuffer is sEdrvRxBuffer;
    
-   ------------------------------------------------------------------------------
-   --\brief Enumeration for Rx buffer release                                  --
-   -- This enumeration lists the Rx buffer release commands.                   --
-   ------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+--\brief Enumeration for Rx buffer release                                  --
+-- This enumeration lists the Rx buffer release commands.                   --
+------------------------------------------------------------------------------
    type tEdrvReleaseRxBuffer is 
      (kEdrvReleaseRxBufferImmediately,
       -- Release the Rx buffer immediately
@@ -100,12 +108,12 @@ package oplk.Edrv is
    pragma Convention (C, tHresCallback);  -- oplk/edrv.h:125
    
    
-   ------------------------------------------------------------------------------
-   --\brief Enumeration for Rx buffer transfer state                           --
-   -- This enumeration lists the transfer state of the Rx buffer.              --
-   -- Note that the Ethernet controller must support early Rx interrupts to    --
-   -- access the first or middle data of a frame!                              --
-   ------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+--\brief Enumeration for Rx buffer transfer state                           --
+-- This enumeration lists the transfer state of the Rx buffer.              --
+-- Note that the Ethernet controller must support early Rx interrupts to    --
+-- access the first or middle data of a frame!                              --
+------------------------------------------------------------------------------
    subtype tEdrvBufferInFrame is unsigned;
    kEdrvBufferFirstInFrame  : constant tEdrvBufferInFrame := 1;
    -- First data of frame received
@@ -115,11 +123,11 @@ package oplk.Edrv is
    -- Last data of frame received
    
    
-   ------------------------------------------------------------------------------
-   --\brief Union for Tx buffer number                                         --
-   -- This union is used to identify the Tx buffer in the Ethernet driver      --
-   -- module.                                                                  --
-   ------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+--\brief Union for Tx buffer number                                         --
+-- This union is used to identify the Tx buffer in the Ethernet driver      --
+-- module.                                                                  --
+------------------------------------------------------------------------------
    type tEdrvTxBufferNumber (discr : unsigned := 0) is record
       case discr is
          when 0 =>
@@ -134,10 +142,10 @@ package oplk.Edrv is
    pragma Unchecked_Union (tEdrvTxBufferNumber);  -- oplk/edrv.h:150
    
    
-   ------------------------------------------------------------------------------
-   --\brief Structure for Tx buffer                                            --
-   -- This structure is the Tx buffer descriptor.                              --
-   ------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+--\brief Structure for Tx buffer                                            --
+-- This structure is the Tx buffer descriptor.                              --
+------------------------------------------------------------------------------
    type sEdrvTxBuffer is record
       txFrameSize    : aliased unsigned;
       -- Size of Tx frame (without CRC)
@@ -159,10 +167,10 @@ package oplk.Edrv is
    pragma Convention (C_Pass_By_Copy, sEdrvTxBuffer);  -- oplk/edrv.h:157
    
    
-   ------------------------------------------------------------------------------
-   --/brief Structure for Rx buffer                                            --
-   -- This structure is the Rx buffer descriptor.                              --
-   ------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+--/brief Structure for Rx buffer                                            --
+-- This structure is the Rx buffer descriptor.                              --
+------------------------------------------------------------------------------
    type sEdrvRxBuffer is record
       bufferInFrame : aliased tEdrvBufferInFrame;
       -- Position of Rx buffer in a frame
@@ -176,10 +184,10 @@ package oplk.Edrv is
    pragma Convention (C_Pass_By_Copy, sEdrvRxBuffer);  -- oplk/edrv.h:174
    
    
-   ------------------------------------------------------------------------------
-   --\brief Structure for initialization                                       --
-   -- This structure is used to initialize the Ethernet driver module.         --
-   ------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+--\brief Structure for initialization                                       --
+-- This structure is used to initialize the Ethernet driver module.         --
+------------------------------------------------------------------------------
    type tEdrvInitParam_aMacAddr_array is array (0 .. 5) of aliased unsigned_char;
    type tEdrvInitParam is record
       aMacAddr     : aliased tEdrvInitParam_aMacAddr_array;
@@ -192,10 +200,10 @@ package oplk.Edrv is
    pragma Convention (C_Pass_By_Copy, tEdrvInitParam);  -- oplk/edrv.h:192
    
    
-   ------------------------------------------------------------------------------
-   --\brief Structure for Rx filter                                            --
-   -- This structure is used to control the Rx filters.                        --
-   ------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+--\brief Structure for Rx filter                                            --
+-- This structure is used to control the Rx filters.                        --
+------------------------------------------------------------------------------
    type tEdrvFilter_aFilterValue_array is array (0 .. 21) of aliased unsigned_char;
    type tEdrvFilter_aFilterMask_array  is array (0 .. 21) of aliased unsigned_char;
    type tEdrvFilter is record
@@ -215,11 +223,11 @@ package oplk.Edrv is
    pragma Convention (C_Pass_By_Copy, tEdrvFilter);  -- oplk/edrv.h:209
 
    
-   ------------------------------------------------------------------------------
-   --\brief Structure for cyclic Ethernet driver diagnostics                   --
-   -- This structure is used to provide diagnostics of the cyclic Ethernet     --
-   -- driver.                                                                  --
-   ------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+--\brief Structure for cyclic Ethernet driver diagnostics                   --
+-- This structure is used to provide diagnostics of the cyclic Ethernet     --
+-- driver.                                                                  --
+------------------------------------------------------------------------------
    type tEdrvCyclicDiagnostics_aSampleTimeStamp_array is 
      array (0 .. 500) of aliased Extensions.unsigned_long_long;
    type tEdrvCyclicDiagnostics_aCycleTime_array is 
@@ -269,9 +277,9 @@ package oplk.Edrv is
    pragma Convention (C_Pass_By_Copy, tEdrvCyclicDiagnostics);  -- oplk/edrv.h:236
    
    
-   ------------------------------------------------------------------------------
-   -- function prototypes                                                      --
-   ------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+-- function prototypes                                                      --
+------------------------------------------------------------------------------
    
    function edrv_init 
      -- pEdrvInitParam_p    Edrv initialization parameters
@@ -280,7 +288,7 @@ package oplk.Edrv is
      -- This function initializes the Ethernet driver.
      (pEdrvInitParam_p : access tEdrvInitParam) 
      return errordefs.tOplkError;
-   pragma Import (C, edrv_init, "edrv_init");  -- oplk/edrv.h:245
+   pragma Export (C, edrv_init, "edrv_init");  -- oplk/edrv.h:245
    
    
    function edrv_shutdown 
@@ -288,7 +296,7 @@ package oplk.Edrv is
      -- 
      -- This function shuts down the Ethernet driver.
      return errordefs.tOplkError;
-   pragma Import (C, edrv_shutdown, "edrv_shutdown");  -- oplk/edrv.h:246
+   pragma Export (C, edrv_shutdown, "edrv_shutdown");  -- oplk/edrv.h:246
    
    
    function edrv_setRxMulticastMacAddr 
@@ -298,7 +306,7 @@ package oplk.Edrv is
      -- This function sets a multicast entry into the Ethernet controller.
      (pMacAddr_p : access unsigned_char) 
      return errordefs.tOplkError;
-   pragma Import 
+   pragma Export 
      (C, edrv_setRxMulticastMacAddr, "edrv_setRxMulticastMacAddr");  -- oplk/edrv.h:247
    
    
@@ -309,7 +317,7 @@ package oplk.Edrv is
      -- This function removes the multicast entry from the Ethernet controller.
      (pMacAddr_p : access unsigned_char) 
      return errordefs.tOplkError;
-   pragma Import 
+   pragma Export 
      (C, edrv_clearRxMulticastMacAddr, "edrv_clearRxMulticastMacAddr");  -- oplk/edrv.h:248
    
    
@@ -320,7 +328,7 @@ package oplk.Edrv is
      -- This function allocates a Tx buffer.
      (pBuffer_p : access tEdrvTxBuffer) 
      return errordefs.tOplkError;
-   pragma Import (C, edrv_allocTxBuffer, "edrv_allocTxBuffer");  -- oplk/edrv.h:249
+   pragma Export (C, edrv_allocTxBuffer, "edrv_allocTxBuffer");  -- oplk/edrv.h:249
    
    
    function edrv_freeTxBuffer 
@@ -330,13 +338,13 @@ package oplk.Edrv is
      -- This function releases the Tx buffer.
      (pBuffer_p : access tEdrvTxBuffer) 
      return errordefs.tOplkError;
-   pragma Import (C, edrv_freeTxBuffer, "edrv_freeTxBuffer");  -- oplk/edrv.h:250
+   pragma Export (C, edrv_freeTxBuffer, "edrv_freeTxBuffer");  -- oplk/edrv.h:250
    
    
    function edrv_updateTxBuffer 
      (pBuffer_p : access tEdrvTxBuffer) 
      return errordefs.tOplkError;
-   pragma Import (C, edrv_updateTxBuffer, "edrv_updateTxBuffer");  -- oplk/edrv.h:251
+   pragma Export (C, edrv_updateTxBuffer, "edrv_updateTxBuffer");  -- oplk/edrv.h:251
    
    
    function edrv_sendTxBuffer 
@@ -346,7 +354,7 @@ package oplk.Edrv is
      -- This function sends the Tx buffer.
      (pBuffer_p : access tEdrvTxBuffer) 
      return errordefs.tOplkError;
-   pragma Import (C, edrv_sendTxBuffer, "edrv_sendTxBuffer");  -- oplk/edrv.h:252
+   pragma Export (C, edrv_sendTxBuffer, "edrv_sendTxBuffer");  -- oplk/edrv.h:252
    
    
    function edrv_setTxBufferReady 
@@ -356,7 +364,7 @@ package oplk.Edrv is
      -- This function sets the Tx buffer buffer ready for transmission.
      (pBuffer_p : access tEdrvTxBuffer) 
      return errordefs.tOplkError;
-   pragma Import (C, edrv_setTxBufferReady, "edrv_setTxBufferReady");  -- oplk/edrv.h:253
+   pragma Export (C, edrv_setTxBufferReady, "edrv_setTxBufferReady");  -- oplk/edrv.h:253
    
    
    function edrv_startTxBuffer 
@@ -366,7 +374,7 @@ package oplk.Edrv is
      -- This function sends the Tx buffer marked as ready.
      (pBuffer_p : access tEdrvTxBuffer) 
      return errordefs.tOplkError;
-   pragma Import (C, edrv_startTxBuffer, "edrv_startTxBuffer");  -- oplk/edrv.h:254
+   pragma Export (C, edrv_startTxBuffer, "edrv_startTxBuffer");  -- oplk/edrv.h:254
    
    
    function edrv_releaseRxBuffer 
@@ -376,7 +384,7 @@ package oplk.Edrv is
      -- This function releases a late release Rx buffer.
      (pBuffer_p : access tEdrvRxBuffer) 
      return errordefs.tOplkError;
-   pragma Import (C, edrv_releaseRxBuffer, "edrv_releaseRxBuffer");  -- oplk/edrv.h:255
+   pragma Export (C, edrv_releaseRxBuffer, "edrv_releaseRxBuffer");  -- oplk/edrv.h:255
    
    
    function Edrv_ChangeRxFilter
@@ -398,7 +406,7 @@ package oplk.Edrv is
       entryChanged_p : unsigned;
       changeFlags_p  : unsigned) 
      return errordefs.tOplkError;
-   pragma Import (C, edrv_changeRxFilter, "edrv_changeRxFilter");  -- oplk/edrv.h:256
+   pragma Export (C, edrv_changeRxFilter, "edrv_changeRxFilter");  -- oplk/edrv.h:256
    
    
    function edrv_getDiagnostics 
@@ -409,57 +417,57 @@ package oplk.Edrv is
      -- This function returns the Edrv diagnostics to a provided buffer.
      (pBuffer_p : Interfaces.C.Strings.chars_ptr; 
       size_p    : int) 
-     return int;
-   pragma Import (C, edrv_getDiagnostics, "edrv_getDiagnostics");  -- oplk/edrv.h:257
+     return errordefs.tOplkError;
+   pragma Export (C, edrv_getDiagnostics, "edrv_getDiagnostics");  -- oplk/edrv.h:257
    
    
   --   function edrvcyclic_init 
   --     return errordefs.tOplkError;
-  --   pragma Import (C, edrvcyclic_init, "edrvcyclic_init");  -- oplk/edrv.h:259
+  --   pragma Export (C, edrvcyclic_init, "edrvcyclic_init");  -- oplk/edrv.h:259
 
   --   function edrvcyclic_shutdown 
   --     return errordefs.tOplkError;
-  --   pragma Import (C, edrvcyclic_shutdown, "edrvcyclic_shutdown");  -- oplk/edrv.h:260
+  --   pragma Export (C, edrvcyclic_shutdown, "edrvcyclic_shutdown");  -- oplk/edrv.h:260
 
   --   function edrvcyclic_setCycleTime 
   --     (cycleTimeUs_p : unsigned) 
   --     return errordefs.tOplkError;
-  --   pragma Import (C, edrvcyclic_setCycleTime, "edrvcyclic_setCycleTime");  -- oplk/edrv.h:261
+  --   pragma Export (C, edrvcyclic_setCycleTime, "edrvcyclic_setCycleTime");  -- oplk/edrv.h:261
 
   --   function edrvcyclic_startCycle 
   --     return errordefs.tOplkError;
-  --   pragma Import (C, edrvcyclic_startCycle, "edrvcyclic_startCycle");  -- oplk/edrv.h:262
+  --   pragma Export (C, edrvcyclic_startCycle, "edrvcyclic_startCycle");  -- oplk/edrv.h:262
 
   --   function edrvcyclic_stopCycle 
   --     return errordefs.tOplkError;
-  --   pragma Import (C, edrvcyclic_stopCycle, "edrvcyclic_stopCycle");  -- oplk/edrv.h:263
+  --   pragma Export (C, edrvcyclic_stopCycle, "edrvcyclic_stopCycle");  -- oplk/edrv.h:263
 
   --   function edrvcyclic_setMaxTxBufferListSize 
   --     (maxListSize_p : unsigned) 
   --     return errordefs.tOplkError;
-  --   pragma Import (C, edrvcyclic_setMaxTxBufferListSize, "edrvcyclic_setMaxTxBufferListSize");  -- oplk/edrv.h:264
+  --   pragma Export (C, edrvcyclic_setMaxTxBufferListSize, "edrvcyclic_setMaxTxBufferListSize");  -- oplk/edrv.h:264
 
   --  -- jdk SECTION_EDRVCYC_SET_NEXT_TX;
   --   function edrvcyclic_setNextTxBufferList 
   --     (ppTxBuffer_p    : System.Address; 
   --      txBufferCount_p : unsigned) 
   --     return errordefs.tOplkError;
-  --   pragma Import (C, edrvcyclic_setNextTxBufferList, "edrvcyclic_setNextTxBufferList");  -- oplk/edrv.h:265
+  --   pragma Export (C, edrvcyclic_setNextTxBufferList, "edrvcyclic_setNextTxBufferList");  -- oplk/edrv.h:265
 
   --   function edrvcyclic_regSyncHandler 
   --     (pfnEdrvCyclicCbSync_p : tEdrvCyclicCbSync) 
   --     return errordefs.tOplkError;
-  --   pragma Import (C, edrvcyclic_regSyncHandler, "edrvcyclic_regSyncHandler");  -- oplk/edrv.h:266
+  --   pragma Export (C, edrvcyclic_regSyncHandler, "edrvcyclic_regSyncHandler");  -- oplk/edrv.h:266
 
   --   function edrvcyclic_regErrorHandler 
   --     (pfnEdrvCyclicCbError_p : tEdrvCyclicCbError) 
   --     return errordefs.tOplkError;
-  --   pragma Import (C, edrvcyclic_regErrorHandler, "edrvcyclic_regErrorHandler");  -- oplk/edrv.h:267
+  --   pragma Export (C, edrvcyclic_regErrorHandler, "edrvcyclic_regErrorHandler");  -- oplk/edrv.h:267
 
   --   function edrvcyclic_getDiagnostics 
   --     (ppDiagnostics_p : System.Address) 
   --     return errordefs.tOplkError;
-  --   pragma Import (C, edrvcyclic_getDiagnostics, "edrvcyclic_getDiagnostics");  -- oplk/edrv.h:268
+  --   pragma Export (C, edrvcyclic_getDiagnostics, "edrvcyclic_getDiagnostics");  -- oplk/edrv.h:268
 
    
    

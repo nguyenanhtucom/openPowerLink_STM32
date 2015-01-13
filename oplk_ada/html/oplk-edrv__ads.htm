@@ -3,32 +3,36 @@
 <HR><DIV ALIGN="center"><H1> File : oplk-edrv.ads </H1></DIV><HR>
 <PRE>
 
+<FONT COLOR=green><EM>--\brief  Definitions for Ethernet driver module</EM></FONT>
+<FONT COLOR=green><EM>--This file contains definitions for the Ethernet driver module.</EM></FONT>
+
 <b>pragma</b> Ada_2005;
 <b>pragma</b> Style_Checks (Off);
 
 <b>with</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C; <b>use</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C;
 <b>with</b> <A HREF="oplk__ads.htm#10_9">oplk</A>.<A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>;
-<b>with</b> <A HREF="oplk__ads.htm#10_9">oplk</A>.<A HREF="oplk-timer__ads.htm#7_14">timer</A>;
+<b>with</b> <A HREF="oplk__ads.htm#10_9">oplk</A>.<A HREF="oplk-timer__ads.htm#11_14">timer</A>;
 <b>with</b> System;
 <b>with</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C.Extensions;
 <b>with</b> <A HREF="oplk__ads.htm#10_9">oplk</A>.<A HREF="oplk-oplkinc__ads.htm#9_14">oplkinc</A>;
 <b>with</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C.Strings;
 
-<b>package</b> <A HREF="oplk__ads.htm#10_9">oplk</A>.<FONT COLOR=red><A NAME="13_14">Edrv</A></FONT> <b>is</b>
+<b>package</b> <A HREF="oplk__ads.htm#10_9">oplk</A>.<A HREF="oplk-edrv__adb.htm#5_19">Edrv</A><FONT COLOR=red><A NAME="16_14"></A></FONT> <b>is</b>
+   <b>pragma</b> Elaborate_Body;
    
-   <FONT COLOR=red><A NAME="15_4">EDRV_MAX_MTU</A></FONT> : <b>constant</b> := 1500;
+   <FONT COLOR=red><A NAME="19_4">EDRV_MAX_MTU</A></FONT> : <b>constant</b> := 1500;
    <FONT COLOR=green><EM>-- </EM></FONT>
-   <FONT COLOR=red><A NAME="17_4">EDRV_MIN_MTU</A></FONT> : <b>constant</b> := 46;
+   <FONT COLOR=red><A NAME="21_4">EDRV_MIN_MTU</A></FONT> : <b>constant</b> := 46;
    <FONT COLOR=green><EM>-- </EM></FONT>
-   <FONT COLOR=red><A NAME="19_4">EDRV_ETH_HDR_OFFSET</A></FONT> : <b>constant</b> := 0;
+   <FONT COLOR=red><A NAME="23_4">EDRV_ETH_HDR_OFFSET</A></FONT> : <b>constant</b> := 0;
    <FONT COLOR=green><EM>-- Ethernet header at the top of the frame</EM></FONT>
-   <FONT COLOR=red><A NAME="21_4">EDRV_ETH_HDR_SIZE</A></FONT> : <b>constant</b> := 14;
+   <FONT COLOR=red><A NAME="25_4">EDRV_ETH_HDR_SIZE</A></FONT> : <b>constant</b> := 14;
    <FONT COLOR=green><EM>-- size of Ethernet header</EM></FONT>
-   <FONT COLOR=red><A NAME="23_4">EDRV_ETH_CRC_SIZE</A></FONT> : <b>constant</b> := 4;
+   <FONT COLOR=red><A NAME="27_4">EDRV_ETH_CRC_SIZE</A></FONT> : <b>constant</b> := 4;
    <FONT COLOR=green><EM>-- size of Ethernet CRC, i.e. FCS</EM></FONT>
-   <FONT COLOR=red><A NAME="25_4">EDRV_MAX_ETH_SIZE</A></FONT> : <b>constant</b> := <A HREF="oplk-edrv__ads.htm#15_4">EDRV_MAX_MTU</A> + <A HREF="oplk-edrv__ads.htm#21_4">EDRV_ETH_HDR_SIZE</A>;
+   <FONT COLOR=red><A NAME="29_4">EDRV_MAX_ETH_SIZE</A></FONT> : <b>constant</b> := <A HREF="oplk-edrv__ads.htm#19_4">EDRV_MAX_MTU</A> + <A HREF="oplk-edrv__ads.htm#25_4">EDRV_ETH_HDR_SIZE</A>;
    <FONT COLOR=green><EM>-- without CRC</EM></FONT>
-   <FONT COLOR=red><A NAME="27_4">EDRV_MIN_ETH_SIZE</A></FONT> : <b>constant</b> := <A HREF="oplk-edrv__ads.htm#17_4">EDRV_MIN_MTU</A> + <A HREF="oplk-edrv__ads.htm#21_4">EDRV_ETH_HDR_SIZE</A>;
+   <FONT COLOR=red><A NAME="31_4">EDRV_MIN_ETH_SIZE</A></FONT> : <b>constant</b> := <A HREF="oplk-edrv__ads.htm#21_4">EDRV_MIN_MTU</A> + <A HREF="oplk-edrv__ads.htm#25_4">EDRV_ETH_HDR_SIZE</A>;
    <FONT COLOR=green><EM>-- without CRC</EM></FONT>
    EDRV_FILTER_CHANGE_VALUE                   : <b>constant</b> Unsigned_Char := 16#01#;
    <FONT COLOR=green><EM>-- filter value changed</EM></FONT>
@@ -38,11 +42,11 @@
    <FONT COLOR=green><EM>-- filter state changed</EM></FONT>
    EDRV_FILTER_CHANGE_AUTO_RESPONSE           : <b>constant</b> Unsigned_Char := 16#08#;
    <FONT COLOR=green><EM>-- filter auto-resp. state changed</EM></FONT>
-   <FONT COLOR=red><A NAME="37_4">EDRV_FILTER_CHANGE_AUTO_RESPONSE_DELAY</A></FONT>     : <b>constant</b> := 16#10#;
+   <FONT COLOR=red><A NAME="41_4">EDRV_FILTER_CHANGE_AUTO_RESPONSE_DELAY</A></FONT>     : <b>constant</b> := 16#10#;
    <FONT COLOR=green><EM>-- filter auto-resp. delay changed</EM></FONT>
    EDRV_FILTER_CHANGE_AUTO_RESPONSE_DELAY_DEF : <b>constant</b> Unsigned_Char := 0;
    <FONT COLOR=green><EM>-- </EM></FONT>
-   <FONT COLOR=red><A NAME="41_4">EDRV_FILTER_CHANGE_ALL</A></FONT>                     : <b>constant</b> := 0 <b>or</b> 
+   <FONT COLOR=red><A NAME="45_4">EDRV_FILTER_CHANGE_ALL</A></FONT>                     : <b>constant</b> := 0 <b>or</b> 
      EDRV_FILTER_CHANGE_VALUE <b>or</b> EDRV_FILTER_CHANGE_MASK <b>or</b> 
      EDRV_FILTER_CHANGE_STATE <b>or</b> EDRV_FILTER_CHANGE_AUTO_RESPONSE <b>or</b> 
      EDRV_FILTER_CHANGE_AUTO_RESPONSE_DELAY_DEF;
@@ -52,79 +56,83 @@
    CONFIG_EDRV_CYCLIC_USE_DIAGNOSTICS         : Boolean := False;
    <FONT COLOR=green><EM>--</EM></FONT>
    
-   <b>type</b> <FONT COLOR=red><A NAME="51_9">sEdrvTxBuffer</A></FONT>;
-   <b>subtype</b> <FONT COLOR=red><A NAME="52_12">tEdrvTxBuffer</A></FONT> <b>is</b> <A HREF="oplk-edrv__ads.htm#51_9">sEdrvTxBuffer</A>;
-
-   <b>type</b> <FONT COLOR=red><A NAME="54_9">sEdrvRxBuffer</A></FONT>;
-   <b>subtype</b> <FONT COLOR=red><A NAME="55_12">tEdrvRxBuffer</A></FONT> <b>is</b> <A HREF="oplk-edrv__ads.htm#54_9">sEdrvRxBuffer</A>;
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>-- Type Definitions                                                         --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
    
-   <FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
-   <FONT COLOR=green><EM>--\brief Enumeration for Rx buffer release                                  --</EM></FONT>
-   <FONT COLOR=green><EM>-- This enumeration lists the Rx buffer release commands.                   --</EM></FONT>
-   <FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
-   <b>type</b> <FONT COLOR=red><A NAME="61_9">tEdrvReleaseRxBuffer</A></FONT> <b>is</b> 
+   <b>type</b> <FONT COLOR=red><A NAME="59_9">sEdrvTxBuffer</A></FONT>;
+   <b>subtype</b> <FONT COLOR=red><A NAME="60_12">tEdrvTxBuffer</A></FONT> <b>is</b> <A HREF="oplk-edrv__ads.htm#59_9">sEdrvTxBuffer</A>;
+
+   <b>type</b> <FONT COLOR=red><A NAME="62_9">sEdrvRxBuffer</A></FONT>;
+   <b>subtype</b> <FONT COLOR=red><A NAME="63_12">tEdrvRxBuffer</A></FONT> <b>is</b> <A HREF="oplk-edrv__ads.htm#62_9">sEdrvRxBuffer</A>;
+   
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief Enumeration for Rx buffer release                                  --</EM></FONT>
+<FONT COLOR=green><EM>-- This enumeration lists the Rx buffer release commands.                   --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="69_9">tEdrvReleaseRxBuffer</A></FONT> <b>is</b> 
      (kEdrvReleaseRxBufferImmediately,
       <FONT COLOR=green><EM>-- Release the Rx buffer immediately</EM></FONT>
       KEdrvReleaseRxBufferLater
       <FONT COLOR=green><EM>-- The Rx buffer is released later</EM></FONT>
      );
-   <b>pragma</b> Convention (C, <A HREF="oplk-edrv__ads.htm#61_9">tEdrvReleaseRxBuffer</A>);  <FONT COLOR=green><EM>-- oplk/edrv.h:110</EM></FONT>
+   <b>pragma</b> Convention (C, <A HREF="oplk-edrv__ads.htm#69_9">tEdrvReleaseRxBuffer</A>);  <FONT COLOR=green><EM>-- oplk/edrv.h:110</EM></FONT>
    
    
-   <b>type</b> <FONT COLOR=red><A NAME="70_9">tEdrvRxHandler</A></FONT> <b>is</b> <b>access</b> <b>function</b>
+   <b>type</b> <FONT COLOR=red><A NAME="78_9">tEdrvRxHandler</A></FONT> <b>is</b> <b>access</b> <b>function</b>
      <FONT COLOR=green><EM>-- Callback function pointer for Rx frames</EM></FONT>
-     (arg1 : <b>access</b> <A HREF="oplk-edrv__ads.htm#55_12">tEdrvRxBuffer</A>) 
-     <b>return</b> <A HREF="oplk-edrv__ads.htm#61_9">tEdrvReleaseRxBuffer</A>;
-   <b>pragma</b> Convention (C, <A HREF="oplk-edrv__ads.htm#70_9">tEdrvRxHandler</A>);  <FONT COLOR=green><EM>-- oplk/edrv.h:113</EM></FONT>
+     (arg1 : <b>access</b> <A HREF="oplk-edrv__ads.htm#63_12">tEdrvRxBuffer</A>) 
+     <b>return</b> <A HREF="oplk-edrv__ads.htm#69_9">tEdrvReleaseRxBuffer</A>;
+   <b>pragma</b> Convention (C, <A HREF="oplk-edrv__ads.htm#78_9">tEdrvRxHandler</A>);  <FONT COLOR=green><EM>-- oplk/edrv.h:113</EM></FONT>
    
    
-   <b>type</b> <FONT COLOR=red><A NAME="77_9">tEdrvTxHandler</A></FONT> <b>is</b> <b>access</b> <b>procedure</b> 
+   <b>type</b> <FONT COLOR=red><A NAME="85_9">tEdrvTxHandler</A></FONT> <b>is</b> <b>access</b> <b>procedure</b> 
      <FONT COLOR=green><EM>-- Callback function pointer for Tx frames</EM></FONT>
-     (arg1 : <b>access</b> <A HREF="oplk-edrv__ads.htm#52_12">tEdrvTxBuffer</A>);
-   <b>pragma</b> Convention (C, <A HREF="oplk-edrv__ads.htm#77_9">tEdrvTxHandler</A>);  <FONT COLOR=green><EM>-- oplk/edrv.h:116</EM></FONT>
+     (arg1 : <b>access</b> <A HREF="oplk-edrv__ads.htm#60_12">tEdrvTxBuffer</A>);
+   <b>pragma</b> Convention (C, <A HREF="oplk-edrv__ads.htm#85_9">tEdrvTxHandler</A>);  <FONT COLOR=green><EM>-- oplk/edrv.h:116</EM></FONT>
    
    
-   <b>type</b> <FONT COLOR=red><A NAME="83_9">tEdrvCyclicCbSync</A></FONT> <b>is</b> <b>access</b> <b>function</b>
+   <b>type</b> <FONT COLOR=red><A NAME="91_9">tEdrvCyclicCbSync</A></FONT> <b>is</b> <b>access</b> <b>function</b>
      <FONT COLOR=green><EM>-- Callback function pointer for Edrv cyclic sync</EM></FONT>
      <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
-   <b>pragma</b> Convention (C, <A HREF="oplk-edrv__ads.htm#83_9">tEdrvCyclicCbSync</A>);  <FONT COLOR=green><EM>-- oplk/edrv.h:119</EM></FONT>
+   <b>pragma</b> Convention (C, <A HREF="oplk-edrv__ads.htm#91_9">tEdrvCyclicCbSync</A>);  <FONT COLOR=green><EM>-- oplk/edrv.h:119</EM></FONT>
    
    
-   <b>type</b> <FONT COLOR=red><A NAME="89_9">tEdrvCyclicCbError</A></FONT> <b>is</b> <b>access</b> <b>function</b> 
+   <b>type</b> <FONT COLOR=red><A NAME="97_9">tEdrvCyclicCbError</A></FONT> <b>is</b> <b>access</b> <b>function</b> 
      <FONT COLOR=green><EM>-- Callback function pointer for Edrv cyclic error</EM></FONT>
      (arg1 : <A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>; 
-      arg2 : <b>access</b> <A HREF="oplk-edrv__ads.htm#52_12">tEdrvTxBuffer</A>) 
+      arg2 : <b>access</b> <A HREF="oplk-edrv__ads.htm#60_12">tEdrvTxBuffer</A>) 
      <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
-   <b>pragma</b> Convention (C, <A HREF="oplk-edrv__ads.htm#89_9">tEdrvCyclicCbError</A>);  <FONT COLOR=green><EM>-- oplk/edrv.h:122</EM></FONT>
+   <b>pragma</b> Convention (C, <A HREF="oplk-edrv__ads.htm#97_9">tEdrvCyclicCbError</A>);  <FONT COLOR=green><EM>-- oplk/edrv.h:122</EM></FONT>
    
    
-   <b>type</b> <FONT COLOR=red><A NAME="97_9">tHresCallback</A></FONT> <b>is</b> <b>access</b> <b>procedure</b> 
+   <b>type</b> <FONT COLOR=red><A NAME="105_9">tHresCallback</A></FONT> <b>is</b> <b>access</b> <b>procedure</b> 
      <FONT COLOR=green><EM>-- Callback function pointer for hres timer callback function</EM></FONT>
-     (arg1 : <b>access</b> <A HREF="oplk-timer__ads.htm#7_14">timer</A>.<A HREF="oplk-timer__ads.htm#10_12">tTimerHdl</A>);
-   <b>pragma</b> Convention (C, <A HREF="oplk-edrv__ads.htm#97_9">tHresCallback</A>);  <FONT COLOR=green><EM>-- oplk/edrv.h:125</EM></FONT>
+     (arg1 : <b>access</b> <A HREF="oplk-timer__ads.htm#11_14">timer</A>.<A HREF="oplk-timer__ads.htm#14_12">tTimerHdl</A>);
+   <b>pragma</b> Convention (C, <A HREF="oplk-edrv__ads.htm#105_9">tHresCallback</A>);  <FONT COLOR=green><EM>-- oplk/edrv.h:125</EM></FONT>
    
    
-   <FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
-   <FONT COLOR=green><EM>--\brief Enumeration for Rx buffer transfer state                           --</EM></FONT>
-   <FONT COLOR=green><EM>-- This enumeration lists the transfer state of the Rx buffer.              --</EM></FONT>
-   <FONT COLOR=green><EM>-- Note that the Ethernet controller must support early Rx interrupts to    --</EM></FONT>
-   <FONT COLOR=green><EM>-- access the first or middle data of a frame!                              --</EM></FONT>
-   <FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
-   <b>subtype</b> <FONT COLOR=red><A NAME="109_12">tEdrvBufferInFrame</A></FONT> <b>is</b> unsigned;
-   kEdrvBufferFirstInFrame  : <b>constant</b> <A HREF="oplk-edrv__ads.htm#109_12">tEdrvBufferInFrame</A> := 1;
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief Enumeration for Rx buffer transfer state                           --</EM></FONT>
+<FONT COLOR=green><EM>-- This enumeration lists the transfer state of the Rx buffer.              --</EM></FONT>
+<FONT COLOR=green><EM>-- Note that the Ethernet controller must support early Rx interrupts to    --</EM></FONT>
+<FONT COLOR=green><EM>-- access the first or middle data of a frame!                              --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>subtype</b> <FONT COLOR=red><A NAME="117_12">tEdrvBufferInFrame</A></FONT> <b>is</b> unsigned;
+   kEdrvBufferFirstInFrame  : <b>constant</b> <A HREF="oplk-edrv__ads.htm#117_12">tEdrvBufferInFrame</A> := 1;
    <FONT COLOR=green><EM>-- First data of frame received</EM></FONT>
-   kEdrvBufferMiddleInFrame : <b>constant</b> <A HREF="oplk-edrv__ads.htm#109_12">tEdrvBufferInFrame</A> := 2;
+   kEdrvBufferMiddleInFrame : <b>constant</b> <A HREF="oplk-edrv__ads.htm#117_12">tEdrvBufferInFrame</A> := 2;
    <FONT COLOR=green><EM>-- Middle data of frame received</EM></FONT>
-   kEdrvBufferLastInFrame   : <b>constant</b> <A HREF="oplk-edrv__ads.htm#109_12">tEdrvBufferInFrame</A> := 4;
+   kEdrvBufferLastInFrame   : <b>constant</b> <A HREF="oplk-edrv__ads.htm#117_12">tEdrvBufferInFrame</A> := 4;
    <FONT COLOR=green><EM>-- Last data of frame received</EM></FONT>
    
    
-   <FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
-   <FONT COLOR=green><EM>--\brief Union for Tx buffer number                                         --</EM></FONT>
-   <FONT COLOR=green><EM>-- This union is used to identify the Tx buffer in the Ethernet driver      --</EM></FONT>
-   <FONT COLOR=green><EM>-- module.                                                                  --</EM></FONT>
-   <FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
-   <b>type</b> <FONT COLOR=red><A NAME="123_9">tEdrvTxBufferNumber</A></FONT> (discr : unsigned := 0) <b>is</b> <b>record</b>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief Union for Tx buffer number                                         --</EM></FONT>
+<FONT COLOR=green><EM>-- This union is used to identify the Tx buffer in the Ethernet driver      --</EM></FONT>
+<FONT COLOR=green><EM>-- module.                                                                  --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <FONT COLOR=red><A NAME="131_9">tEdrvTxBufferNumber</A></FONT> (discr : unsigned := 0) <b>is</b> <b>record</b>
       <b>case</b> discr <b>is</b>
          <b>when</b> 0 =&gt;
             value : <b>aliased</b> unsigned;
@@ -134,15 +142,15 @@
             <FONT COLOR=green><EM>-- Pointer to the TX buffer</EM></FONT>
       <b>end</b> <b>case</b>;
    <b>end</b> <b>record</b>;
-   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-edrv__ads.htm#123_9">tEdrvTxBufferNumber</A>);
-   <b>pragma</b> Unchecked_Union (<A HREF="oplk-edrv__ads.htm#123_9">tEdrvTxBufferNumber</A>);  <FONT COLOR=green><EM>-- oplk/edrv.h:150</EM></FONT>
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-edrv__ads.htm#131_9">tEdrvTxBufferNumber</A>);
+   <b>pragma</b> Unchecked_Union (<A HREF="oplk-edrv__ads.htm#131_9">tEdrvTxBufferNumber</A>);  <FONT COLOR=green><EM>-- oplk/edrv.h:150</EM></FONT>
    
    
-   <FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
-   <FONT COLOR=green><EM>--\brief Structure for Tx buffer                                            --</EM></FONT>
-   <FONT COLOR=green><EM>-- This structure is the Tx buffer descriptor.                              --</EM></FONT>
-   <FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
-   <b>type</b> <A HREF="oplk-edrv__ads.htm#51_9">sEdrvTxBuffer</A><FONT COLOR=red><A NAME="141_9"></A></FONT> <b>is</b> <b>record</b>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief Structure for Tx buffer                                            --</EM></FONT>
+<FONT COLOR=green><EM>-- This structure is the Tx buffer descriptor.                              --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <A HREF="oplk-edrv__ads.htm#59_9">sEdrvTxBuffer</A><FONT COLOR=red><A NAME="149_9"></A></FONT> <b>is</b> <b>record</b>
       txFrameSize    : <b>aliased</b> unsigned;
       <FONT COLOR=green><EM>-- Size of Tx frame (without CRC)</EM></FONT>
       timeOffsetNs   : <b>aliased</b> unsigned;
@@ -151,24 +159,24 @@
       <FONT COLOR=green><EM>-- Absolute Tx time [ticks]</EM></FONT>
       launchTime     : <b>aliased</b> Extensions.unsigned_long_long;
       <FONT COLOR=green><EM>-- Launch time of frame [ns]</EM></FONT>
-      pfnTxHandler   : <A HREF="oplk-edrv__ads.htm#77_9">tEdrvTxHandler</A>;
+      pfnTxHandler   : <A HREF="oplk-edrv__ads.htm#85_9">tEdrvTxHandler</A>;
       <FONT COLOR=green><EM>-- Tx callback function</EM></FONT>
-      txBufferNumber : <A HREF="oplk-edrv__ads.htm#123_9">tEdrvTxBufferNumber</A>;
+      txBufferNumber : <A HREF="oplk-edrv__ads.htm#131_9">tEdrvTxBufferNumber</A>;
       <FONT COLOR=green><EM>-- Edrv Tx buffer number</EM></FONT>
       pBuffer        : <b>access</b> unsigned_char;
       <FONT COLOR=green><EM>-- Pointer to the Tx buffer</EM></FONT>
       maxBufferSize  : <b>aliased</b> unsigned;
       <FONT COLOR=green><EM>-- Maximum size of the Tx buffer</EM></FONT>
    <b>end</b> <b>record</b>;
-   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-edrv__ads.htm#51_9">sEdrvTxBuffer</A>);  <FONT COLOR=green><EM>-- oplk/edrv.h:157</EM></FONT>
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-edrv__ads.htm#59_9">sEdrvTxBuffer</A>);  <FONT COLOR=green><EM>-- oplk/edrv.h:157</EM></FONT>
    
    
-   <FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
-   <FONT COLOR=green><EM>--/brief Structure for Rx buffer                                            --</EM></FONT>
-   <FONT COLOR=green><EM>-- This structure is the Rx buffer descriptor.                              --</EM></FONT>
-   <FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
-   <b>type</b> <A HREF="oplk-edrv__ads.htm#54_9">sEdrvRxBuffer</A><FONT COLOR=red><A NAME="166_9"></A></FONT> <b>is</b> <b>record</b>
-      bufferInFrame : <b>aliased</b> <A HREF="oplk-edrv__ads.htm#109_12">tEdrvBufferInFrame</A>;
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--/brief Structure for Rx buffer                                            --</EM></FONT>
+<FONT COLOR=green><EM>-- This structure is the Rx buffer descriptor.                              --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> <A HREF="oplk-edrv__ads.htm#62_9">sEdrvRxBuffer</A><FONT COLOR=red><A NAME="174_9"></A></FONT> <b>is</b> <b>record</b>
+      bufferInFrame : <b>aliased</b> <A HREF="oplk-edrv__ads.htm#117_12">tEdrvBufferInFrame</A>;
       <FONT COLOR=green><EM>-- Position of Rx buffer in a frame</EM></FONT>
       rxFrameSize   : <b>aliased</b> unsigned;
       <FONT COLOR=green><EM>-- Size of Rx frame (without CRC)</EM></FONT>
@@ -177,32 +185,32 @@
       pRxTimeStamp  : <b>access</b> <A HREF="oplk-oplkinc__ads.htm#9_14">oplkinc</A>.<A HREF="oplk-oplkinc__ads.htm#18_9">tTimestamp</A>;
       <FONT COLOR=green><EM>-- Pointer to Rx time stamp</EM></FONT>
    <b>end</b> <b>record</b>;
-   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-edrv__ads.htm#54_9">sEdrvRxBuffer</A>);  <FONT COLOR=green><EM>-- oplk/edrv.h:174</EM></FONT>
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-edrv__ads.htm#62_9">sEdrvRxBuffer</A>);  <FONT COLOR=green><EM>-- oplk/edrv.h:174</EM></FONT>
    
    
-   <FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
-   <FONT COLOR=green><EM>--\brief Structure for initialization                                       --</EM></FONT>
-   <FONT COLOR=green><EM>-- This structure is used to initialize the Ethernet driver module.         --</EM></FONT>
-   <FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief Structure for initialization                                       --</EM></FONT>
+<FONT COLOR=green><EM>-- This structure is used to initialize the Ethernet driver module.         --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
    <b>type</b> tEdrvInitParam_aMacAddr_array <b>is</b> <b>array</b> (0 .. 5) <b>of</b> <b>aliased</b> unsigned_char;
-   <b>type</b> <FONT COLOR=red><A NAME="184_9">tEdrvInitParam</A></FONT> <b>is</b> <b>record</b>
+   <b>type</b> <FONT COLOR=red><A NAME="192_9">tEdrvInitParam</A></FONT> <b>is</b> <b>record</b>
       aMacAddr     : <b>aliased</b> tEdrvInitParam_aMacAddr_array;
       <FONT COLOR=green><EM>-- Ethernet controller MAC address</EM></FONT>
-      pfnRxHandler : <A HREF="oplk-edrv__ads.htm#70_9">tEdrvRxHandler</A>;
+      pfnRxHandler : <A HREF="oplk-edrv__ads.htm#78_9">tEdrvRxHandler</A>;
       <FONT COLOR=green><EM>-- Rx frame callback function pointer</EM></FONT>
       hwParam      : <b>aliased</b> <A HREF="oplk-oplkinc__ads.htm#9_14">oplkinc</A>.<A HREF="oplk-oplkinc__ads.htm#43_9">tHwParam</A>;
       <FONT COLOR=green><EM>-- Hardware parameter</EM></FONT>
    <b>end</b> <b>record</b>;
-   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-edrv__ads.htm#184_9">tEdrvInitParam</A>);  <FONT COLOR=green><EM>-- oplk/edrv.h:192</EM></FONT>
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-edrv__ads.htm#192_9">tEdrvInitParam</A>);  <FONT COLOR=green><EM>-- oplk/edrv.h:192</EM></FONT>
    
    
-   <FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
-   <FONT COLOR=green><EM>--\brief Structure for Rx filter                                            --</EM></FONT>
-   <FONT COLOR=green><EM>-- This structure is used to control the Rx filters.                        --</EM></FONT>
-   <FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief Structure for Rx filter                                            --</EM></FONT>
+<FONT COLOR=green><EM>-- This structure is used to control the Rx filters.                        --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
    <b>type</b> tEdrvFilter_aFilterValue_array <b>is</b> <b>array</b> (0 .. 21) <b>of</b> <b>aliased</b> unsigned_char;
    <b>type</b> tEdrvFilter_aFilterMask_array  <b>is</b> <b>array</b> (0 .. 21) <b>of</b> <b>aliased</b> unsigned_char;
-   <b>type</b> <FONT COLOR=red><A NAME="201_9">tEdrvFilter</A></FONT> <b>is</b> <b>record</b>
+   <b>type</b> <FONT COLOR=red><A NAME="209_9">tEdrvFilter</A></FONT> <b>is</b> <b>record</b>
       handle       : <b>aliased</b> unsigned;
       <FONT COLOR=green><EM>-- Handle to Rx filter</EM></FONT>
       fEnable      : <b>aliased</b> unsigned_char;
@@ -211,19 +219,19 @@
       <FONT COLOR=green><EM>-- Rx filter values</EM></FONT>
       aFilterMask  : <b>aliased</b> tEdrvFilter_aFilterMask_array;
       <FONT COLOR=green><EM>-- filter mask</EM></FONT>
-      pTxBuffer    : <b>access</b> <A HREF="oplk-edrv__ads.htm#52_12">tEdrvTxBuffer</A>;
+      pTxBuffer    : <b>access</b> <A HREF="oplk-edrv__ads.htm#60_12">tEdrvTxBuffer</A>;
       <FONT COLOR=green><EM>-- Tx frame to be transmitted when filter matches</EM></FONT>
-      PfnRxHandler : <A HREF="oplk-edrv__ads.htm#70_9">TEdrvRxHandler</A> := <b>null</b>;
+      PfnRxHandler : <A HREF="oplk-edrv__ads.htm#78_9">TEdrvRxHandler</A> := <b>null</b>;
       <FONT COLOR=green><EM>-- Rx frame callback function pointer for this filter</EM></FONT>
    <b>end</b> <b>record</b>;
-   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-edrv__ads.htm#201_9">tEdrvFilter</A>);  <FONT COLOR=green><EM>-- oplk/edrv.h:209</EM></FONT>
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-edrv__ads.htm#209_9">tEdrvFilter</A>);  <FONT COLOR=green><EM>-- oplk/edrv.h:209</EM></FONT>
 
    
-   <FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
-   <FONT COLOR=green><EM>--\brief Structure for cyclic Ethernet driver diagnostics                   --</EM></FONT>
-   <FONT COLOR=green><EM>-- This structure is used to provide diagnostics of the cyclic Ethernet     --</EM></FONT>
-   <FONT COLOR=green><EM>-- driver.                                                                  --</EM></FONT>
-   <FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief Structure for cyclic Ethernet driver diagnostics                   --</EM></FONT>
+<FONT COLOR=green><EM>-- This structure is used to provide diagnostics of the cyclic Ethernet     --</EM></FONT>
+<FONT COLOR=green><EM>-- driver.                                                                  --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
    <b>type</b> tEdrvCyclicDiagnostics_aSampleTimeStamp_array <b>is</b> 
      <b>array</b> (0 .. 500) <b>of</b> <b>aliased</b> Extensions.unsigned_long_long;
    <b>type</b> tEdrvCyclicDiagnostics_aCycleTime_array <b>is</b> 
@@ -232,7 +240,7 @@
      <b>array</b> (0 .. 500) <b>of</b> <b>aliased</b> unsigned;
    <b>type</b> tEdrvCyclicDiagnostics_aSpareCycleTime_array <b>is</b> 
      <b>array</b> (0 .. 500) <b>of</b> <b>aliased</b> unsigned;
-   <b>type</b> <FONT COLOR=red><A NAME="231_9">tEdrvCyclicDiagnostics</A></FONT> <b>is</b> <b>record</b>
+   <b>type</b> <FONT COLOR=red><A NAME="239_9">tEdrvCyclicDiagnostics</A></FONT> <b>is</b> <b>record</b>
       
       <FONT COLOR=green><EM>-- continuous min/max/avg measurement</EM></FONT>
       cycleCount            : <b>aliased</b> Extensions.unsigned_long_long;
@@ -270,120 +278,120 @@
       aSpareCycleTime       : <b>aliased</b> tEdrvCyclicDiagnostics_aSpareCycleTime_array;
       <FONT COLOR=green><EM>-- Array of spare cycle time values</EM></FONT>
    <b>end</b> <b>record</b>;
-   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-edrv__ads.htm#231_9">tEdrvCyclicDiagnostics</A>);  <FONT COLOR=green><EM>-- oplk/edrv.h:236</EM></FONT>
+   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-edrv__ads.htm#239_9">tEdrvCyclicDiagnostics</A>);  <FONT COLOR=green><EM>-- oplk/edrv.h:236</EM></FONT>
    
    
-   <FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
-   <FONT COLOR=green><EM>-- function prototypes                                                      --</EM></FONT>
-   <FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>-- function prototypes                                                      --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
    
-   <b>function</b> <A HREF="oplk-edrv__ads.htm#283_22">edrv_init</A><FONT COLOR=red><A NAME="276_13"></A></FONT> 
+   <b>function</b> <A HREF="oplk-edrv__adb.htm#18_13">edrv_init</A><FONT COLOR=red><A NAME="284_13"></A></FONT> 
      <FONT COLOR=green><EM>-- pEdrvInitParam_p    Edrv initialization parameters</EM></FONT>
      <FONT COLOR=green><EM>-- The function returns a tOplkError error code.</EM></FONT>
      <FONT COLOR=green><EM>-- </EM></FONT>
      <FONT COLOR=green><EM>-- This function initializes the Ethernet driver.</EM></FONT>
-     (pEdrvInitParam_p : <b>access</b> <A HREF="oplk-edrv__ads.htm#184_9">tEdrvInitParam</A>) 
+     (pEdrvInitParam_p : <b>access</b> <A HREF="oplk-edrv__ads.htm#192_9">tEdrvInitParam</A>) 
      <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
-   <b>pragma</b> Import (C, <A HREF="oplk-edrv__ads.htm#276_13">edrv_init</A><FONT COLOR=red><A NAME="283_22"></A></FONT>, "edrv_init");  <FONT COLOR=green><EM>-- oplk/edrv.h:245</EM></FONT>
+   <b>pragma</b> Export (C, edrv_init, "edrv_init");  <FONT COLOR=green><EM>-- oplk/edrv.h:245</EM></FONT>
    
    
-   <b>function</b> <A HREF="oplk-edrv__ads.htm#291_22">edrv_shutdown</A><FONT COLOR=red><A NAME="286_13"></A></FONT> 
+   <b>function</b> <A HREF="oplk-edrv__adb.htm#33_13">edrv_shutdown</A><FONT COLOR=red><A NAME="294_13"></A></FONT> 
      <FONT COLOR=green><EM>-- The function returns a tOplkError error code.</EM></FONT>
      <FONT COLOR=green><EM>-- </EM></FONT>
      <FONT COLOR=green><EM>-- This function shuts down the Ethernet driver.</EM></FONT>
      <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
-   <b>pragma</b> Import (C, <A HREF="oplk-edrv__ads.htm#286_13">edrv_shutdown</A><FONT COLOR=red><A NAME="291_22"></A></FONT>, "edrv_shutdown");  <FONT COLOR=green><EM>-- oplk/edrv.h:246</EM></FONT>
+   <b>pragma</b> Export (C, edrv_shutdown, "edrv_shutdown");  <FONT COLOR=green><EM>-- oplk/edrv.h:246</EM></FONT>
    
    
-   <b>function</b> <A HREF="oplk-edrv__ads.htm#302_10">edrv_setRxMulticastMacAddr</A><FONT COLOR=red><A NAME="294_13"></A></FONT> 
+   <b>function</b> <A HREF="oplk-edrv__adb.htm#47_13">edrv_setRxMulticastMacAddr</A><FONT COLOR=red><A NAME="302_13"></A></FONT> 
      <FONT COLOR=green><EM>-- pMacAddr_p  Multicast address</EM></FONT>
      <FONT COLOR=green><EM>-- The function returns a tOplkError error code.</EM></FONT>
      <FONT COLOR=green><EM>-- </EM></FONT>
      <FONT COLOR=green><EM>-- This function sets a multicast entry into the Ethernet controller.</EM></FONT>
      (pMacAddr_p : <b>access</b> unsigned_char) 
      <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
-   <b>pragma</b> Import 
-     (C, <A HREF="oplk-edrv__ads.htm#294_13">edrv_setRxMulticastMacAddr</A><FONT COLOR=red><A NAME="302_10"></A></FONT>, "edrv_setRxMulticastMacAddr");  <FONT COLOR=green><EM>-- oplk/edrv.h:247</EM></FONT>
+   <b>pragma</b> Export 
+     (C, edrv_setRxMulticastMacAddr, "edrv_setRxMulticastMacAddr");  <FONT COLOR=green><EM>-- oplk/edrv.h:247</EM></FONT>
    
    
-   <b>function</b> <A HREF="oplk-edrv__ads.htm#313_10">edrv_clearRxMulticastMacAddr</A><FONT COLOR=red><A NAME="305_13"></A></FONT> 
+   <b>function</b> <A HREF="oplk-edrv__adb.htm#63_13">edrv_clearRxMulticastMacAddr</A><FONT COLOR=red><A NAME="313_13"></A></FONT> 
      <FONT COLOR=green><EM>-- pMacAddr_p  Multicast address</EM></FONT>
      <FONT COLOR=green><EM>-- The function returns a tOplkError error code.</EM></FONT>
      <FONT COLOR=green><EM>-- </EM></FONT>
      <FONT COLOR=green><EM>-- This function removes the multicast entry from the Ethernet controller.</EM></FONT>
      (pMacAddr_p : <b>access</b> unsigned_char) 
      <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
-   <b>pragma</b> Import 
-     (C, <A HREF="oplk-edrv__ads.htm#305_13">edrv_clearRxMulticastMacAddr</A><FONT COLOR=red><A NAME="313_10"></A></FONT>, "edrv_clearRxMulticastMacAddr");  <FONT COLOR=green><EM>-- oplk/edrv.h:248</EM></FONT>
+   <b>pragma</b> Export 
+     (C, edrv_clearRxMulticastMacAddr, "edrv_clearRxMulticastMacAddr");  <FONT COLOR=green><EM>-- oplk/edrv.h:248</EM></FONT>
    
    
-   <b>function</b> <A HREF="oplk-edrv__ads.htm#323_22">edrv_allocTxBuffer</A><FONT COLOR=red><A NAME="316_13"></A></FONT> 
+   <b>function</b> <A HREF="oplk-edrv__adb.htm#79_13">edrv_allocTxBuffer</A><FONT COLOR=red><A NAME="324_13"></A></FONT> 
      <FONT COLOR=green><EM>-- pBuffer_p           Tx buffer descriptor</EM></FONT>
      <FONT COLOR=green><EM>-- The function returns a tOplkError error code.</EM></FONT>
      <FONT COLOR=green><EM>-- </EM></FONT>
      <FONT COLOR=green><EM>-- This function allocates a Tx buffer.</EM></FONT>
-     (pBuffer_p : <b>access</b> <A HREF="oplk-edrv__ads.htm#52_12">tEdrvTxBuffer</A>) 
+     (pBuffer_p : <b>access</b> <A HREF="oplk-edrv__ads.htm#60_12">tEdrvTxBuffer</A>) 
      <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
-   <b>pragma</b> Import (C, <A HREF="oplk-edrv__ads.htm#316_13">edrv_allocTxBuffer</A><FONT COLOR=red><A NAME="323_22"></A></FONT>, "edrv_allocTxBuffer");  <FONT COLOR=green><EM>-- oplk/edrv.h:249</EM></FONT>
+   <b>pragma</b> Export (C, edrv_allocTxBuffer, "edrv_allocTxBuffer");  <FONT COLOR=green><EM>-- oplk/edrv.h:249</EM></FONT>
    
    
-   <b>function</b> <A HREF="oplk-edrv__ads.htm#333_22">edrv_freeTxBuffer</A><FONT COLOR=red><A NAME="326_13"></A></FONT> 
+   <b>function</b> <A HREF="oplk-edrv__adb.htm#95_13">edrv_freeTxBuffer</A><FONT COLOR=red><A NAME="334_13"></A></FONT> 
      <FONT COLOR=green><EM>-- pBuffer_p           Tx buffer descriptor</EM></FONT>
      <FONT COLOR=green><EM>-- The function returns a tOplkError error code.</EM></FONT>
      <FONT COLOR=green><EM>-- </EM></FONT>
      <FONT COLOR=green><EM>-- This function releases the Tx buffer.</EM></FONT>
-     (pBuffer_p : <b>access</b> <A HREF="oplk-edrv__ads.htm#52_12">tEdrvTxBuffer</A>) 
+     (pBuffer_p : <b>access</b> <A HREF="oplk-edrv__ads.htm#60_12">tEdrvTxBuffer</A>) 
      <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
-   <b>pragma</b> Import (C, <A HREF="oplk-edrv__ads.htm#326_13">edrv_freeTxBuffer</A><FONT COLOR=red><A NAME="333_22"></A></FONT>, "edrv_freeTxBuffer");  <FONT COLOR=green><EM>-- oplk/edrv.h:250</EM></FONT>
+   <b>pragma</b> Export (C, edrv_freeTxBuffer, "edrv_freeTxBuffer");  <FONT COLOR=green><EM>-- oplk/edrv.h:250</EM></FONT>
    
    
-   <b>function</b> <A HREF="oplk-edrv__ads.htm#339_22">edrv_updateTxBuffer</A><FONT COLOR=red><A NAME="336_13"></A></FONT> 
-     (pBuffer_p : <b>access</b> <A HREF="oplk-edrv__ads.htm#52_12">tEdrvTxBuffer</A>) 
+   <b>function</b> <A HREF="oplk-edrv__adb.htm#105_13">edrv_updateTxBuffer</A><FONT COLOR=red><A NAME="344_13"></A></FONT> 
+     (pBuffer_p : <b>access</b> <A HREF="oplk-edrv__ads.htm#60_12">tEdrvTxBuffer</A>) 
      <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
-   <b>pragma</b> Import (C, <A HREF="oplk-edrv__ads.htm#336_13">edrv_updateTxBuffer</A><FONT COLOR=red><A NAME="339_22"></A></FONT>, "edrv_updateTxBuffer");  <FONT COLOR=green><EM>-- oplk/edrv.h:251</EM></FONT>
+   <b>pragma</b> Export (C, edrv_updateTxBuffer, "edrv_updateTxBuffer");  <FONT COLOR=green><EM>-- oplk/edrv.h:251</EM></FONT>
    
    
-   <b>function</b> <A HREF="oplk-edrv__ads.htm#349_22">edrv_sendTxBuffer</A><FONT COLOR=red><A NAME="342_13"></A></FONT> 
+   <b>function</b> <A HREF="oplk-edrv__adb.htm#121_13">edrv_sendTxBuffer</A><FONT COLOR=red><A NAME="350_13"></A></FONT> 
      <FONT COLOR=green><EM>-- pBuffer_p           Tx buffer descriptor</EM></FONT>
      <FONT COLOR=green><EM>-- The function returns a tOplkError error code.</EM></FONT>
      <FONT COLOR=green><EM>-- </EM></FONT>
      <FONT COLOR=green><EM>-- This function sends the Tx buffer.</EM></FONT>
-     (pBuffer_p : <b>access</b> <A HREF="oplk-edrv__ads.htm#52_12">tEdrvTxBuffer</A>) 
+     (pBuffer_p : <b>access</b> <A HREF="oplk-edrv__ads.htm#60_12">tEdrvTxBuffer</A>) 
      <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
-   <b>pragma</b> Import (C, <A HREF="oplk-edrv__ads.htm#342_13">edrv_sendTxBuffer</A><FONT COLOR=red><A NAME="349_22"></A></FONT>, "edrv_sendTxBuffer");  <FONT COLOR=green><EM>-- oplk/edrv.h:252</EM></FONT>
+   <b>pragma</b> Export (C, edrv_sendTxBuffer, "edrv_sendTxBuffer");  <FONT COLOR=green><EM>-- oplk/edrv.h:252</EM></FONT>
    
    
-   <b>function</b> <A HREF="oplk-edrv__ads.htm#359_22">edrv_setTxBufferReady</A><FONT COLOR=red><A NAME="352_13"></A></FONT> 
+   <b>function</b> <A HREF="oplk-edrv__adb.htm#137_13">edrv_setTxBufferReady</A><FONT COLOR=red><A NAME="360_13"></A></FONT> 
      <FONT COLOR=green><EM>-- pBuffer_p   Tx buffer buffer descriptor</EM></FONT>
      <FONT COLOR=green><EM>-- The function returns a tOplkError error code.</EM></FONT>
      <FONT COLOR=green><EM>-- </EM></FONT>
      <FONT COLOR=green><EM>-- This function sets the Tx buffer buffer ready for transmission.</EM></FONT>
-     (pBuffer_p : <b>access</b> <A HREF="oplk-edrv__ads.htm#52_12">tEdrvTxBuffer</A>) 
+     (pBuffer_p : <b>access</b> <A HREF="oplk-edrv__ads.htm#60_12">tEdrvTxBuffer</A>) 
      <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
-   <b>pragma</b> Import (C, <A HREF="oplk-edrv__ads.htm#352_13">edrv_setTxBufferReady</A><FONT COLOR=red><A NAME="359_22"></A></FONT>, "edrv_setTxBufferReady");  <FONT COLOR=green><EM>-- oplk/edrv.h:253</EM></FONT>
+   <b>pragma</b> Export (C, edrv_setTxBufferReady, "edrv_setTxBufferReady");  <FONT COLOR=green><EM>-- oplk/edrv.h:253</EM></FONT>
    
    
-   <b>function</b> <A HREF="oplk-edrv__ads.htm#369_22">edrv_startTxBuffer</A><FONT COLOR=red><A NAME="362_13"></A></FONT> 
+   <b>function</b> <A HREF="oplk-edrv__adb.htm#153_13">edrv_startTxBuffer</A><FONT COLOR=red><A NAME="370_13"></A></FONT> 
      <FONT COLOR=green><EM>-- pBuffer_p   Tx buffer buffer descriptor</EM></FONT>
      <FONT COLOR=green><EM>-- The function returns a tOplkError error code.</EM></FONT>
      <FONT COLOR=green><EM>-- </EM></FONT>
      <FONT COLOR=green><EM>-- This function sends the Tx buffer marked as ready.</EM></FONT>
-     (pBuffer_p : <b>access</b> <A HREF="oplk-edrv__ads.htm#52_12">tEdrvTxBuffer</A>) 
+     (pBuffer_p : <b>access</b> <A HREF="oplk-edrv__ads.htm#60_12">tEdrvTxBuffer</A>) 
      <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
-   <b>pragma</b> Import (C, <A HREF="oplk-edrv__ads.htm#362_13">edrv_startTxBuffer</A><FONT COLOR=red><A NAME="369_22"></A></FONT>, "edrv_startTxBuffer");  <FONT COLOR=green><EM>-- oplk/edrv.h:254</EM></FONT>
+   <b>pragma</b> Export (C, edrv_startTxBuffer, "edrv_startTxBuffer");  <FONT COLOR=green><EM>-- oplk/edrv.h:254</EM></FONT>
    
    
-   <b>function</b> <A HREF="oplk-edrv__ads.htm#379_22">edrv_releaseRxBuffer</A><FONT COLOR=red><A NAME="372_13"></A></FONT> 
+   <b>function</b> <A HREF="oplk-edrv__adb.htm#169_13">edrv_releaseRxBuffer</A><FONT COLOR=red><A NAME="380_13"></A></FONT> 
      <FONT COLOR=green><EM>-- pRxBuffer_p     Rx buffer to be released</EM></FONT>
      <FONT COLOR=green><EM>-- The function returns a tOplkError error code.</EM></FONT>
      <FONT COLOR=green><EM>-- </EM></FONT>
      <FONT COLOR=green><EM>-- This function releases a late release Rx buffer.</EM></FONT>
-     (pBuffer_p : <b>access</b> <A HREF="oplk-edrv__ads.htm#55_12">tEdrvRxBuffer</A>) 
+     (pBuffer_p : <b>access</b> <A HREF="oplk-edrv__ads.htm#63_12">tEdrvRxBuffer</A>) 
      <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
-   <b>pragma</b> Import (C, <A HREF="oplk-edrv__ads.htm#372_13">edrv_releaseRxBuffer</A><FONT COLOR=red><A NAME="379_22"></A></FONT>, "edrv_releaseRxBuffer");  <FONT COLOR=green><EM>-- oplk/edrv.h:255</EM></FONT>
+   <b>pragma</b> Export (C, edrv_releaseRxBuffer, "edrv_releaseRxBuffer");  <FONT COLOR=green><EM>-- oplk/edrv.h:255</EM></FONT>
    
    
-   <b>function</b> <A HREF="oplk-edrv__ads.htm#401_22">Edrv_ChangeRxFilter</A><FONT COLOR=red><A NAME="382_13"></A></FONT>
+   <b>function</b> <A HREF="oplk-edrv__adb.htm#194_13">Edrv_ChangeRxFilter</A><FONT COLOR=red><A NAME="390_13"></A></FONT>
      <FONT COLOR=green><EM>-- pFilter_p           Base pointer of Rx filter array</EM></FONT>
      <FONT COLOR=green><EM>-- count_p             Number of Rx filter array entries</EM></FONT>
      <FONT COLOR=green><EM>-- entryChanged_p      Index of Rx filter entry that shall be changed</EM></FONT>
@@ -397,15 +405,15 @@
      <FONT COLOR=green><EM>-- be changed.</EM></FONT>
      <FONT COLOR=green><EM>-- </EM></FONT>
      <FONT COLOR=green><EM>-- \note Rx filters are not supported by this driver! (maybe)!!!!!!!!!!!!!!!!</EM></FONT>
-     (pFilter_p      : <b>access</b> <A HREF="oplk-edrv__ads.htm#201_9">tEdrvFilter</A>;
+     (pFilter_p      : <b>access</b> <A HREF="oplk-edrv__ads.htm#209_9">tEdrvFilter</A>;
       count_p        : unsigned;
       entryChanged_p : unsigned;
       changeFlags_p  : unsigned) 
      <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
-   <b>pragma</b> Import (C, <A HREF="oplk-edrv__ads.htm#382_13">edrv_changeRxFilter</A><FONT COLOR=red><A NAME="401_22"></A></FONT>, "edrv_changeRxFilter");  <FONT COLOR=green><EM>-- oplk/edrv.h:256</EM></FONT>
+   <b>pragma</b> Export (C, edrv_changeRxFilter, "edrv_changeRxFilter");  <FONT COLOR=green><EM>-- oplk/edrv.h:256</EM></FONT>
    
    
-   <b>function</b> <A HREF="oplk-edrv__ads.htm#413_22">edrv_getDiagnostics</A><FONT COLOR=red><A NAME="404_13"></A></FONT> 
+   <b>function</b> <A HREF="oplk-edrv__adb.htm#214_13">edrv_getDiagnostics</A><FONT COLOR=red><A NAME="412_13"></A></FONT> 
      <FONT COLOR=green><EM>-- pBuffer_p   Pointer to buffer filled with diagnostics.</EM></FONT>
      <FONT COLOR=green><EM>-- size_p      Size of buffer</EM></FONT>
      <FONT COLOR=green><EM>-- The function returns a tOplkError error code.</EM></FONT>
@@ -413,63 +421,63 @@
      <FONT COLOR=green><EM>-- This function returns the Edrv diagnostics to a provided buffer.</EM></FONT>
      (pBuffer_p : <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C.Strings.chars_ptr; 
       size_p    : int) 
-     <b>return</b> int;
-   <b>pragma</b> Import (C, <A HREF="oplk-edrv__ads.htm#404_13">edrv_getDiagnostics</A><FONT COLOR=red><A NAME="413_22"></A></FONT>, "edrv_getDiagnostics");  <FONT COLOR=green><EM>-- oplk/edrv.h:257</EM></FONT>
+     <b>return</b> <A HREF="oplk-errordefs__ads.htm#9_14">errordefs</A>.<A HREF="oplk-errordefs__ads.htm#124_12">tOplkError</A>;
+   <b>pragma</b> Export (C, edrv_getDiagnostics, "edrv_getDiagnostics");  <FONT COLOR=green><EM>-- oplk/edrv.h:257</EM></FONT>
    
    
   <FONT COLOR=green><EM>--   function edrvcyclic_init </EM></FONT>
   <FONT COLOR=green><EM>--     return errordefs.tOplkError;</EM></FONT>
-  <FONT COLOR=green><EM>--   pragma Import (C, edrvcyclic_init, "edrvcyclic_init");  -- oplk/edrv.h:259</EM></FONT>
+  <FONT COLOR=green><EM>--   pragma Export (C, edrvcyclic_init, "edrvcyclic_init");  -- oplk/edrv.h:259</EM></FONT>
 
   <FONT COLOR=green><EM>--   function edrvcyclic_shutdown </EM></FONT>
   <FONT COLOR=green><EM>--     return errordefs.tOplkError;</EM></FONT>
-  <FONT COLOR=green><EM>--   pragma Import (C, edrvcyclic_shutdown, "edrvcyclic_shutdown");  -- oplk/edrv.h:260</EM></FONT>
+  <FONT COLOR=green><EM>--   pragma Export (C, edrvcyclic_shutdown, "edrvcyclic_shutdown");  -- oplk/edrv.h:260</EM></FONT>
 
   <FONT COLOR=green><EM>--   function edrvcyclic_setCycleTime </EM></FONT>
   <FONT COLOR=green><EM>--     (cycleTimeUs_p : unsigned) </EM></FONT>
   <FONT COLOR=green><EM>--     return errordefs.tOplkError;</EM></FONT>
-  <FONT COLOR=green><EM>--   pragma Import (C, edrvcyclic_setCycleTime, "edrvcyclic_setCycleTime");  -- oplk/edrv.h:261</EM></FONT>
+  <FONT COLOR=green><EM>--   pragma Export (C, edrvcyclic_setCycleTime, "edrvcyclic_setCycleTime");  -- oplk/edrv.h:261</EM></FONT>
 
   <FONT COLOR=green><EM>--   function edrvcyclic_startCycle </EM></FONT>
   <FONT COLOR=green><EM>--     return errordefs.tOplkError;</EM></FONT>
-  <FONT COLOR=green><EM>--   pragma Import (C, edrvcyclic_startCycle, "edrvcyclic_startCycle");  -- oplk/edrv.h:262</EM></FONT>
+  <FONT COLOR=green><EM>--   pragma Export (C, edrvcyclic_startCycle, "edrvcyclic_startCycle");  -- oplk/edrv.h:262</EM></FONT>
 
   <FONT COLOR=green><EM>--   function edrvcyclic_stopCycle </EM></FONT>
   <FONT COLOR=green><EM>--     return errordefs.tOplkError;</EM></FONT>
-  <FONT COLOR=green><EM>--   pragma Import (C, edrvcyclic_stopCycle, "edrvcyclic_stopCycle");  -- oplk/edrv.h:263</EM></FONT>
+  <FONT COLOR=green><EM>--   pragma Export (C, edrvcyclic_stopCycle, "edrvcyclic_stopCycle");  -- oplk/edrv.h:263</EM></FONT>
 
   <FONT COLOR=green><EM>--   function edrvcyclic_setMaxTxBufferListSize </EM></FONT>
   <FONT COLOR=green><EM>--     (maxListSize_p : unsigned) </EM></FONT>
   <FONT COLOR=green><EM>--     return errordefs.tOplkError;</EM></FONT>
-  <FONT COLOR=green><EM>--   pragma Import (C, edrvcyclic_setMaxTxBufferListSize, "edrvcyclic_setMaxTxBufferListSize");  -- oplk/edrv.h:264</EM></FONT>
+  <FONT COLOR=green><EM>--   pragma Export (C, edrvcyclic_setMaxTxBufferListSize, "edrvcyclic_setMaxTxBufferListSize");  -- oplk/edrv.h:264</EM></FONT>
 
   <FONT COLOR=green><EM>--  -- jdk SECTION_EDRVCYC_SET_NEXT_TX;</EM></FONT>
   <FONT COLOR=green><EM>--   function edrvcyclic_setNextTxBufferList </EM></FONT>
   <FONT COLOR=green><EM>--     (ppTxBuffer_p    : System.Address; </EM></FONT>
   <FONT COLOR=green><EM>--      txBufferCount_p : unsigned) </EM></FONT>
   <FONT COLOR=green><EM>--     return errordefs.tOplkError;</EM></FONT>
-  <FONT COLOR=green><EM>--   pragma Import (C, edrvcyclic_setNextTxBufferList, "edrvcyclic_setNextTxBufferList");  -- oplk/edrv.h:265</EM></FONT>
+  <FONT COLOR=green><EM>--   pragma Export (C, edrvcyclic_setNextTxBufferList, "edrvcyclic_setNextTxBufferList");  -- oplk/edrv.h:265</EM></FONT>
 
   <FONT COLOR=green><EM>--   function edrvcyclic_regSyncHandler </EM></FONT>
   <FONT COLOR=green><EM>--     (pfnEdrvCyclicCbSync_p : tEdrvCyclicCbSync) </EM></FONT>
   <FONT COLOR=green><EM>--     return errordefs.tOplkError;</EM></FONT>
-  <FONT COLOR=green><EM>--   pragma Import (C, edrvcyclic_regSyncHandler, "edrvcyclic_regSyncHandler");  -- oplk/edrv.h:266</EM></FONT>
+  <FONT COLOR=green><EM>--   pragma Export (C, edrvcyclic_regSyncHandler, "edrvcyclic_regSyncHandler");  -- oplk/edrv.h:266</EM></FONT>
 
   <FONT COLOR=green><EM>--   function edrvcyclic_regErrorHandler </EM></FONT>
   <FONT COLOR=green><EM>--     (pfnEdrvCyclicCbError_p : tEdrvCyclicCbError) </EM></FONT>
   <FONT COLOR=green><EM>--     return errordefs.tOplkError;</EM></FONT>
-  <FONT COLOR=green><EM>--   pragma Import (C, edrvcyclic_regErrorHandler, "edrvcyclic_regErrorHandler");  -- oplk/edrv.h:267</EM></FONT>
+  <FONT COLOR=green><EM>--   pragma Export (C, edrvcyclic_regErrorHandler, "edrvcyclic_regErrorHandler");  -- oplk/edrv.h:267</EM></FONT>
 
   <FONT COLOR=green><EM>--   function edrvcyclic_getDiagnostics </EM></FONT>
   <FONT COLOR=green><EM>--     (ppDiagnostics_p : System.Address) </EM></FONT>
   <FONT COLOR=green><EM>--     return errordefs.tOplkError;</EM></FONT>
-  <FONT COLOR=green><EM>--   pragma Import (C, edrvcyclic_getDiagnostics, "edrvcyclic_getDiagnostics");  -- oplk/edrv.h:268</EM></FONT>
+  <FONT COLOR=green><EM>--   pragma Export (C, edrvcyclic_getDiagnostics, "edrvcyclic_getDiagnostics");  -- oplk/edrv.h:268</EM></FONT>
 
    
    
    
    
-<b>end</b> <A HREF="oplk__ads.htm#10_9">oplk</A>.<A HREF="oplk-edrv__ads.htm#13_14">Edrv</A>;
+<b>end</b> <A HREF="oplk__ads.htm#10_9">oplk</A>.<A HREF="oplk-edrv__ads.htm#16_14">Edrv</A>;
 
 
 </PRE></BODY></HTML>

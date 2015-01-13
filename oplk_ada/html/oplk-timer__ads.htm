@@ -2,23 +2,27 @@
 <BODY>
 <HR><DIV ALIGN="center"><H1> File : oplk-timer.ads </H1></DIV><HR>
 <PRE>
+
+<FONT COLOR=green><EM>--\brief  Generic definitions for timer modules</EM></FONT>
+<FONT COLOR=green><EM>--This file contains some generic definitions for timer modules.</EM></FONT>
+
 <b>pragma</b> Ada_2005;
 <b>pragma</b> Style_Checks (Off);
 
-<b>with</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C; <b>use</b> <A HREF="interfac__ads.htm#38_9">Interfaces</A>.C;
+<b>with</b> Interfaces.C; <b>use</b> Interfaces.C;
 <b>with</b> System;
 
-<b>package</b> <A HREF="oplk__ads.htm#10_9">oplk</A>.<FONT COLOR=red><A NAME="7_14">timer</A></FONT> <b>is</b>
+<b>package</b> oplk.timer <b>is</b>
    
    <FONT COLOR=green><EM>-- type for timer handle</EM></FONT>
-   <b>subtype</b> <FONT COLOR=red><A NAME="10_12">tTimerHdl</A></FONT> <b>is</b> unsigned_long;  <FONT COLOR=green><EM>-- ./oplk/timer.h:58</EM></FONT>
+   <b>subtype</b> tTimerHdl <b>is</b> unsigned_long;  <FONT COLOR=green><EM>-- ./oplk/timer.h:58</EM></FONT>
    
-   <FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
-   <FONT COLOR=green><EM>--\brief  Structure for timer event arguments                               --</EM></FONT>
-   <FONT COLOR=green><EM>-- The structure defines a timer event argument. It provides information    --</EM></FONT>
-   <FONT COLOR=green><EM>-- about the timer to the sink the event is sent to.                        --</EM></FONT>
-   <FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
-   <b>type</b> <FONT COLOR=red><A NAME="17_9">anon_50</A></FONT> (discr : unsigned := 0) <b>is</b> <b>record</b>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+<FONT COLOR=green><EM>--\brief  Structure for timer event arguments                               --</EM></FONT>
+<FONT COLOR=green><EM>-- The structure defines a timer event argument. It provides information    --</EM></FONT>
+<FONT COLOR=green><EM>-- about the timer to the sink the event is sent to.                        --</EM></FONT>
+<FONT COLOR=green><EM>------------------------------------------------------------------------------</EM></FONT>
+   <b>type</b> anon_50 (discr : unsigned := 0) <b>is</b> <b>record</b>
       <FONT COLOR=green><EM>-- The timer argument the timer was initialized with.</EM></FONT>
       <FONT COLOR=green><EM>-- check if this crap is needed at all !!!!!!!!!!!!!!!!!!!!!!!</EM></FONT>
       <b>case</b> discr <b>is</b>
@@ -30,15 +34,15 @@
             <FONT COLOR=green><EM>-- Timer argument supplied as void*</EM></FONT>
       <b>end</b> <b>case</b>;
    <b>end</b> <b>record</b>;
-   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-timer__ads.htm#17_9">anon_50</A>);
-   <b>pragma</b> Unchecked_Union (<A HREF="oplk-timer__ads.htm#17_9">anon_50</A>);
-   <b>type</b> <FONT COLOR=red><A NAME="31_9">tTimerEventArg</A></FONT> <b>is</b> <b>record</b>
-      timerHdl : <b>aliased</b> <A HREF="oplk-timer__ads.htm#10_12">tTimerHdl</A>;
+   <b>pragma</b> Convention (C_Pass_By_Copy, anon_50);
+   <b>pragma</b> Unchecked_Union (anon_50);
+   <b>type</b> tTimerEventArg <b>is</b> <b>record</b>
+      timerHdl : <b>aliased</b> tTimerHdl;
       <FONT COLOR=green><EM>-- Delivers the handle of the expired timer</EM></FONT>
-      argument : <A HREF="oplk-timer__ads.htm#17_9">anon_50</A>;
+      argument : anon_50;
    <b>end</b> <b>record</b>;
-   <b>pragma</b> Convention (C_Pass_By_Copy, <A HREF="oplk-timer__ads.htm#31_9">tTimerEventArg</A>);  <FONT COLOR=green><EM>-- ./oplk/timer.h:75</EM></FONT>
+   <b>pragma</b> Convention (C_Pass_By_Copy, tTimerEventArg);  <FONT COLOR=green><EM>-- ./oplk/timer.h:75</EM></FONT>
    
-<b>end</b> <A HREF="oplk__ads.htm#10_9">oplk</A>.<A HREF="oplk-timer__ads.htm#7_14">Timer</A>;
+<b>end</b> oplk.Timer;
 
 </PRE></BODY></HTML>

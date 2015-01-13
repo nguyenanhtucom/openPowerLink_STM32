@@ -1,3 +1,7 @@
+
+--\brief  Generic definitions for timer modules
+--This file contains some generic definitions for timer modules.
+
 pragma Ada_2005;
 pragma Style_Checks (Off);
 
@@ -9,11 +13,11 @@ package oplk.timer is
    -- type for timer handle
    subtype tTimerHdl is unsigned_long;  -- ./oplk/timer.h:58
    
-   ------------------------------------------------------------------------------
-   --\brief  Structure for timer event arguments                               --
-   -- The structure defines a timer event argument. It provides information    --
-   -- about the timer to the sink the event is sent to.                        --
-   ------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+--\brief  Structure for timer event arguments                               --
+-- The structure defines a timer event argument. It provides information    --
+-- about the timer to the sink the event is sent to.                        --
+------------------------------------------------------------------------------
    type anon_50 (discr : unsigned := 0) is record
       -- The timer argument the timer was initialized with.
       -- check if this crap is needed at all !!!!!!!!!!!!!!!!!!!!!!!
