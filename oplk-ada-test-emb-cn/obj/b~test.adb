@@ -149,25 +149,25 @@ package body ada_main is
    end;
 
 --  BEGIN Object file/option list
-   --   /home/jan/openPOWERLINK/Ada-Interface/oplk-ada-test-emb-cn/obj/oplk.o
-   --   /home/jan/openPOWERLINK/Ada-Interface/oplk-ada-test-emb-cn/obj/oplk-errordefs.o
-   --   /home/jan/openPOWERLINK/Ada-Interface/oplk-ada-test-emb-cn/obj/oplk-cfm.o
-   --   /home/jan/openPOWERLINK/Ada-Interface/oplk-ada-test-emb-cn/obj/oplk-led.o
-   --   /home/jan/openPOWERLINK/Ada-Interface/oplk-ada-test-emb-cn/obj/oplk-nmt.o
-   --   /home/jan/openPOWERLINK/Ada-Interface/oplk-ada-test-emb-cn/obj/oplk-oplkinc.o
-   --   /home/jan/openPOWERLINK/Ada-Interface/oplk-ada-test-emb-cn/obj/oplk-event.o
-   --   /home/jan/openPOWERLINK/Ada-Interface/oplk-ada-test-emb-cn/obj/oplk-frame.o
-   --   /home/jan/openPOWERLINK/Ada-Interface/oplk-ada-test-emb-cn/obj/oplk-obd.o
-   --   /home/jan/openPOWERLINK/Ada-Interface/oplk-ada-test-emb-cn/obj/oplk-sdo.o
-   --   /home/jan/openPOWERLINK/Ada-Interface/oplk-ada-test-emb-cn/obj/oplk-oplk.o
-   --   /home/jan/openPOWERLINK/Ada-Interface/oplk-ada-test-emb-cn/obj/oplk-debugstr.o
-   --   /home/jan/openPOWERLINK/Ada-Interface/oplk-ada-test-emb-cn/obj/test1.o
-   --   /home/jan/openPOWERLINK/Ada-Interface/oplk-ada-test-emb-cn/obj/test1-event.o
-   --   /home/jan/openPOWERLINK/Ada-Interface/oplk-ada-test-emb-cn/obj/test.o
-   --   -L/home/jan/openPOWERLINK/Ada-Interface/oplk-ada-test-emb-cn/obj/
-   --   -L/home/jan/openPOWERLINK/Ada-Interface/oplk-ada-test-emb-cn/obj/
+   --   /home/jan/openPOWERLINK/openPowerLink-Ada/oplk-ada-test-emb-cn/obj/oplk.o
+   --   /home/jan/openPOWERLINK/openPowerLink-Ada/oplk-ada-test-emb-cn/obj/oplk-errordefs.o
+   --   /home/jan/openPOWERLINK/openPowerLink-Ada/oplk-ada-test-emb-cn/obj/oplk-cfm.o
+   --   /home/jan/openPOWERLINK/openPowerLink-Ada/oplk-ada-test-emb-cn/obj/oplk-led.o
+   --   /home/jan/openPOWERLINK/openPowerLink-Ada/oplk-ada-test-emb-cn/obj/oplk-nmt.o
+   --   /home/jan/openPOWERLINK/openPowerLink-Ada/oplk-ada-test-emb-cn/obj/oplk-oplkinc.o
+   --   /home/jan/openPOWERLINK/openPowerLink-Ada/oplk-ada-test-emb-cn/obj/oplk-event.o
+   --   /home/jan/openPOWERLINK/openPowerLink-Ada/oplk-ada-test-emb-cn/obj/oplk-frame.o
+   --   /home/jan/openPOWERLINK/openPowerLink-Ada/oplk-ada-test-emb-cn/obj/oplk-obd.o
+   --   /home/jan/openPOWERLINK/openPowerLink-Ada/oplk-ada-test-emb-cn/obj/oplk-sdo.o
+   --   /home/jan/openPOWERLINK/openPowerLink-Ada/oplk-ada-test-emb-cn/obj/oplk-oplk.o
+   --   /home/jan/openPOWERLINK/openPowerLink-Ada/oplk-ada-test-emb-cn/obj/oplk-debugstr.o
+   --   /home/jan/openPOWERLINK/openPowerLink-Ada/oplk-ada-test-emb-cn/obj/test1.o
+   --   /home/jan/openPOWERLINK/openPowerLink-Ada/oplk-ada-test-emb-cn/obj/test1-event.o
+   --   /home/jan/openPOWERLINK/openPowerLink-Ada/oplk-ada-test-emb-cn/obj/test.o
+   --   -L/home/jan/openPOWERLINK/openPowerLink-Ada/oplk-ada-test-emb-cn/obj/
+   --   -L/home/jan/openPOWERLINK/openPowerLink-Ada/oplk-ada-test-emb-cn/obj/
    --   -L/usr/gnat/lib/gcc/x86_64-pc-linux-gnu/4.7.4/rts-native/adalib/
-   --   -L/home/jan/openPOWERLINK/Ada-Interface/oplk-ada-test-emb-cn/
+   --   -L/home/jan/openPOWERLINK/openPowerLink-Ada/oplk-ada-test-emb-cn/
    --   -L/usr/gnat-arm/lib/gnat/arm-eabi/ravenscar-sfp-stm32f4/adalib/
    --   -static
    --   -lgnat

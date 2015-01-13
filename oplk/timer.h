@@ -1,11 +1,10 @@
 /**
 ********************************************************************************
-\file   oplk/oplkinc.h
+\file   common/timer.h
 
-\brief  Standard include file for public headers.
+\brief  Generic definitions for timer modules
 
-This is the standard include file for all public openPOWERLINK header files.
-It includes all necessary files for setting up the basic types and definitions.
+This file contains some generic definitions for timer modules.
 *******************************************************************************/
 
 /*------------------------------------------------------------------------------
@@ -36,81 +35,43 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ------------------------------------------------------------------------------*/
 
-#ifndef _INC_oplk_oplkinc_H_
-#define _INC_oplk_oplkinc_H_
+#ifndef _INC_common_timer_H_
+#define _INC_common_timer_H_
 
 //------------------------------------------------------------------------------
 // includes
 //------------------------------------------------------------------------------
-#include <oplk/targetsystem.h>
-#include <oplk/oplkdefs.h>
-#include <oplk/errordefs.h>
-#include <oplk/version.h>
-#include <oplk/debug.h>
+#include "oplk/oplkinc.h"
 
 //------------------------------------------------------------------------------
 // const defines
 //------------------------------------------------------------------------------
 
-#ifndef TIME_STAMP_T
-#define TIME_STAMP_T                  UINT32
-#endif
-
 //------------------------------------------------------------------------------
 // typedef
 //------------------------------------------------------------------------------
 
-/**
-\brief Timestamp structure
-
-The following structure defines a timestamp value use to store target specific
-timestamps.
-*/
-typedef struct
-{
-    TIME_STAMP_T        timeStamp;      ///< The timestamp.
-} tTimestamp;
-
-/**
-\brief  IEEE 1588 conforming net time structure
-
-The structure defines an IEEE 1588 conforming net time.
-*/
-typedef struct
-{
-    UINT32              sec;        ///< Seconds
-    UINT32              nsec;       ///< Nanoseconds
-} tNetTime;
-
-/**
-\brief Hardware parameter structure
-
-The following structure specifies the hardware parameters of an openPOWERLINK
-Ethernet controller.
-*/
-typedef struct
-{
-    UINT                devNum;     ///< Device number of the used Ethernet controller
-    const char*         pDevName;   ///< Device name of the Ethernet controller (valid if non-null)
-} tHwParam;
-
-/**
-\brief Time of day structure
-
-The following structure defines a CANopen time-of-day format.
-*/
-#ifndef _TIME_OF_DAY_DEFINED_
-typedef struct
-{
-    ULONG               msec;           ///< Milliseconds after midnight
-    USHORT              days;           ///< Days since January the 1st, 1984
-} tTimeOfDay;
-
-#define _TIME_OF_DAY_DEFINED_
+// type for timer handle
+#if (TARGET_SYSTEM == _WIN32_)
+typedef ULONG_PTR tTimerHdl;
+#else
+typedef ULONG tTimerHdl;
 #endif
 
-//------------------------------------------------------------------------------
-// global macros
-//------------------------------------------------------------------------------
+/**
+\brief  Structure for timer event arguments
 
-#endif /* _INC_oplk_oplkinc_H_ */
+The structure defines a timer event argument. It provides information about
+the timer to the sink the event is sent to.
+*/
+typedef struct
+{
+    tTimerHdl           timerHdl;       ///< Delivers the handle of the expired timer
+    union
+    {
+        UINT32          value;          ///< Timer argument supplied as UINT32
+        void*           pValue;         ///< Timer argument supplied as void*
+    } argument;                         ///< The timer argument the timer was initialized with.
+} tTimerEventArg;
+
+#endif /* _INC_common_timer_H_ */

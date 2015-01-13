@@ -7,7 +7,20 @@ with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings;
 
 package Oplk.oplkinc is
-
+   
+   
+------------------------------------------------------------------------------
+--\brief  Timestamp structure                                               --
+--                                                                          --
+-- The following structure defines a timestamp value use to store target    --
+-- specific timestamps.                                                     --
+------------------------------------------------------------------------------
+   type tTimestamp is record
+      timeStamp : aliased unsigned;
+   end record;
+   pragma Convention (C_Pass_By_Copy, tTimestamp);  -- ./oplk/oplkinc.h:72
+   
+   
 ------------------------------------------------------------------------------
 --\brief  IEEE 1588 conforming net time structure                           --
 --                                                                          --
