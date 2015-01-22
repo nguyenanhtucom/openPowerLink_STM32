@@ -6,37 +6,37 @@ with stdint_h;
 
 package wwd_h is
 
-   --  unsupported macro: WWDG_CR_T ((uint8_t)0x7F)
-   --  unsupported macro: WWDG_CR_T0 ((uint8_t)0x01)
-   --  unsupported macro: WWDG_CR_T1 ((uint8_t)0x02)
-   --  unsupported macro: WWDG_CR_T2 ((uint8_t)0x04)
-   --  unsupported macro: WWDG_CR_T3 ((uint8_t)0x08)
-   --  unsupported macro: WWDG_CR_T4 ((uint8_t)0x10)
-   --  unsupported macro: WWDG_CR_T5 ((uint8_t)0x20)
-   --  unsupported macro: WWDG_CR_T6 ((uint8_t)0x40)
-   --  unsupported macro: WWDG_CR_WDGA ((uint8_t)0x80)
-   --  unsupported macro: WWDG_CFR_W ((uint16_t)0x007F)
-   --  unsupported macro: WWDG_CFR_W0 ((uint16_t)0x0001)
-   --  unsupported macro: WWDG_CFR_W1 ((uint16_t)0x0002)
-   --  unsupported macro: WWDG_CFR_W2 ((uint16_t)0x0004)
-   --  unsupported macro: WWDG_CFR_W3 ((uint16_t)0x0008)
-   --  unsupported macro: WWDG_CFR_W4 ((uint16_t)0x0010)
-   --  unsupported macro: WWDG_CFR_W5 ((uint16_t)0x0020)
-   --  unsupported macro: WWDG_CFR_W6 ((uint16_t)0x0040)
-   --  unsupported macro: WWDG_CFR_WDGTB ((uint16_t)0x0180)
-   --  unsupported macro: WWDG_CFR_WDGTB0 ((uint16_t)0x0080)
-   --  unsupported macro: WWDG_CFR_WDGTB1 ((uint16_t)0x0100)
-   --  unsupported macro: WWDG_CFR_EWI ((uint16_t)0x0200)
-   --  unsupported macro: WWDG_SR_EWIF ((uint8_t)0x01)
+   --  unsupported macro: WWDG_CR_T
+   --  unsupported macro: WWDG_CR_T0
+   --  unsupported macro: WWDG_CR_T1
+   --  unsupported macro: WWDG_CR_T2
+   --  unsupported macro: WWDG_CR_T3
+   --  unsupported macro: WWDG_CR_T4
+   --  unsupported macro: WWDG_CR_T5
+   --  unsupported macro: WWDG_CR_T6
+   --  unsupported macro: WWDG_CR_WDGA
+   --  unsupported macro: WWDG_CFR_W
+   --  unsupported macro: WWDG_CFR_W0
+   --  unsupported macro: WWDG_CFR_W1
+   --  unsupported macro: WWDG_CFR_W2
+   --  unsupported macro: WWDG_CFR_W3
+   --  unsupported macro: WWDG_CFR_W4
+   --  unsupported macro: WWDG_CFR_W5
+   --  unsupported macro: WWDG_CFR_W6
+   --  unsupported macro: WWDG_CFR_WDGTB
+   --  unsupported macro: WWDG_CFR_WDGTB0
+   --  unsupported macro: WWDG_CFR_WDGTB1
+   --  unsupported macro: WWDG_CFR_EWI
+   --  unsupported macro: WWDG_SR_EWIF
   --* 
   --  * @brief Window WATCHDOG
   --   
 
   --!< WWDG Control register,       Address offset: 0x00  
    type WWDG_TypeDef is record
-      CR : aliased stdint_h.uint32_t;  -- wwd.h:9
+      CR  : aliased stdint_h.uint32_t;  -- wwd.h:9
       CFR : aliased stdint_h.uint32_t;  -- wwd.h:10
-      SR : aliased stdint_h.uint32_t;  -- wwd.h:11
+      SR  : aliased stdint_h.uint32_t;  -- wwd.h:11
    end record;
    pragma Convention (C_Pass_By_Copy, WWDG_TypeDef);  -- wwd.h:12
 
