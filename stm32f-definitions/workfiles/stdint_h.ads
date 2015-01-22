@@ -2,6 +2,7 @@ pragma Ada_2005;
 pragma Style_Checks (Off);
 
 with Interfaces.C; use Interfaces.C;
+with Interfaces.C.Extensions;
 
 package stdint_h is
 
@@ -32,7 +33,7 @@ package stdint_h is
 
    subtype int32_t is int;  -- /usr/include/stdint.h:39
 
-   subtype int64_t is long;  -- /usr/include/stdint.h:41
+   subtype int64_t is Long_Long_Integer;  -- /usr/include/stdint.h:44
 
   -- Unsigned.   
    subtype uint8_t is unsigned_char;  -- /usr/include/stdint.h:49
@@ -41,7 +42,7 @@ package stdint_h is
 
    subtype uint32_t is unsigned;  -- /usr/include/stdint.h:52
 
-   subtype uint64_t is unsigned_long;  -- /usr/include/stdint.h:56
+   subtype uint64_t is Extensions.unsigned_long_long;  -- /usr/include/stdint.h:59
 
   -- Small types.   
   -- Signed.   
@@ -51,7 +52,7 @@ package stdint_h is
 
    subtype int_least32_t is int;  -- /usr/include/stdint.h:68
 
-   subtype int_least64_t is long;  -- /usr/include/stdint.h:70
+   subtype int_least64_t is Long_Long_Integer;  -- /usr/include/stdint.h:73
 
   -- Unsigned.   
    subtype uint_least8_t is unsigned_char;  -- /usr/include/stdint.h:77
@@ -60,36 +61,36 @@ package stdint_h is
 
    subtype uint_least32_t is unsigned;  -- /usr/include/stdint.h:79
 
-   subtype uint_least64_t is unsigned_long;  -- /usr/include/stdint.h:81
+   subtype uint_least64_t is Extensions.unsigned_long_long;  -- /usr/include/stdint.h:84
 
   -- Fast types.   
   -- Signed.   
    subtype int_fast8_t is signed_char;  -- /usr/include/stdint.h:91
 
-   subtype int_fast16_t is long;  -- /usr/include/stdint.h:93
+   subtype int_fast16_t is int;  -- /usr/include/stdint.h:97
 
-   subtype int_fast32_t is long;  -- /usr/include/stdint.h:94
+   subtype int_fast32_t is int;  -- /usr/include/stdint.h:98
 
-   subtype int_fast64_t is long;  -- /usr/include/stdint.h:95
+   subtype int_fast64_t is Long_Long_Integer;  -- /usr/include/stdint.h:100
 
   -- Unsigned.   
    subtype uint_fast8_t is unsigned_char;  -- /usr/include/stdint.h:104
 
-   subtype uint_fast16_t is unsigned_long;  -- /usr/include/stdint.h:106
+   subtype uint_fast16_t is unsigned;  -- /usr/include/stdint.h:110
 
-   subtype uint_fast32_t is unsigned_long;  -- /usr/include/stdint.h:107
+   subtype uint_fast32_t is unsigned;  -- /usr/include/stdint.h:111
 
-   subtype uint_fast64_t is unsigned_long;  -- /usr/include/stdint.h:108
+   subtype uint_fast64_t is Extensions.unsigned_long_long;  -- /usr/include/stdint.h:113
 
   -- Types for `void *' pointers.   
-   subtype intptr_t is long;  -- /usr/include/stdint.h:120
+   subtype intptr_t is int;  -- /usr/include/stdint.h:126
 
-   subtype uintptr_t is unsigned_long;  -- /usr/include/stdint.h:123
+   subtype uintptr_t is unsigned;  -- /usr/include/stdint.h:129
 
   -- Largest integral types.   
-   subtype intmax_t is long;  -- /usr/include/stdint.h:135
+   subtype intmax_t is Long_Long_Integer;  -- /usr/include/stdint.h:139
 
-   subtype uintmax_t is unsigned_long;  -- /usr/include/stdint.h:136
+   subtype uintmax_t is Extensions.unsigned_long_long;  -- /usr/include/stdint.h:141
 
   -- The ISO C99 standard specifies that in C++ implementations these
   --   macros should only be defined if explicitly requested.   

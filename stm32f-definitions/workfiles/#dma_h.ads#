@@ -1,0 +1,357 @@
+npragma Ada_2005;
+pragma Style_Checks (Off);
+
+with Interfaces.C; use Interfaces.C;
+with stdint_h;
+
+package dma_h is
+
+   --  unsupported macro: DMA_SxCR_CHSEL
+   --  unsupported macro: DMA_SxCR_CHSEL_0
+   --  unsupported macro: DMA_SxCR_CHSEL_1
+   --  unsupported macro: DMA_SxCR_CHSEL_2
+   --  unsupported macro: DMA_SxCR_MBURST
+   --  unsupported macro: DMA_SxCR_MBURST_0
+   --  unsupported macro: DMA_SxCR_MBURST_1
+   --  unsupported macro: DMA_SxCR_PBURST
+   --  unsupported macro: DMA_SxCR_PBURST_0
+   --  unsupported macro: DMA_SxCR_PBURST_1
+   --  unsupported macro: DMA_SxCR_ACK
+   --  unsupported macro: DMA_SxCR_CT
+   --  unsupported macro: DMA_SxCR_DBM
+   --  unsupported macro: DMA_SxCR_PL  
+   --  unsupported macro: DMA_SxCR_PL_0
+   --  unsupported macro: DMA_SxCR_PL_1
+   --  unsupported macro: DMA_SxCR_PINCOS
+   --  unsupported macro: DMA_SxCR_MSIZE
+   --  unsupported macro: DMA_SxCR_MSIZE_0
+   --  unsupported macro: DMA_SxCR_MSIZE_1
+   --  unsupported macro: DMA_SxCR_PSIZE
+   --  unsupported macro: DMA_SxCR_PSIZE_0
+   --  unsupported macro: DMA_SxCR_PSIZE_1
+   --  unsupported macro: DMA_SxCR_MINC
+   --  unsupported macro: DMA_SxCR_PINC
+   --  unsupported macro: DMA_SxCR_CIRC
+   --  unsupported macro: DMA_SxCR_DIR    
+   --  unsupported macro: DMA_SxCR_DIR_0
+   --  unsupported macro: DMA_SxCR_DIR_1
+   --  unsupported macro: DMA_SxCR_PFCTRL
+   --  unsupported macro: DMA_SxCR_TCIE
+   --  unsupported macro: DMA_SxCR_HTIE
+   --  unsupported macro: DMA_SxCR_TEIE
+   --  unsupported macro: DMA_SxCR_DMEIE
+   --  unsupported macro: DMA_SxCR_EN       
+   --  unsupported macro: DMA_SxNDT
+   --  unsupported macro: DMA_SxNDT_0
+   --  unsupported macro: DMA_SxNDT_1
+   --  unsupported macro: DMA_SxNDT_2
+   --  unsupported macro: DMA_SxNDT_3
+   --  unsupported macro: DMA_SxNDT_4
+   --  unsupported macro: DMA_SxNDT_5
+   --  unsupported macro: DMA_SxNDT_6
+   --  unsupported macro: DMA_SxNDT_7
+   --  unsupported macro: DMA_SxNDT_8
+   --  unsupported macro: DMA_SxNDT_9
+   --  unsupported macro: DMA_SxNDT_10
+   --  unsupported macro: DMA_SxNDT_11
+   --  unsupported macro: DMA_SxNDT_12
+   --  unsupported macro: DMA_SxNDT_13
+   --  unsupported macro: DMA_SxNDT_14
+   --  unsupported macro: DMA_SxNDT_15
+   --  unsupported macro: DMA_SxFCR_FEIE
+   --  unsupported macro: DMA_SxFCR_FS
+   --  unsupported macro: DMA_SxFCR_FS_0
+   --  unsupported macro: DMA_SxFCR_FS_1
+   --  unsupported macro: DMA_SxFCR_FS_2
+   --  unsupported macro: DMA_SxFCR_DMDIS
+   --  unsupported macro: DMA_SxFCR_FTH
+   --  unsupported macro: DMA_SxFCR_FTH_0
+   --  unsupported macro: DMA_SxFCR_FTH_1
+   --  unsupported macro: DMA_LISR_TCIF3
+   --  unsupported macro: DMA_LISR_HTIF3
+   --  unsupported macro: DMA_LISR_TEIF3
+   --  unsupported macro: DMA_LISR_DMEIF3
+   --  unsupported macro: DMA_LISR_FEIF3
+   --  unsupported macro: DMA_LISR_TCIF2
+   --  unsupported macro: DMA_LISR_HTIF2
+   --  unsupported macro: DMA_LISR_TEIF2
+   --  unsupported macro: DMA_LISR_DMEIF2
+   --  unsupported macro: DMA_LISR_FEIF2
+   --  unsupported macro: DMA_LISR_TCIF1
+   --  unsupported macro: DMA_LISR_HTIF1
+   --  unsupported macro: DMA_LISR_TEIF1
+   --  unsupported macro: DMA_LISR_DMEIF1
+   --  unsupported macro: DMA_LISR_FEIF1
+   --  unsupported macro: DMA_LISR_TCIF0
+   --  unsupported macro: DMA_LISR_HTIF0
+   --  unsupported macro: DMA_LISR_TEIF0
+   --  unsupported macro: DMA_LISR_DMEIF0
+   --  unsupported macro: DMA_LISR_FEIF0
+   --  unsupported macro: DMA_HISR_TCIF7
+   --  unsupported macro: DMA_HISR_HTIF7
+   --  unsupported macro: DMA_HISR_TEIF7
+   --  unsupported macro: DMA_HISR_DMEIF7
+   --  unsupported macro: DMA_HISR_FEIF7
+   --  unsupported macro: DMA_HISR_TCIF6
+   --  unsupported macro: DMA_HISR_HTIF6
+   --  unsupported macro: DMA_HISR_TEIF6
+   --  unsupported macro: DMA_HISR_DMEIF6
+   --  unsupported macro: DMA_HISR_FEIF6
+   --  unsupported macro: DMA_HISR_TCIF5
+   --  unsupported macro: DMA_HISR_HTIF5
+   --  unsupported macro: DMA_HISR_TEIF5
+   --  unsupported macro: DMA_HISR_DMEIF5
+   --  unsupported macro: DMA_HISR_FEIF5
+   --  unsupported macro: DMA_HISR_TCIF4
+   --  unsupported macro: DMA_HISR_HTIF4
+   --  unsupported macro: DMA_HISR_TEIF4
+   --  unsupported macro: DMA_HISR_DMEIF4
+   --  unsupported macro: DMA_HISR_FEIF4
+   --  unsupported macro: DMA_LIFCR_CTCIF3
+   --  unsupported macro: DMA_LIFCR_CHTIF3
+   --  unsupported macro: DMA_LIFCR_CTEIF3
+   --  unsupported macro: DMA_LIFCR_CDMEIF3
+   --  unsupported macro: DMA_LIFCR_CFEIF3
+   --  unsupported macro: DMA_LIFCR_CTCIF2
+   --  unsupported macro: DMA_LIFCR_CHTIF2
+   --  unsupported macro: DMA_LIFCR_CTEIF2
+   --  unsupported macro: DMA_LIFCR_CDMEIF2
+   --  unsupported macro: DMA_LIFCR_CFEIF2
+   --  unsupported macro: DMA_LIFCR_CTCIF1
+   --  unsupported macro: DMA_LIFCR_CHTIF1
+   --  unsupported macro: DMA_LIFCR_CTEIF1
+   --  unsupported macro: DMA_LIFCR_CDMEIF1
+   --  unsupported macro: DMA_LIFCR_CFEIF1
+   --  unsupported macro: DMA_LIFCR_CTCIF0
+   --  unsupported macro: DMA_LIFCR_CHTIF0
+   --  unsupported macro: DMA_LIFCR_CTEIF0
+   --  unsupported macro: DMA_LIFCR_CDMEIF0
+   --  unsupported macro: DMA_LIFCR_CFEIF0
+   --  unsupported macro: DMA_HIFCR_CTCIF7
+   --  unsupported macro: DMA_HIFCR_CHTIF7
+   --  unsupported macro: DMA_HIFCR_CTEIF7
+   --  unsupported macro: DMA_HIFCR_CDMEIF7
+   --  unsupported macro: DMA_HIFCR_CFEIF7
+   --  unsupported macro: DMA_HIFCR_CTCIF6
+   --  unsupported macro: DMA_HIFCR_CHTIF6
+   --  unsupported macro: DMA_HIFCR_CTEIF6
+   --  unsupported macro: DMA_HIFCR_CDMEIF6
+   --  unsupported macro: DMA_HIFCR_CFEIF6
+   --  unsupported macro: DMA_HIFCR_CTCIF5
+   --  unsupported macro: DMA_HIFCR_CHTIF5
+   --  unsupported macro: DMA_HIFCR_CTEIF5
+   --  unsupported macro: DMA_HIFCR_CDMEIF5
+   --  unsupported macro: DMA_HIFCR_CFEIF5
+   --  unsupported macro: DMA_HIFCR_CTCIF4
+   --  unsupported macro: DMA_HIFCR_CHTIF4
+   --  unsupported macro: DMA_HIFCR_CTEIF4
+   --  unsupported macro: DMA_HIFCR_CDMEIF4
+   --  unsupported macro: DMA_HIFCR_CFEIF4
+   --  unsupported macro: DMA2D_CR_START
+   --  unsupported macro: DMA2D_CR_SUSP
+   --  unsupported macro: DMA2D_CR_ABORT
+   --  unsupported macro: DMA2D_CR_TEIE
+   --  unsupported macro: DMA2D_CR_TCIE
+   --  unsupported macro: DMA2D_CR_TWIE
+   --  unsupported macro: DMA2D_CR_CAEIE
+   --  unsupported macro: DMA2D_CR_CTCIE
+   --  unsupported macro: DMA2D_CR_CEIE
+   --  unsupported macro: DMA2D_CR_MODE
+   --  unsupported macro: DMA2D_ISR_TEIF
+   --  unsupported macro: DMA2D_ISR_TCIF
+   --  unsupported macro: DMA2D_ISR_TWIF
+   --  unsupported macro: DMA2D_ISR_CAEIF
+   --  unsupported macro: DMA2D_ISR_CTCIF
+   --  unsupported macro: DMA2D_ISR_CEIF
+   --  unsupported macro: DMA2D_IFSR_CTEIF
+   --  unsupported macro: DMA2D_IFSR_CTCIF
+   --  unsupported macro: DMA2D_IFSR_CTWIF
+   --  unsupported macro: DMA2D_IFSR_CCAEIF
+   --  unsupported macro: DMA2D_IFSR_CCTCIF
+   --  unsupported macro: DMA2D_IFSR_CCEIF
+   --  unsupported macro: DMA2D_FGMAR_MA
+   --  unsupported macro: DMA2D_FGOR_LO
+   --  unsupported macro: DMA2D_BGMAR_MA
+   --  unsupported macro: DMA2D_BGOR_LO
+   --  unsupported macro: DMA2D_FGPFCCR_CM
+   --  unsupported macro: DMA2D_FGPFCCR_CCM
+   --  unsupported macro: DMA2D_FGPFCCR_START
+   --  unsupported macro: DMA2D_FGPFCCR_CS
+   --  unsupported macro: DMA2D_FGPFCCR_AM
+   --  unsupported macro: DMA2D_FGPFCCR_ALPHA
+   --  unsupported macro: DMA2D_FGCOLR_BLUE
+   --  unsupported macro: DMA2D_FGCOLR_GREEN
+   --  unsupported macro: DMA2D_FGCOLR_RED
+   --  unsupported macro: DMA2D_BGPFCCR_CM
+   --  unsupported macro: DMA2D_BGPFCCR_CCM
+   --  unsupported macro: DMA2D_BGPFCCR_START
+   --  unsupported macro: DMA2D_BGPFCCR_CS
+   --  unsupported macro: DMA2D_BGPFCCR_AM
+   --  unsupported macro: DMA2D_BGPFCCR_ALPHA
+   --  unsupported macro: DMA2D_BGCOLR_BLUE
+   --  unsupported macro: DMA2D_BGCOLR_GREEN
+   --  unsupported macro: DMA2D_BGCOLR_RED
+   --  unsupported macro: DMA2D_FGCMAR_MA
+   --  unsupported macro: DMA2D_BGCMAR_MA
+   --  unsupported macro: DMA2D_OPFCCR_CM
+   --  unsupported macro: DMA2D_OCOLR_BLUE_1
+   --  unsupported macro: DMA2D_OCOLR_GREEN_1
+   --  unsupported macro: DMA2D_OCOLR_RED_1
+   --  unsupported macro: DMA2D_OCOLR_ALPHA_1
+   --  unsupported macro: DMA2D_OCOLR_BLUE_2
+   --  unsupported macro: DMA2D_OCOLR_GREEN_2
+   --  unsupported macro: DMA2D_OCOLR_RED_2
+   --  unsupported macro: DMA2D_OCOLR_BLUE_3
+   --  unsupported macro: DMA2D_OCOLR_GREEN_3
+   --  unsupported macro: DMA2D_OCOLR_RED_3
+   --  unsupported macro: DMA2D_OCOLR_ALPHA_3
+   --  unsupported macro: DMA2D_OCOLR_BLUE_4
+   --  unsupported macro: DMA2D_OCOLR_GREEN_4
+   --  unsupported macro: DMA2D_OCOLR_RED_4
+   --  unsupported macro: DMA2D_OCOLR_ALPHA_4
+   --  unsupported macro: DMA2D_OMAR_MA
+   --  unsupported macro: DMA2D_OOR_LO
+   --  unsupported macro: DMA2D_NLR_NL
+   --  unsupported macro: DMA2D_NLR_PL
+   --  unsupported macro: DMA2D_LWR_LW
+   --  unsupported macro: DMA2D_AMTCR_EN
+   --  unsupported macro: DMA2D_AMTCR_DT
+  --**************************************************************************** 
+  --                                                                             
+  --                             DMA Controller                                  
+  --                                                                             
+  --**************************************************************************** 
+  --*******************  Bits definition for DMA_SxCR register  **************** 
+  --*******************  Bits definition for DMA_SxCNDTR register  ************* 
+  --*******************  Bits definition for DMA_SxFCR register  *************** 
+  --*******************  Bits definition for DMA_LISR register  **************** 
+  --*******************  Bits definition for DMA_HISR register  **************** 
+  --*******************  Bits definition for DMA_LIFCR register  *************** 
+  --*******************  Bits definition for DMA_HIFCR  register  *************** 
+  --**************************************************************************** 
+  --                                                                             
+  --                         AHB Master DMA2D Controller (DMA2D)                 
+  --                                                                             
+  --**************************************************************************** 
+  --*******************  Bit definition for DMA2D_CR register  ***************** 
+  --*******************  Bit definition for DMA2D_ISR register  **************** 
+  --*******************  Bit definition for DMA2D_IFSR register  *************** 
+  --*******************  Bit definition for DMA2D_FGMAR register  ************** 
+  --*******************  Bit definition for DMA2D_FGOR register  *************** 
+  --*******************  Bit definition for DMA2D_BGMAR register  ************** 
+  --*******************  Bit definition for DMA2D_BGOR register  *************** 
+  --*******************  Bit definition for DMA2D_FGPFCCR register  ************ 
+  --*******************  Bit definition for DMA2D_FGCOLR register  ************* 
+  --*******************  Bit definition for DMA2D_BGPFCCR register  ************ 
+  --*******************  Bit definition for DMA2D_BGCOLR register  ************* 
+  --*******************  Bit definition for DMA2D_FGCMAR register  ************* 
+  --*******************  Bit definition for DMA2D_BGCMAR register  ************* 
+  --*******************  Bit definition for DMA2D_OPFCCR register  ************* 
+  --*******************  Bit definition for DMA2D_OCOLR register  ************** 
+  --!<Mode_ARGB8888/RGB888  
+  --!<Mode_RGB565  
+  --!<Mode_ARGB1555  
+  --!<Mode_ARGB4444  
+  --*******************  Bit definition for DMA2D_OMAR register  *************** 
+  --*******************  Bit definition for DMA2D_OOR register  **************** 
+  --*******************  Bit definition for DMA2D_NLR register  **************** 
+  --*******************  Bit definition for DMA2D_LWR register  **************** 
+  --*******************  Bit definition for DMA2D_AMTCR register  ************** 
+  --*******************  Bit definition for DMA2D_FGCLUT register  ************* 
+  --*******************  Bit definition for DMA2D_BGCLUT register  ************* 
+  --* 
+  --  * @brief DMA Controller
+  --   
+
+  --!< DMA stream x configuration register       
+   type DMA_Stream_TypeDef is record
+      CR_Register;
+      NDTR_Register;
+      PAR_Register;
+      M0AR_Register;
+      M1AR_Register;
+      FCR_Register;
+   end record;
+   pragma Convention (C_Pass_By_Copy, DMA_Stream_TypeDef);  -- dma.h:329
+
+   --  skipped anonymous struct anon_0
+
+  --!< DMA stream x number of data register      
+  --!< DMA stream x peripheral address register  
+  --!< DMA stream x memory 0 address register    
+  --!< DMA stream x memory 1 address register    
+  --!< DMA stream x FIFO control register        
+  --!< DMA low interrupt status register,      Address offset: 0x00  
+   type DMA_TypeDef is record
+      LISR_Register;
+      HISR_Register;
+      LIFCR_Register;
+      HIFCR_Register;
+   end record;
+   pragma Convention (C_Pass_By_Copy, DMA_TypeDef);  -- dma.h:337
+
+   --  skipped anonymous struct anon_1
+
+  --!< DMA high interrupt status register,     Address offset: 0x04  
+  --!< DMA low interrupt flag clear register,  Address offset: 0x08  
+  --!< DMA high interrupt flag clear register, Address offset: 0x0C  
+  --* 
+  --  * @brief DMA2D Controller
+  --   
+
+  --!< DMA2D Control Register,                         Address offset: 0x00  
+   type DMA2D_TypeDef_RESERVED_array is array (0 .. 235) of aliased stdint_h.uint32_t;
+   type DMA2D_TypeDef_FGCLUT_array is array (0 .. 255) of aliased stdint_h.uint32_t;
+   type DMA2D_TypeDef_BGCLUT_array is array (0 .. 255) of aliased stdint_h.uint32_t;
+   type DMA2D_TypeDef is record
+      CR_Register;
+      ISR_Register;
+      IFCR_Register;
+      FGMAR_Register;
+      FGOR_Register;
+      BGMAR_Register;
+      BGOR_Register;
+      FGPFCCR_Register;
+      FGCOLR_Register;
+      BGPFCCR_Register;
+      BGCOLR_Register;
+      FGCMAR_Register;
+      BGCMAR_Register;
+      OPFCCR_Register;
+      OCOLR_Register;
+      OMAR_Register;
+      OOR_Register;
+      NLR_Register;
+      LWR_Register;
+      AMTCR_Register;
+      RESERVED : aliased DMA2D_TypeDef_RESERVED_array;  -- dma.h:365
+      FGCLUT : aliased DMA2D_TypeDef_FGCLUT_array;  -- dma.h:366
+      BGCLUT : aliased DMA2D_TypeDef_BGCLUT_array;  -- dma.h:367
+   end record;
+   pragma Convention (C_Pass_By_Copy, DMA2D_TypeDef);  -- dma.h:368
+
+   --  skipped anonymous struct anon_2
+
+  --!< DMA2D Interrupt Status Register,                Address offset: 0x04  
+  --!< DMA2D Interrupt Flag Clear Register,            Address offset: 0x08  
+  --!< DMA2D Foreground Memory Address Register,       Address offset: 0x0C  
+  --!< DMA2D Foreground Offset Register,               Address offset: 0x10  
+  --!< DMA2D Background Memory Address Register,       Address offset: 0x14  
+  --!< DMA2D Background Offset Register,               Address offset: 0x18  
+  --!< DMA2D Foreground PFC Control Register,          Address offset: 0x1C  
+  --!< DMA2D Foreground Color Register,                Address offset: 0x20  
+  --!< DMA2D Background PFC Control Register,          Address offset: 0x24  
+  --!< DMA2D Background Color Register,                Address offset: 0x28  
+  --!< DMA2D Foreground CLUT Memory Address Register,  Address offset: 0x2C  
+  --!< DMA2D Background CLUT Memory Address Register,  Address offset: 0x30  
+  --!< DMA2D Output PFC Control Register,              Address offset: 0x34  
+  --!< DMA2D Output Color Register,                    Address offset: 0x38  
+  --!< DMA2D Output Memory Address Register,           Address offset: 0x3C  
+  --!< DMA2D Output Offset Register,                   Address offset: 0x40  
+  --!< DMA2D Number of Line Register,                  Address offset: 0x44  
+  --!< DMA2D Line Watermark Register,                  Address offset: 0x48  
+  --!< DMA2D AHB Master Timer Configuration Register,  Address offset: 0x4C  
+  --!< Reserved, 0x50-0x3FF  
+  --!< DMA2D Foreground CLUT,                          Address offset:400-7FF  
+  --!< DMA2D Background CLUT,                          Address offset:800-BFF  
+end dma_h;
