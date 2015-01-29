@@ -112,15 +112,16 @@ package STM32F4.O7xx.Timers.T6_7 is
    subtype PSC_Register is Half_Word;  -- prescaler 
    subtype ARR_Register is Half_Word;  -- auto-reload register
    
-   
-   type Cntr_Nr_Type is new Positive range 6 .. 7;
-   
-   type Timer_Register (Cntr : Cntr_Nr_Type := 6) is record
+   type RESERVED0_Register is array (0 .. 2) of aliased Bits_32x1;
+     
+   type Timer_Register is record
       CR1         : Cr1_Register;  -- control register 1 
       CR2         : Cr2_Register;  -- control register 2 
+      Res1        : Bits_32x1;
       DIER        : DIER_Register;  -- DMA/interrupt enable register
       SR          : SR_Register;    -- status register 
       EGR         : EGR_Register;   -- event generation register
+      Res0        : RESERVED0_Register;
       CNT         : CNT_Register;   -- counter
       PSC         : PSC_Register;   -- prescaler 
       ARR         : ARR_Register;   -- auto-reload register
@@ -129,9 +130,11 @@ package STM32F4.O7xx.Timers.T6_7 is
    for Timer_Register use record
       CR1   at 0   range 0 .. 31;
       CR2   at 4   range 0 .. 31;
+      Res1  at 8   range 0 .. 31;
       DIER  at 12  range 0 .. 31;
       SR    at 16  range 0 .. 31;
       EGR   at 20  range 0 .. 31;
+      Res0  at 24  range 0 .. 95;
       CNT   at 36  range 0 .. 31;
       PSC   at 40  range 0 .. 31;
       ARR   at 44  range 0 .. 31;

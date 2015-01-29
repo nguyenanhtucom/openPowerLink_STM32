@@ -196,33 +196,31 @@ package STM32F4.O7xx.Timers.T10_14 is
    end record;
    
    
-   type Cntr_Nr_Type is new Positive range 10 .. 14;
     
    ------------------------------------------------------------
    -- this is the top of the timer / counter definition      --
    -- usage example:                                         --
-   --  T11 : STM32F4.O7xx.Timers.T10_14.Timer_Register (11); --
+   --  T11 : STM32F4.O7xx.Timers.T10_14.Timer_Register;      --
+   --
+   -- timer 12 is in T9_12 !!!
    ------------------------------------------------------------
+   type RESERVED2_Register is array (0 .. 5) of aliased Bits_32x1;
+   type RESERVED3_Register is array (0 .. 6) of aliased Bits_32x1;
    
-   type Timer_Register (Cntr : Cntr_Nr_Type := 10) is record
-      pragma Compile_Time_Error 
-	(Cntr = 12, "Timer 12 is in STM32F4.O7xx.Timers.T9_12");
+   type Timer_Register is record
       CR1         : Cr1_Register;  -- control register 1 
       DIER        : DIER_Register;  -- DMA/interrupt enable register
       SR          : SR_Register;    -- status register 
       EGR         : EGR_Register;   -- event generation register
       CCMR1       : CCMR1_Register; -- capture/compare mode register 1
+      Reserved0   : Bits_32x1;
       CCER        : CCER_Register;  -- capture/compare enable register 
       CNT         : CNT_Register;   -- counter
       PSC         : PSC_Register;   -- prescaler 
       ARR         : ARR_Register;   -- auto-reload register
+      Reserved1   : Bits_32x1;
       CCR1        : CCR_Register;  -- capture/compare register 1
-      case Cntr is
-	 when 11      =>
-	    TIM11_OR : TIM11_OR_Register; -- TIM11 option register 1
-	 when others  =>
-	    null;
-      end case;
+      Reserved3   : RESERVED3_Register;
    end record;
    
    for Timer_Register use record
@@ -231,11 +229,48 @@ package STM32F4.O7xx.Timers.T10_14 is
       SR    at 16  range 0 .. 31;
       EGR   at 20  range 0 .. 31;
       CCMR1 at 24  range 0 .. 31;
+      Reserved0 at 28 range 0 .. 31;
       CCER  at 32  range 0 .. 31;
       CNT   at 36  range 0 .. 31;
       PSC   at 40  range 0 .. 31;
       ARR   at 44  range 0 .. 31;
+      Reserved1 at 48 range 0 .. 31;
       CCR1  at 52  range 0 .. 31;
+      Reserved3 at 56 range 0 .. 223;
+   end record;
+   
+   
+      type Timer11_Register is record
+      CR1         : Cr1_Register;  -- control register 1 
+      DIER        : DIER_Register;  -- DMA/interrupt enable register
+      SR          : SR_Register;    -- status register 
+      EGR         : EGR_Register;   -- event generation register
+      CCMR1       : CCMR1_Register; -- capture/compare mode register 1
+      Reserved0   : Bits_32x1;
+      CCER        : CCER_Register;  -- capture/compare enable register 
+      CNT         : CNT_Register;   -- counter
+      PSC         : PSC_Register;   -- prescaler 
+      ARR         : ARR_Register;   -- auto-reload register
+      Reserved1   : Bits_32x1;
+      CCR1        : CCR_Register;  -- capture/compare register 1
+      Reserved2   : RESERVED2_Register;
+      TIM11_OR    : TIM11_OR_Register; -- TIM11 option register 1
+   end record;
+   
+   for Timer11_Register use record
+      CR1   at 0   range 0 .. 31;
+      DIER  at 12  range 0 .. 31;
+      SR    at 16  range 0 .. 31;
+      EGR   at 20  range 0 .. 31;
+      CCMR1 at 24  range 0 .. 31;
+      Reserved0 at 28 range 0 .. 31;
+      CCER  at 32  range 0 .. 31;
+      CNT   at 36  range 0 .. 31;
+      PSC   at 40  range 0 .. 31;
+      ARR   at 44  range 0 .. 31;
+      Reserved1 at 48 range 0 .. 31;
+      CCR1  at 52  range 0 .. 31;
+      Reserved2 at 56 range 0 .. 191;
       TIM11_OR at 80 range 0 .. 31;
    end record;
    

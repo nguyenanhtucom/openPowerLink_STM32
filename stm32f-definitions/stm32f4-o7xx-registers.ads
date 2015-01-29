@@ -33,6 +33,9 @@
 --with Interfaces;
 
 with System;
+with STM32F4.O7xx.Eth;
+with STM32F4.o7xx.Dma;
+with STM32F4.o7xx.Usart;
 with STM32F4.O7xx.Timers.T1_8;
 with STM32F4.O7xx.Timers.T2_5;
 with STM32F4.O7xx.Timers.T6_7;
@@ -40,12 +43,34 @@ with STM32F4.O7xx.Timers.T9_12;
 with STM32F4.O7xx.Timers.T10_14;
 with STM32F4.O7xx.Adc.Adc1_3;
 with STM32F4.O7xx.Adc.Common;
+with STM32F4.O7xx.Dac;
+with STM32F4.o7xx.Wwdg;
 
 package STM32F4.O7xx.Registers is
    
-   -----------------------
-   -- A to D converters --
-   -----------------------
+   
+   -----------------
+   -- DMA (ch 10) --
+   -----------------
+   
+   package Dma renames STM32F4.o7xx.Dma;
+   
+   Dma1 : Dma.DMA_TypeDef with
+     Volatile,
+     Address => System'To_Address (DMA1_Base);
+   pragma Import (Ada, Dma1);
+   
+   DMA2 : Dma.DMA_TypeDef with
+     Volatile,
+     Address => System'To_Address (DMA2_Base);
+   pragma Import (Ada, DMA2);
+   
+   
+   
+   
+   -------------------------------
+   -- A to D converters (ch 13) --
+   -------------------------------
    
    package Adc1_3 renames STM32F4.O7xx.Adc.Adc1_3;
    package Adc_C  renames STM32F4.O7xx.Adc.Common;
@@ -71,9 +96,19 @@ package STM32F4.O7xx.Registers is
    pragma Import (Ada, Adc3);
    
    
-   ----------------------
-   -- Timer / Counters --
-   ----------------------
+   -------------------
+   --  Dac (ch 14)  --
+   -------------------
+      
+   DAC : STM32F4.O7xx.Dac.Dac_Register with
+     Volatile,
+     Address => System'To_Address (DAC_Base);
+   pragma Import (Ada, DAC);
+   
+   
+   ---------------------------------
+   -- Timer / Counters (ch 17-20) --
+   ---------------------------------
    
    package T1_8   renames STM32F4.O7xx.Timers.T1_8;
    package T2_5   renames STM32F4.O7xx.Timers.T2_5;
@@ -81,75 +116,136 @@ package STM32F4.O7xx.Registers is
    package T9_12  renames STM32F4.O7xx.Timers.T9_12;
    package T10_14 renames STM32F4.O7xx.Timers.T10_14;
    
-   TIM1 : T1_8.Timer_Register (1) with
+   TIM1 : T1_8.Timer_Register with
      Volatile,
      Address => System'To_Address (TIM1_Base);
    pragma Import (Ada, TIM1);
    
-   TIM2 : T2_5.Timer_Register (2) with
+   TIM2 : T2_5.Timer2_Register with
      Volatile,
      Address => System'To_Address (TIM2_Base);
    pragma Import (Ada, TIM2);
    
-   TIM3 : T2_5.Timer_Register (3) with
+   TIM3 : T2_5.Timer34_Register with
      Volatile,
      Address => System'To_Address (TIM3_Base);
    pragma Import (Ada, TIM3);
 
-   TIM4 : T2_5.Timer_Register (4) with
+   TIM4 : T2_5.Timer34_Register with
      Volatile,
      Address => System'To_Address (TIM4_Base);
    pragma Import (Ada, TIM4);
    
-   TIM5 : T2_5.Timer_Register (5) with
+   TIM5 : T2_5.Timer5_Register with
      Volatile,
      Address => System'To_Address (TIM5_Base);
    pragma Import (Ada, TIM5);
 
-   TIM6 : T6_7.Timer_Register (6) with
+   TIM6 : T6_7.Timer_Register with
      Volatile,
      Address => System'To_Address (TIM6_Base);
    pragma Import (Ada, TIM6);
    
-   TIM7 : T6_7.Timer_Register (7) with
+   TIM7 : T6_7.Timer_Register with
      Volatile,
      Address => System'To_Address (TIM7_Base);
    pragma Import (Ada, TIM7);
    
-   TIM8 : T1_8.Timer_Register (8) with
+   TIM8 : T1_8.Timer_Register with
      Volatile,
      Address => System'To_Address (TIM8_Base);
    pragma Import (Ada, TIM8);
    
-   TIM9 : T9_12.Timer_Register (9) with
+   TIM9 : T9_12.Timer_Register with
      Volatile,
      Address => System'To_Address (TIM9_Base);
    pragma Import (Ada, TIM9);
    
-   TIM10 : T10_14.Timer_Register (10) with
+   TIM10 : T10_14.Timer_Register with
      Volatile,
      Address => System'To_Address (TIM10_Base);
    pragma Import (Ada, TIM10);
    
-   TIM11 : T10_14.Timer_Register (11) with
+   TIM11 : T10_14.Timer11_Register with
      Volatile,
      Address => System'To_Address (TIM11_Base);
    pragma Import (Ada, TIM11);
    
-   TIM12 : T9_12.Timer_Register (12) with
+   TIM12 : T9_12.Timer_Register with
      Volatile,
      Address => System'To_Address (TIM12_Base);
    pragma Import (Ada, TIM12);
    
-   TIM13 : T10_14.Timer_Register (13) with
+   TIM13 : T10_14.Timer_Register with
      Volatile,
      Address => System'To_Address (TIM13_Base);
    pragma Import (Ada, TIM13);
    
-   TIM14 : T10_14.Timer_Register (14) with
+   TIM14 : T10_14.Timer_Register with
      Volatile,
      Address => System'To_Address (TIM14_Base);
    pragma Import (Ada, TIM14);
+   
+   
+   ---------------------
+   -- watchdog (ch22) --
+   ---------------------
+   
+   WWDG : STM32F4.o7xx.Wwdg.WWDG_TypeDef with
+     Volatile,
+     Address => System'To_Address (WWDG_Base);
+   pragma Import (Ada, WWDG);
+   
+   
+   --------------------
+   --  USARTS (ch30) --
+   --------------------
+   
+   package Usart renames STM32F4.o7xx.Usart;
+   
+   USART1 : Usart.USART_TypeDef with
+     Volatile,
+     Address => System'To_Address (USART1_Base);
+   pragma Import (Ada, USART1);
+   
+   USART2 : Usart.USART_TypeDef with
+     Volatile,
+     Address => System'To_Address (USART2_Base);
+   pragma Import (Ada, USART2);
+   
+   USART3 : Usart.USART_TypeDef with
+     Volatile,
+     Address => System'To_Address (USART3_Base);
+   pragma Import (Ada, USART3);
+   
+   UART4 : Usart.USART_TypeDef with
+     Volatile,
+     Address => System'To_Address (UART4_Base);
+   pragma Import (Ada, UART4);
+   
+   UART5 : Usart.USART_TypeDef with
+     Volatile,
+     Address => System'To_Address (UART5_Base);
+   pragma Import (Ada, UART5);
+   
+   USART6 : Usart.USART_TypeDef with
+     Volatile,
+     Address => System'To_Address (USART6_Base);
+   pragma Import (Ada, USART6);
+   
+   
+   ---------------------
+   -- Ethernet (ch33) --
+   ---------------------
+   
+   ETH_MAC : STM32F4.o7xx.Eth.Eth_Register with
+     Volatile,
+     Address => System'To_Address (ETHERNET_Base);
+   pragma Import (Ada, ETH_MAC);
+   
+   
+   
+   
    
    
 end STM32F4.O7xx.Registers;

@@ -261,10 +261,12 @@ package STM32F4.O7xx.Timers.T9_12 is
       SR          : SR_Register;    -- status register 
       EGR         : EGR_Register;   -- event generation register
       CCMR1       : CCMR1_Register; -- capture/compare mode register 1
+      Reserved0   : Bits_32x1;
       CCER        : CCER_Register;  -- capture/compare enable register 
       CNT         : CNT_Register;   -- counter
       PSC         : PSC_Register;   -- prescaler 
       ARR         : ARR_Register;   -- auto-reload register
+      Reserved1   : Bits_32x1;
       CCR1        : CCR_Register;  -- capture/compare register 1
       CCR2        : CCR_Register;  -- capture/compare register 1
    end record;
@@ -276,10 +278,12 @@ package STM32F4.O7xx.Timers.T9_12 is
       SR    at 16  range 0 .. 31;
       EGR   at 20  range 0 .. 31;
       CCMR1 at 24  range 0 .. 31;
+      Reserved0 at 28 range 0 .. 31;
       CCER  at 32  range 0 .. 31;
       CNT   at 36  range 0 .. 31;
       PSC   at 40  range 0 .. 31;
       ARR   at 44  range 0 .. 31;
+      Reserved1 at 48 range 0 .. 31;
       CCR1  at 52  range 0 .. 31;
       CCR2  at 56  range 0 .. 31;
    end record;

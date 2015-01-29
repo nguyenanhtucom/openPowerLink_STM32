@@ -444,15 +444,17 @@ package STM32F4.O7xx.Timers.T2_5 is
       CCMR1       : CCMR1_Register; -- capture/compare mode register 1
       CCMR2       : CCMR2_Register; -- capture/compare mode register 2
       CCER        : CCER_Register;  -- capture/compare enable register 
-      PSC         : PSC_Register;   -- prescaler 
-      DCR         : DCR_Register;   -- DMA control register
-      DMAR        : DMAR_Register;  -- DMA address for full transfer
       CNT         : CNT32_Register;  -- counter
+      PSC         : PSC_Register;   -- prescaler 
       ARR         : ARR32_Register;  -- auto-reload register
+      Reserved0   : Bits_32x1;
       CCR1        : CCR32_Register;  -- capture/compare register 1
       CCR2        : CCR32_Register;  -- capture/compare register 2
       CCR3        : CCR32_Register;  -- capture/compare register 3
       CCR4        : CCR32_Register;  -- capture/compare register 4
+      Reserved1   : Bits_32x1;
+      DCR         : DCR_Register;   -- DMA control register
+      DMAR        : DMAR_Register;  -- DMA address for full transfer
       T_OR        : TIM2_OR_Register;-- TIM2 option register
    end record;
    
@@ -466,13 +468,15 @@ package STM32F4.O7xx.Timers.T2_5 is
       CCMR1 at 24  range 0 .. 31;
       CCMR2 at 28  range 0 .. 31;
       CCER  at 32  range 0 .. 31;
-      PSC   at 40  range 0 .. 31;
       CNT   at 36  range 0 .. 31;
+      PSC   at 40  range 0 .. 31;
       ARR   at 44  range 0 .. 31;
+      Reserved0 at 48 range 0 .. 31;
       CCR1  at 52  range 0 .. 31;
       CCR2  at 56  range 0 .. 31;
       CCR3  at 60  range 0 .. 31;
       CCR4  at 64  range 0 .. 31;
+      Reserved1 at 68 range 0 .. 31;
       DCR   at 72  range 0 .. 31;
       DMAR  at 76  range 0 .. 31;
       T_OR  at 80  range 0 .. 31;
@@ -489,15 +493,17 @@ package STM32F4.O7xx.Timers.T2_5 is
       CCMR1       : CCMR1_Register; -- capture/compare mode register 1
       CCMR2       : CCMR2_Register; -- capture/compare mode register 2
       CCER        : CCER_Register;  -- capture/compare enable register 
-      PSC         : PSC_Register;   -- prescaler 
-      DCR         : DCR_Register;   -- DMA control register
-      DMAR        : DMAR_Register;  -- DMA address for full transfer
       CNT         : CNT16_Register;  -- counter
+      PSC         : PSC_Register;   -- prescaler 
       ARR         : ARR16_Register;  -- auto-reload register
+      Reserved0   : Bits_32x1;
       CCR1        : CCR16_Register;  -- capture/compare register 1
       CCR2        : CCR16_Register;  -- capture/compare register 2
       CCR3        : CCR16_Register;  -- capture/compare register 3
       CCR4        : CCR16_Register;  -- capture/compare register 4
+      Reserved1   : Bits_32x1;
+      DCR         : DCR_Register;   -- DMA control register
+      DMAR        : DMAR_Register;  -- DMA address for full transfer
    end record;
    
    for Timer34_Register use record
@@ -510,13 +516,15 @@ package STM32F4.O7xx.Timers.T2_5 is
       CCMR1 at 24  range 0 .. 31;
       CCMR2 at 28  range 0 .. 31;
       CCER  at 32  range 0 .. 31;
-      PSC   at 40  range 0 .. 31;
       CNT   at 36  range 0 .. 31;
+      PSC   at 40  range 0 .. 31;
       ARR   at 44  range 0 .. 31;
+      Reserved0 at 48 range 0 .. 31;
       CCR1  at 52  range 0 .. 31;
       CCR2  at 56  range 0 .. 31;
       CCR3  at 60  range 0 .. 31;
       CCR4  at 64  range 0 .. 31;
+      Reserved1 at 68 range 0 .. 31;
       DCR   at 72  range 0 .. 31;
       DMAR  at 76  range 0 .. 31;
    end record;
@@ -532,16 +540,18 @@ package STM32F4.O7xx.Timers.T2_5 is
       CCMR1       : CCMR1_Register; -- capture/compare mode register 1
       CCMR2       : CCMR2_Register; -- capture/compare mode register 2
       CCER        : CCER_Register;  -- capture/compare enable register 
+      CNT         : CNT32_Register;  -- counter     
       PSC         : PSC_Register;   -- prescaler 
-      DCR         : DCR_Register;   -- DMA control register
-      DMAR        : DMAR_Register;  -- DMA address for full transfer
-      CNT         : CNT32_Register;  -- counter
       ARR         : ARR32_Register;  -- auto-reload register
+      Reserved0   : Bits_32x1;
       CCR1        : CCR32_Register;  -- capture/compare register 1
       CCR2        : CCR32_Register;  -- capture/compare register 2
       CCR3        : CCR32_Register;  -- capture/compare register 3
       CCR4        : CCR32_Register;  -- capture/compare register 4
-      T_OR        : TIM5_OR_Register;-- TIM2 option register
+      Reserved1   : Bits_32x1;
+      DCR         : DCR_Register;   -- DMA control register
+      DMAR        : DMAR_Register;  -- DMA address for full transfer
+      T_OR        : TIM5_OR_Register;-- TIM5 option register
    end record;
    
    for Timer5_Register use record
@@ -554,13 +564,15 @@ package STM32F4.O7xx.Timers.T2_5 is
       CCMR1 at 24  range 0 .. 31;
       CCMR2 at 28  range 0 .. 31;
       CCER  at 32  range 0 .. 31;
+      CNT   at 36  range 0 .. 31;      
       PSC   at 40  range 0 .. 31;
-      CNT   at 36  range 0 .. 31;
       ARR   at 44  range 0 .. 31;
+      Reserved0 at 48 range 0 .. 31;
       CCR1  at 52  range 0 .. 31;
       CCR2  at 56  range 0 .. 31;
       CCR3  at 60  range 0 .. 31;
       CCR4  at 64  range 0 .. 31;
+      Reserved1 at 68 range 0 .. 31;
       DCR   at 72  range 0 .. 31;
       DMAR  at 76  range 0 .. 31;
       T_OR  at 80  range 0 .. 31;

@@ -2,7 +2,7 @@
 --                                                                          --
 --                             STM32F4 COMPONENTS                           --
 --                                                                          --
---                         S T M 32 F 4 . O7xx . A d c                      --
+--                         S T M 32 F 4 . O7xx . D a c                      --
 --                                                                          --
 --                           H a r d w ar e  S p e c                        --
 --                                                                          --

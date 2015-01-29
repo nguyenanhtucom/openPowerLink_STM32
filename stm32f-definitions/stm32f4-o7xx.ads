@@ -44,6 +44,7 @@ package STM32F4.o7xx is
    
    USB_OTG_HS_Base      : constant := AHB1_Peripheral_Base + 16#002_0000#;
    --DMA2D_Base           : constant := AHB1_Peripheral_Base + 16#B000#;
+   ETHERNET_Base        : constant := AHB1_Peripheral_Base + 16#8000#;
    --ETHERNET MAC is not defined yet
    DMA2_Base            : constant := AHB1_Peripheral_Base + 16#6400#;
    DMA1_Base            : constant := AHB1_Peripheral_Base + 16#6000#;

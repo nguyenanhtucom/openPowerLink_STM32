@@ -392,18 +392,13 @@ package STM32F4.O7xx.Timers.T1_8 is
    subtype DMAR_Register is Half_Word;  -- DMA address for full transfer
    
    
-   type Cntr_Nr_Type is new Positive range 1 .. 8;
-
    -----------------------------------------------------------
    -- this is the top of the timer / counter definition     --
    -- usage example:                                        --
-   --   T8 : STM32F4.O7xx.Timers.T1_8.Timer_Register (8);   --
+   --   T8 : STM32F4.O7xx.Timers.T1_8.Timer_Register;   --
    -----------------------------------------------------------
    	     
-   type Timer_Register (Cntr : Cntr_Nr_Type := 1) is record
-      pragma Compile_Time_Error 
-	(Cntr /= 1 and Cntr /= 8, 
-	 "Timer 1 and 8 only are allowed here.");
+   type Timer_Register is record
       CR1         : Cr1_Register;   -- control register 1 
       CR2         : Cr2_Register;   -- control register 2 
       SMCR        : SMCR_Register;  -- slave mode control register
