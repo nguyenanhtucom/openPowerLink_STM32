@@ -1463,7 +1463,9 @@ package STM32F4.o7xx.Eth is
       RESERVED1         : Bits_32x1;
       MACDBGR           : MACDBGR_Register;
       MACSR             : MACSR_Register;
+      Res0              : Bits_16;
       MACIMR            : MACIMR_Register;
+      Res1              : Bits_16;
       MACA0HR           : MACA0HR_Register;
       MACA0LR           : MACA0LR_Register;
       MACA1HR           : MACA1HR_Register;
@@ -1534,8 +1536,10 @@ package STM32F4.o7xx.Eth is
       MACPMTCSR   at   44 range 0 ..    31;
       RESERVED1   at   48 range 0 ..    31;
       MACDBGR     at   52 range 0 ..    31;
-      MACSR       at   56 range 0 ..    31;
-      MACIMR      at   60 range 0 ..    31;
+      MACSR       at   56 range 0 ..    15;
+      Res0        at   58 range 0 ..    15;
+      MACIMR      at   60 range 0 ..    15;
+      Res1        at   62 range 0 ..    15;
       MACA0HR     at   64 range 0 ..    31;
       MACA0LR     at   68 range 0 ..    31;
       MACA1HR     at   72 range 0 ..    31;

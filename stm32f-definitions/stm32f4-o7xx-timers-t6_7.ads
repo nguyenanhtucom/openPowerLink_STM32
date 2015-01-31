@@ -33,7 +33,7 @@
 
 
 pragma Restrictions (No_Elaboration_Code);
-
+-- NOT FIXED YET!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 package STM32F4.O7xx.Timers.T6_7 is
    
    type Cr1_Register  is record   --   control register 1 

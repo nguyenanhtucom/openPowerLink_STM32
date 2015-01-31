@@ -37,8 +37,6 @@
 
 pragma Restrictions (No_Elaboration_Code);
 
-with STM32F4.O7xx;
-
 package STM32F4.O7xx.Dac is
    
    --------------------------------------------------

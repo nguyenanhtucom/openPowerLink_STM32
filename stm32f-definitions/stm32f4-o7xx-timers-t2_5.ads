@@ -46,7 +46,7 @@ package STM32F4.O7xx.Timers.T2_5 is
       CCDS  : Bits_1; -- Capture/compare DMA selection
       MMS   : Bits_3; -- Master mode selection
       TI1S  : Bits_1; -- TI1 selection
-      Res2  : Reserved ( 8 .. 31) := (others => 0);
+      Res2  : Reserved ( 8 .. 15) := (others => 0);
    end record;
    
    for Cr2_Register use record
@@ -54,7 +54,7 @@ package STM32F4.O7xx.Timers.T2_5 is
       CCDS  at 0 range 3 .. 3;
       MMS   at 0 range 4 .. 6;
       TI1S  at 0 range 7 .. 7;
-      Res2  at 0 range 8 .. 31;
+      Res2  at 0 range 8 .. 15;
    end record;
    
    
@@ -76,7 +76,6 @@ package STM32F4.O7xx.Timers.T2_5 is
       CC4DE,            -- Capture/Compare 4 DMA request enable
       COMDE,            -- COM DMA request enable
       TDE    : Bits_1;  -- Trigger DMA request enable
-      Res2   : Reserved (15 .. 31) := (others => 0);
    end record;
    
    for DIER_Register use record
@@ -94,7 +93,6 @@ package STM32F4.O7xx.Timers.T2_5 is
       CC4DE  at 0 range 12 .. 12;
       COMDE  at 0 range 13 .. 13;
       TDE    at 0 range 14 .. 14;
-      Res2   at 0 range 15 .. 31;
    end record;
    
          
@@ -111,7 +109,7 @@ package STM32F4.O7xx.Timers.T2_5 is
       CC2OF,              -- Capture/Compare 2 overcapture flag
       CC3OF,              -- Capture/Compare 3 overcapture flag
       CC4OF    : Bits_1;  -- Capture/Compare 4 overcapture flag
-      Res2   : Reserved (13 .. 31) := (others => 0);
+      Res2   : Reserved (13 .. 15) := (others => 0);
    end record;
    
    for SR_Register use record
@@ -127,7 +125,7 @@ package STM32F4.O7xx.Timers.T2_5 is
       CC2OF  at 0 range 10 .. 10;
       CC3OF  at 0 range 11 .. 11;
       CC4OF  at 0 range 12 .. 12;
-      Res2   at 0 range 13 .. 31;
+      Res2   at 0 range 13 .. 15;
    end record;
    
    
@@ -139,7 +137,7 @@ package STM32F4.O7xx.Timers.T2_5 is
       CC4G      : Bits_1; -- Capture/Compare 4 generation
       Res1      : Reserved (5 .. 5) := (others => 0);
       TG        : Bits_1; -- Trigger generation
-      Res2      : Reserved (7 .. 31) := (others => 0);
+      Res2      : Reserved (7 .. 15) := (others => 0);
    end record;
    
    for EGR_Register use record
@@ -150,110 +148,16 @@ package STM32F4.O7xx.Timers.T2_5 is
       CC4G  at 0 range 4 .. 4;
       Res1  at 0 range 5 .. 5; 
       TG    at 0 range 6 .. 6;
-      Res2  at 0 range 7 .. 31;
+      Res2  at 0 range 7 .. 15;
    end record;
    
    
-   --type CCMR1_Register is new STM32F4.O7xx.Timers.T1_8.CCMR1_Register;
+   subtype CCMR1_Capture_Register is
+     STM32F4.O7xx.Timers.T1_8.CCMR1_Capture_Register;
+
    
-   --type Mode_Type is (Input_Capture, Output_Compare);
-   
-   --type CCMR1_Register (Mode : Mode_Type := Output_Compare) is record  
-   type CCMR1_Register is record  
-      -- capture/compare mode register 1
-      CC1S    : Bits_2;             -- Capture/Compare 1 selection
-      --case Mode is
-	 --when Input_Capture  =>
-	    IC1PSC  : Bits_2;  -- Input capture 1 prescaler
-	    IC1F    : Bits_4;  -- Input capture 1 filter
-	    iCC2S   : Bits_2;  -- Capture/Compare 2 selection
-	    IC2PSC  : Bits_2;  -- Input capture 2 prescaler
-	    IC2F    : Bits_4;  -- Input capture 2 filter 
-	    Res5    : Reserved (16 .. 31) := (others => 0);
-	 --when Output_Compare =>
-	    --  OC1FE,             -- Output Compare 1 fast enable
-	    --  OC1PE   : Bits_1;  -- Output Compare 1 preload enable
-	    --  OC1M    : Bits_3;  -- Output Compare 1 mode
-	    --  OC1CE   : Bits_1;  -- Output Compare 1 clear enable
-	    --  oCC2S   : Bits_2;  -- Capture/Compare 2 selection
-	    --  OC2FE,             -- Output Compare 2 fast enable
-	    --  OC2PE   : Bits_1;  -- Output Compare 2 preload enable
-	    --  OC2M    : Bits_3;  -- Output Compare 2 mode
-	    --  OC2CE   : Bits_1;  -- Output Compare 2 clear enable
-	    --  Res6    : Reserved (16 .. 31) := (others => 0);
-      --end case;
-   end record;-- with Pack, Size => 32;
-   
-   for CCMR1_Register use record
-      CC1S   at 0 range 0 .. 1;	
-      
-      IC1PSC at 0 range 2 .. 3;
-      IC1F   at 0 range 4 .. 7;
-      iCC2S  at 0 range 8 .. 9;
-      IC2PSC at 0 range 10 .. 11;
-      IC2F   at 0 range 12 .. 15;
-      Res5   at 0 range 16 .. 31;
-      
-      --  OC1FE  at 0 range 2 .. 2;
-      --  OC1PE  at 0 range 3 .. 3;
-      --  OC1M   at 0 range 4 .. 6;
-      --  OC1CE  at 0 range 7 .. 7;
-      --  oCC2S  at 0 range 8 .. 9;
-      --  OC2FE  at 0 range 10 .. 10;
-      --  OC2PE  at 0 range 11 .. 11;
-      --  OC2M   at 0 range 12 .. 14;
-      --  OC2CE  at 0 range 15 .. 15;
-      --  Res6   at 0 range 16 .. 31;
-   end record;
-   
-   --type CCMR2_Register is new STM32F4.O7xx.Timers.T1_8.CCMR2_Register;
-   
-   type CCMR2_Register is record  
-      -- capture/compare mode register 2
-      CC3S    : Bits_2;             -- Capture/Compare 3 selection
-      --case Mode is
-	 --when Input_Capture   =>
-	    IC3PSC  : Bits_2;  -- Input capture 3 prescaler
-	    IC3F    : Bits_4;  -- Input capture 3 filter
-	    iCC4S   : Bits_2;  -- Capture/Compare 4 selection
-	    IC4PSC  : Bits_2;  -- Input capture 4 prescaler
-	    IC4F    : Bits_4;  -- Input capture 4 filter  
-	    Res5    : Reserved (16 .. 31) := (others => 0);
-      --  	 when Output_Compare  =>
-      --  	    OC3FE,             -- Output Compare 3 fast enable
-      --  	    OC3PE   : Bits_1;  -- Output Compare 3 preload enable
-      --  	    OC3M    : Bits_3;  -- Output Compare 3 mode
-      --  	    OC3CE   : Bits_1;  -- Output Compare 3 clear enable
-      --  	    oCC4S   : Bits_2;  -- Capture/Compare 4 selection
-      --  	    OC4FE,             -- Output Compare 4 fast enable
-      --  	    OC4PE   : Bits_1;  -- Output Compare 4 preload enable
-      --  	    OC4M    : Bits_3;  -- Output Compare 4 mode
-      --  	    OC4CE   : Bits_1;  -- Output Compare 4 clear enable
-      --  	    Res6    : Reserved (16 .. 31) := (others => 0);
-      --  end case;
-   end record;
-   
-   for CCMR2_Register use record
-      CC3S   at 0 range 0 .. 1;	
-      
-      IC3PSC at 0 range 2 .. 3;
-      IC3F   at 0 range 4 .. 7;
-      iCC4S  at 0 range 8 .. 9;
-      IC4PSC at 0 range 10 .. 11;
-      IC4F   at 0 range 12 .. 15;
-      Res5   at 0 range 16 .. 31;
-      
-      --  OC3FE  at 0 range 2 .. 2;
-      --  OC3PE  at 0 range 3 .. 3;
-      --  OC3M   at 0 range 4 .. 6;
-      --  OC3CE  at 0 range 7 .. 7;
-      --  oCC4S  at 0 range 8 .. 9;
-      --  OC4FE  at 0 range 10 .. 10;
-      --  OC4PE  at 0 range 11 .. 11;
-      --  OC4M   at 0 range 12 .. 14;
-      --  OC4CE  at 0 range 15 .. 15;
-      --  Res6   at 0 range 16 .. 31;
-   end record;
+   subtype CCMR2_Capture_Register is 
+     STM32F4.O7xx.Timers.T1_8.CCMR2_Capture_Register;
    
    
    type CCER_Register is record  -- capture/compare enable register 
@@ -271,9 +175,8 @@ package STM32F4.O7xx.Timers.T2_5 is
       CC3NP,              -- Capture/Compare 3 complementary output polarity
       CC4E,               -- Capture/Compare 4 output enable
       CC4P     : Bits_1;  -- Capture/Compare 4 output polarity
-      Res4     : Reserved (15 .. 15) := (others => 0);
+      Res4     : Reserved (14 .. 14) := (others => 0);
       CC4NP    : Bits_1; -- Capture/Compare 4 complementary output polarity
-      Res5     : Reserved (16 .. 31) := (others => 0);
    end record;
    
    for CCER_Register use record
@@ -293,7 +196,6 @@ package STM32F4.O7xx.Timers.T2_5 is
       CC4P   at 0 range 13 .. 13;
       Res4   at 0 range 14 .. 14;
       CC4NP  at 0 range 15 .. 15;
-      Res5   at 0 range 16 .. 31;
    end record;
    
    
@@ -311,14 +213,14 @@ package STM32F4.O7xx.Timers.T2_5 is
       DBA       : Bits_5;    --  DMA base address
       Res1      : Reserved (5 .. 7) := (others => 0);
       DBL       : Bits_5;    --  DMA burst length
-      Res2      : Reserved (13 .. 31) := (others => 0);
+      Res2      : Reserved (13 .. 15) := (others => 0);
    end record;
    
    for DCR_Register use record
       DBA   at 0 range  0 .. 4;
       Res1  at 0 range  5 .. 7;
       DBL   at 0 range  8 .. 12;
-      Res2  at 0 range 13 .. 31;
+      Res2  at 0 range 13 .. 15;
    end record;
    
    
@@ -328,26 +230,26 @@ package STM32F4.O7xx.Timers.T2_5 is
    type TIM2_OR_Register is record  -- TIM2 option register
       Res1      : Reserved (0 .. 9) := (others => 0);
       ITR1_RMP  : Bits_2;    -- TIM2  Internal trigger 1 remap
-      Res2      : Reserved (12 .. 31) := (others => 0);
+      Res2      : Reserved (12 .. 15) := (others => 0);
    end record;
    
    for TIM2_OR_Register use record
       Res1     at 0 range  0 .. 9;
       ITR1_RMP at 0 range 10 .. 11;
-      Res2     at 0 range 12 .. 31;
+      Res2     at 0 range 12 .. 15;
    end record;
    
    
    type TIM5_OR_Register is record  -- TIM5 option register
       Res1      : Reserved (0 .. 5) := (others => 0);
       TI4_RMP   : Bits_2;    -- TIM5  Timer Input 4 remap
-      Res2      : Reserved (8 .. 31) := (others => 0);
+      Res2      : Reserved (8 .. 15) := (others => 0);
    end record;
    
    for TIM5_OR_Register use record
       Res1    at 0 range  0 .. 5;
       TI4_RMP at 0 range  6 .. 7;
-      Res2    at 0 range  8 .. 31;
+      Res2    at 0 range  8 .. 15;
    end record;
    
    
@@ -436,16 +338,26 @@ package STM32F4.O7xx.Timers.T2_5 is
    
    type Timer2_Register is record
       CR1         : Cr1_Register;   -- control register 1 
+      Res0        : Bits_16;
       CR2         : Cr2_Register;   -- control register 2 
+      Res1        : Bits_16;
       SMCR        : SMCR_Register;  -- slave mode control register
+      Res2        : Bits_16;
       DIER        : DIER_Register;  -- DMA/interrupt enable register
+      Res3        : Bits_16;
       SR          : SR_Register;    -- status register 
+      Res4        : Bits_16;
       EGR         : EGR_Register;   -- event generation register
-      CCMR1       : CCMR1_Register; -- capture/compare mode register 1
-      CCMR2       : CCMR2_Register; -- capture/compare mode register 2
+      Res5        : Bits_16;
+      CCMR1       : CCMR1_Capture_Register; -- capt/compare mode register 1
+      Res6        : Bits_16;
+      CCMR2       : CCMR2_Capture_Register; -- capt/compare mode register 2
+      Res7        : Bits_16;
       CCER        : CCER_Register;  -- capture/compare enable register 
+      Res8        : Bits_16;
       CNT         : CNT32_Register;  -- counter
       PSC         : PSC_Register;   -- prescaler 
+      Res10       : Bits_16;
       ARR         : ARR32_Register;  -- auto-reload register
       Reserved0   : Bits_32x1;
       CCR1        : CCR32_Register;  -- capture/compare register 1
@@ -453,23 +365,35 @@ package STM32F4.O7xx.Timers.T2_5 is
       CCR3        : CCR32_Register;  -- capture/compare register 3
       CCR4        : CCR32_Register;  -- capture/compare register 4
       Reserved1   : Bits_32x1;
-      DCR         : DCR_Register;   -- DMA control register
-      DMAR        : DMAR_Register;  -- DMA address for full transfer
+      DCR         : DCR_Register;  -- DMA control register
+      Res18       : Bits_16;
+      DMAR        : DMAR_Register; -- DMA address for full transfer 
+      Res19       : Bits_16;
       T_OR        : TIM2_OR_Register;-- TIM2 option register
    end record;
    
    for Timer2_Register use record
-      CR1   at 0   range 0 .. 31;
-      CR2   at 4   range 0 .. 31;
-      SMCR  at 8   range 0 .. 31;
-      DIER  at 12  range 0 .. 31;
-      SR    at 16  range 0 .. 31;
-      EGR   at 20  range 0 .. 31;
-      CCMR1 at 24  range 0 .. 31;
-      CCMR2 at 28  range 0 .. 31;
-      CCER  at 32  range 0 .. 31;
+      CR1   at 0   range 0 .. 15;
+      Res0  at 2   range 0 .. 15;
+      CR2   at 4   range 0 .. 15;
+      Res1  at 6   range 0 .. 15;
+      SMCR  at 8   range 0 .. 15;
+      Res2  at 10  range 0 .. 15;
+      DIER  at 12  range 0 .. 15;
+      Res3  at 14  range 0 .. 15;
+      SR    at 16  range 0 .. 15;
+      Res4  at 18  range 0 .. 15;
+      EGR   at 20  range 0 .. 15;
+      Res5  at 22  range 0 .. 15;
+      CCMR1 at 24  range 0 .. 15;
+      Res6  at 26  range 0 .. 15;
+      CCMR2 at 28  range 0 .. 15;
+      Res7  at 30  range 0 .. 15;
+      CCER  at 32  range 0 .. 15;
+      Res8  at 34  range 0 .. 15;
       CNT   at 36  range 0 .. 31;
-      PSC   at 40  range 0 .. 31;
+      PSC   at 40  range 0 .. 15;
+      Res10 at 42  range 0 .. 15;
       ARR   at 44  range 0 .. 31;
       Reserved0 at 48 range 0 .. 31;
       CCR1  at 52  range 0 .. 31;
@@ -477,71 +401,155 @@ package STM32F4.O7xx.Timers.T2_5 is
       CCR3  at 60  range 0 .. 31;
       CCR4  at 64  range 0 .. 31;
       Reserved1 at 68 range 0 .. 31;
-      DCR   at 72  range 0 .. 31;
-      DMAR  at 76  range 0 .. 31;
-      T_OR  at 80  range 0 .. 31;
+      DCR   at 72  range 0 .. 15;
+      Res18 at 74  range 0 .. 15;
+      DMAR  at 76  range 0 .. 15;
+      Res19 at 78  range 0 .. 15;
+      T_OR  at 80  range 0 .. 15;
    end record;
    
    
    type Timer34_Register is record
+      --  CR1         : Cr1_Register;   -- control register 1 
+      --  CR2         : Cr2_Register;   -- control register 2 
+      --  SMCR        : SMCR_Register;  -- slave mode control register
+      --  DIER        : DIER_Register;  -- DMA/interrupt enable register
+      --  SR          : SR_Register;    -- status register 
+      --  EGR         : EGR_Register;   -- event generation register
+      --  CCMR1       : CCMR1_Register; -- capture/compare mode register 1
+      --  CCMR2       : CCMR2_Register; -- capture/compare mode register 2
+      --  CCER        : CCER_Register;  -- capture/compare enable register 
+      --  CNT         : CNT16_Register;  -- counter
+      --  PSC         : PSC_Register;   -- prescaler 
+      --  ARR         : ARR16_Register;  -- auto-reload register
       CR1         : Cr1_Register;   -- control register 1 
+      Res0        : Bits_16;
       CR2         : Cr2_Register;   -- control register 2 
+      Res1        : Bits_16;
       SMCR        : SMCR_Register;  -- slave mode control register
+      Res2        : Bits_16;
       DIER        : DIER_Register;  -- DMA/interrupt enable register
+      Res3        : Bits_16;
       SR          : SR_Register;    -- status register 
+      Res4        : Bits_16;
       EGR         : EGR_Register;   -- event generation register
-      CCMR1       : CCMR1_Register; -- capture/compare mode register 1
-      CCMR2       : CCMR2_Register; -- capture/compare mode register 2
+      Res5        : Bits_16;
+      CCMR1       : CCMR1_Capture_Register; -- capt/compare mode register 1
+      Res6        : Bits_16;
+      CCMR2       : CCMR2_Capture_Register; -- capt/compare mode register 2
+      Res7        : Bits_16;
       CCER        : CCER_Register;  -- capture/compare enable register 
-      CNT         : CNT16_Register;  -- counter
+      Res8        : Bits_16;
+      CNT         : CNT16_Register;   -- counter
+      Res9        : Bits_16;
       PSC         : PSC_Register;   -- prescaler 
-      ARR         : ARR16_Register;  -- auto-reload register
+      Res10       : Bits_16;
+      ARR         : ARR16_Register;   -- auto-reload register
+      Res11       : Bits_16;
       Reserved0   : Bits_32x1;
+      --  CCR1        : CCR16_Register;  -- capture/compare register 1
+      --  CCR2        : CCR16_Register;  -- capture/compare register 2
+      --  CCR3        : CCR16_Register;  -- capture/compare register 3
+      --  CCR4        : CCR16_Register;  -- capture/compare register 4
       CCR1        : CCR16_Register;  -- capture/compare register 1
-      CCR2        : CCR16_Register;  -- capture/compare register 2
-      CCR3        : CCR16_Register;  -- capture/compare register 3
-      CCR4        : CCR16_Register;  -- capture/compare register 4
+      Res13       : Bits_16;
+      CCR2        : CCR16_Register;  -- capture/compare register 1
+      Res14       : Bits_16;
+      CCR3        : CCR16_Register;  -- capture/compare register 1
+      Res15       : Bits_16;
+      CCR4        : CCR16_Register;  -- capture/compare register 1
+      Res16       : Bits_16;
       Reserved1   : Bits_32x1;
-      DCR         : DCR_Register;   -- DMA control register
-      DMAR        : DMAR_Register;  -- DMA address for full transfer
+      --  DCR         : DCR_Register;   -- DMA control register
+      --  DMAR        : DMAR_Register;  -- DMA address for full transfer
+      DCR         : DCR_Register;  -- DMA control register
+      Res18       : Bits_16;
+      DMAR        : DMAR_Register; -- DMA address for full transfer 
+      Res19       : Bits_16;
    end record;
    
    for Timer34_Register use record
-      CR1   at 0   range 0 .. 31;
-      CR2   at 4   range 0 .. 31;
-      SMCR  at 8   range 0 .. 31;
-      DIER  at 12  range 0 .. 31;
-      SR    at 16  range 0 .. 31;
-      EGR   at 20  range 0 .. 31;
-      CCMR1 at 24  range 0 .. 31;
-      CCMR2 at 28  range 0 .. 31;
-      CCER  at 32  range 0 .. 31;
-      CNT   at 36  range 0 .. 31;
-      PSC   at 40  range 0 .. 31;
-      ARR   at 44  range 0 .. 31;
+      --  CR1   at 0   range 0 .. 31;
+      --  CR2   at 4   range 0 .. 31;
+      --  SMCR  at 8   range 0 .. 31;
+      --  DIER  at 12  range 0 .. 31;
+      --  SR    at 16  range 0 .. 31;
+      --  EGR   at 20  range 0 .. 31;
+      --  CCMR1 at 24  range 0 .. 31;
+      --  CCMR2 at 28  range 0 .. 31;
+      --  CCER  at 32  range 0 .. 31;
+      --  CNT   at 36  range 0 .. 31;
+      --  PSC   at 40  range 0 .. 31;
+      --  ARR   at 44  range 0 .. 31;
+      CR1   at 0   range 0 .. 15;
+      Res0  at 2   range 0 .. 15;
+      CR2   at 4   range 0 .. 15;
+      Res1  at 6   range 0 .. 15;
+      SMCR  at 8   range 0 .. 15;
+      Res2  at 10  range 0 .. 15;
+      DIER  at 12  range 0 .. 15;
+      Res3  at 14  range 0 .. 15;
+      SR    at 16  range 0 .. 15;
+      Res4  at 18  range 0 .. 15;
+      EGR   at 20  range 0 .. 15;
+      Res5  at 22  range 0 .. 15;
+      CCMR1 at 24  range 0 .. 15;
+      Res6  at 26  range 0 .. 15;
+      CCMR2 at 28  range 0 .. 15;
+      Res7  at 30  range 0 .. 15;
+      CCER  at 32  range 0 .. 15;
+      Res8  at 34  range 0 .. 15;
+      CNT   at 36  range 0 .. 15;
+      Res9  at 38  range 0 .. 15;
+      PSC   at 40  range 0 .. 15;
+      Res10 at 42  range 0 .. 15;
+      ARR   at 44  range 0 .. 15;
+      Res11 at 46  range 0 .. 15;
       Reserved0 at 48 range 0 .. 31;
-      CCR1  at 52  range 0 .. 31;
-      CCR2  at 56  range 0 .. 31;
-      CCR3  at 60  range 0 .. 31;
-      CCR4  at 64  range 0 .. 31;
+      --  CCR1  at 52  range 0 .. 31;
+      --  CCR2  at 56  range 0 .. 31;
+      --  CCR3  at 60  range 0 .. 31;
+      --  CCR4  at 64  range 0 .. 31;
+      CCR1  at 52  range 0 .. 15;
+      Res13 at 54  range 0 .. 15;
+      CCR2  at 56  range 0 .. 15;
+      Res14 at 58  range 0 .. 15;
+      CCR3  at 60  range 0 .. 15;
+      Res15 at 62  range 0 .. 15;
+      CCR4  at 64  range 0 .. 15;
+      Res16 at 66  range 0 .. 15;
       Reserved1 at 68 range 0 .. 31;
-      DCR   at 72  range 0 .. 31;
-      DMAR  at 76  range 0 .. 31;
+      --  DCR   at 72  range 0 .. 31;
+      --  DMAR  at 76  range 0 .. 31;
+      DCR   at 72  range 0 .. 15;
+      Res18 at 74  range 0 .. 15;
+      DMAR  at 76  range 0 .. 15;
+      Res19 at 78  range 0 .. 15;
    end record;
    
    
    type Timer5_Register is record
       CR1         : Cr1_Register;   -- control register 1 
+      Res0        : Bits_16;
       CR2         : Cr2_Register;   -- control register 2 
+      Res1        : Bits_16;
       SMCR        : SMCR_Register;  -- slave mode control register
+      Res2        : Bits_16;
       DIER        : DIER_Register;  -- DMA/interrupt enable register
+      Res3        : Bits_16;
       SR          : SR_Register;    -- status register 
+      Res4        : Bits_16;
       EGR         : EGR_Register;   -- event generation register
-      CCMR1       : CCMR1_Register; -- capture/compare mode register 1
-      CCMR2       : CCMR2_Register; -- capture/compare mode register 2
+      Res5        : Bits_16;
+      CCMR1       : CCMR1_Capture_Register; -- capt/compare mode register 1
+      Res6        : Bits_16;
+      CCMR2       : CCMR2_Capture_Register; -- capt/compare mode register 2
+      Res7        : Bits_16;
       CCER        : CCER_Register;  -- capture/compare enable register 
-      CNT         : CNT32_Register;  -- counter     
+      Res8        : Bits_16;
+      CNT         : CNT32_Register;  -- counter
       PSC         : PSC_Register;   -- prescaler 
+      Res10       : Bits_16;
       ARR         : ARR32_Register;  -- auto-reload register
       Reserved0   : Bits_32x1;
       CCR1        : CCR32_Register;  -- capture/compare register 1
@@ -549,23 +557,35 @@ package STM32F4.O7xx.Timers.T2_5 is
       CCR3        : CCR32_Register;  -- capture/compare register 3
       CCR4        : CCR32_Register;  -- capture/compare register 4
       Reserved1   : Bits_32x1;
-      DCR         : DCR_Register;   -- DMA control register
-      DMAR        : DMAR_Register;  -- DMA address for full transfer
+      DCR         : DCR_Register;  -- DMA control register
+      Res18       : Bits_16;
+      DMAR        : DMAR_Register; -- DMA address for full transfer 
+      Res19       : Bits_16;
       T_OR        : TIM5_OR_Register;-- TIM5 option register
    end record;
    
    for Timer5_Register use record
-      CR1   at 0   range 0 .. 31;
-      CR2   at 4   range 0 .. 31;
-      SMCR  at 8   range 0 .. 31;
-      DIER  at 12  range 0 .. 31;
-      SR    at 16  range 0 .. 31;
-      EGR   at 20  range 0 .. 31;
-      CCMR1 at 24  range 0 .. 31;
-      CCMR2 at 28  range 0 .. 31;
-      CCER  at 32  range 0 .. 31;
-      CNT   at 36  range 0 .. 31;      
-      PSC   at 40  range 0 .. 31;
+      CR1   at 0   range 0 .. 15;
+      Res0  at 2   range 0 .. 15;
+      CR2   at 4   range 0 .. 15;
+      Res1  at 6   range 0 .. 15;
+      SMCR  at 8   range 0 .. 15;
+      Res2  at 10  range 0 .. 15;
+      DIER  at 12  range 0 .. 15;
+      Res3  at 14  range 0 .. 15;
+      SR    at 16  range 0 .. 15;
+      Res4  at 18  range 0 .. 15;
+      EGR   at 20  range 0 .. 15;
+      Res5  at 22  range 0 .. 15;
+      CCMR1 at 24  range 0 .. 15;
+      Res6  at 26  range 0 .. 15;
+      CCMR2 at 28  range 0 .. 15;
+      Res7  at 30  range 0 .. 15;
+      CCER  at 32  range 0 .. 15;
+      Res8  at 34  range 0 .. 15;
+      CNT   at 36  range 0 .. 31;
+      PSC   at 40  range 0 .. 15;
+      Res10 at 42  range 0 .. 15;
       ARR   at 44  range 0 .. 31;
       Reserved0 at 48 range 0 .. 31;
       CCR1  at 52  range 0 .. 31;
@@ -573,9 +593,11 @@ package STM32F4.O7xx.Timers.T2_5 is
       CCR3  at 60  range 0 .. 31;
       CCR4  at 64  range 0 .. 31;
       Reserved1 at 68 range 0 .. 31;
-      DCR   at 72  range 0 .. 31;
-      DMAR  at 76  range 0 .. 31;
-      T_OR  at 80  range 0 .. 31;
+      DCR   at 72  range 0 .. 15;
+      Res18 at 74  range 0 .. 15;
+      DMAR  at 76  range 0 .. 15;
+      Res19 at 78  range 0 .. 15;
+      T_OR  at 80  range 0 .. 15;
    end record;
 
 end STM32F4.O7xx.Timers.T2_5;

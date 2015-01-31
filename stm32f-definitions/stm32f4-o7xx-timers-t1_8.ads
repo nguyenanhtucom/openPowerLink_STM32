@@ -217,32 +217,45 @@ package STM32F4.O7xx.Timers.T1_8 is
    end record;
    
    
-   type Mode_Type is (Input_Capture, Output_Compare);
+   --  type Mode_Type is (Input_Capture, Output_Compare);
    
-   type CCMR1_Register (Mode : Mode_Type := Output_Compare) is record  
+   --  type CCMR1_Register (Mode : Mode_Type := Output_Compare) is record  
+   --     -- capture/compare mode register 1
+   --     CC1S    : Bits_2;             -- Capture/Compare 1 selection
+   --     case Mode is
+   --  	 when Input_Capture  =>
+   --  	    IC1PSC  : Bits_2;  -- Input capture 1 prescaler
+   --  	    IC1F    : Bits_4;  -- Input capture 1 filter
+   --  	    iCC2S   : Bits_2;  -- Capture/Compare 2 selection
+   --  	    IC2PSC  : Bits_2;  -- Input capture 2 prescaler
+   --  	    IC2F    : Bits_4;  -- Input capture 2 filter  
+   --  	 when Output_Compare =>
+   --  	    OC1FE,             -- Output Compare 1 fast enable
+   --  	      OC1PE   : Bits_1;  -- Output Compare 1 preload enable
+   --  	    OC1M    : Bits_3;  -- Output Compare 1 mode
+   --  	    OC1CE   : Bits_1;  -- Output Compare 1 clear enable
+   --  	    oCC2S   : Bits_2;  -- Capture/Compare 2 selection
+   --  	    OC2FE,             -- Output Compare 2 fast enable
+   --  	      OC2PE   : Bits_1;  -- Output Compare 2 preload enable
+   --  	    OC2M    : Bits_3;  -- Output Compare 2 mode
+   --  	    OC2CE   : Bits_1;  -- Output Compare 2 clear enable
+   --     end case;
+   --  end record with Unchecked_Union;
+   
+   
+   type CCMR1_Capture_Register is record  
       -- capture/compare mode register 1
       CC1S    : Bits_2;             -- Capture/Compare 1 selection
-      case Mode is
-	 when Input_Capture  =>
-	    IC1PSC  : Bits_2;  -- Input capture 1 prescaler
-	    IC1F    : Bits_4;  -- Input capture 1 filter
-	    iCC2S   : Bits_2;  -- Capture/Compare 2 selection
-	    IC2PSC  : Bits_2;  -- Input capture 2 prescaler
-	    IC2F    : Bits_4;  -- Input capture 2 filter  
-	 when Output_Compare =>
-	    OC1FE,             -- Output Compare 1 fast enable
-	    OC1PE   : Bits_1;  -- Output Compare 1 preload enable
-	    OC1M    : Bits_3;  -- Output Compare 1 mode
-	    OC1CE   : Bits_1;  -- Output Compare 1 clear enable
-	    oCC2S   : Bits_2;  -- Capture/Compare 2 selection
-	    OC2FE,             -- Output Compare 2 fast enable
-	    OC2PE   : Bits_1;  -- Output Compare 2 preload enable
-	    OC2M    : Bits_3;  -- Output Compare 2 mode
-	    OC2CE   : Bits_1;  -- Output Compare 2 clear enable
-      end case;
+
+      IC1PSC  : Bits_2;  -- Input capture 1 prescaler
+      IC1F    : Bits_4;  -- Input capture 1 filter
+      iCC2S   : Bits_2;  -- Capture/Compare 2 selection
+      IC2PSC  : Bits_2;  -- Input capture 2 prescaler
+      IC2F    : Bits_4;  -- Input capture 2 filter  
+
    end record;
    
-   for CCMR1_Register use record
+   for CCMR1_Capture_Register use record
       CC1S   at 0 range 0 .. 1;	
       
       IC1PSC at 0 range 2 .. 3;
@@ -250,7 +263,23 @@ package STM32F4.O7xx.Timers.T1_8 is
       iCC2S  at 0 range 8 .. 9;
       IC2PSC at 0 range 10 .. 11;
       IC2F   at 0 range 12 .. 15;
-      
+   end record;
+   
+   type CCMR1_Compare_Register is record  
+      CC1S    : Bits_2;             -- Capture/Compare 1 selection
+      OC1FE,             -- Output Compare 1 fast enable
+	OC1PE   : Bits_1;  -- Output Compare 1 preload enable
+      OC1M    : Bits_3;  -- Output Compare 1 mode
+      OC1CE   : Bits_1;  -- Output Compare 1 clear enable
+      oCC2S   : Bits_2;  -- Capture/Compare 2 selection
+      OC2FE,             -- Output Compare 2 fast enable
+	OC2PE   : Bits_1;  -- Output Compare 2 preload enable
+      OC2M    : Bits_3;  -- Output Compare 2 mode
+      OC2CE   : Bits_1;  -- Output Compare 2 clear enable
+   end record;
+   
+   for CCMR1_Compare_Register use record
+      CC1S   at 0 range 0 .. 1;	
       OC1FE  at 0 range 2 .. 2;
       OC1PE  at 0 range 3 .. 3;
       OC1M   at 0 range 4 .. 6;
@@ -263,50 +292,98 @@ package STM32F4.O7xx.Timers.T1_8 is
    end record;
    
    
-   type CCMR2_Register (Mode : Mode_Type := Output_Compare) is record  
+   --  type CCMR2_Register (Mode : Mode_Type := Output_Compare) is record  
+   --     -- capture/compare mode register 2
+   --     CC3S    : Bits_2;             -- Capture/Compare 3 selection
+   --     case Mode is
+   --  	 when Input_Capture   =>
+   --  	    IC3PSC  : Bits_2;  -- Input capture 3 prescaler
+   --  	    IC3F    : Bits_4;  -- Input capture 3 filter
+   --  	    iCC4S   : Bits_2;  -- Capture/Compare 4 selection
+   --  	    IC4PSC  : Bits_2;  -- Input capture 4 prescaler
+   --  	    IC4F    : Bits_4;  -- Input capture 4 filter  
+   --  	 when Output_Compare  =>
+   --  	    OC3FE,             -- Output Compare 3 fast enable
+   --  	    OC3PE   : Bits_1;  -- Output Compare 3 preload enable
+   --  	    OC3M    : Bits_3;  -- Output Compare 3 mode
+   --  	    OC3CE   : Bits_1;  -- Output Compare 3 clear enable
+   --  	    oCC4S   : Bits_2;  -- Capture/Compare 4 selection
+   --  	    OC4FE,             -- Output Compare 4 fast enable
+   --  	    OC4PE   : Bits_1;  -- Output Compare 4 preload enable
+   --  	    OC4M    : Bits_3;  -- Output Compare 4 mode
+   --  	    OC4CE   : Bits_1;  -- Output Compare 4 clear enable
+   --     end case;
+   --  end record with Unchecked_Union;
+   
+   --  for CCMR2_Register use record
+   --     CC3S   at 0 range 0 .. 1;	
+      
+   --     IC3PSC at 0 range 2 .. 3;
+   --     IC3F   at 0 range 4 .. 7;
+   --     iCC4S  at 0 range 8 .. 9;
+   --     IC4PSC at 0 range 10 .. 11;
+   --     IC4F   at 0 range 12 .. 15;
+      
+   --     OC3FE  at 0 range 2 .. 2;
+   --     OC3PE  at 0 range 3 .. 3;
+   --     OC3M   at 0 range 4 .. 6;
+   --     OC3CE  at 0 range 7 .. 7;
+   --     oCC4S  at 0 range 8 .. 9;
+   --     OC4FE  at 0 range 10 .. 10;
+   --     OC4PE  at 0 range 11 .. 11;
+   --     OC4M   at 0 range 12 .. 14;
+   --     OC4CE  at 0 range 15 .. 15;
+   --  end record;
+   
+   
+   type CCMR2_Capture_Register is record  
       -- capture/compare mode register 2
       CC3S    : Bits_2;             -- Capture/Compare 3 selection
-      case Mode is
-	 when Input_Capture   =>
-	    IC3PSC  : Bits_2;  -- Input capture 3 prescaler
-	    IC3F    : Bits_4;  -- Input capture 3 filter
-	    iCC4S   : Bits_2;  -- Capture/Compare 4 selection
-	    IC4PSC  : Bits_2;  -- Input capture 4 prescaler
-	    IC4F    : Bits_4;  -- Input capture 4 filter  
-	 when Output_Compare  =>
-	    OC3FE,             -- Output Compare 3 fast enable
-	    OC3PE   : Bits_1;  -- Output Compare 3 preload enable
-	    OC3M    : Bits_3;  -- Output Compare 3 mode
-	    OC3CE   : Bits_1;  -- Output Compare 3 clear enable
-	    oCC4S   : Bits_2;  -- Capture/Compare 4 selection
-	    OC4FE,             -- Output Compare 4 fast enable
-	    OC4PE   : Bits_1;  -- Output Compare 4 preload enable
-	    OC4M    : Bits_3;  -- Output Compare 4 mode
-	    OC4CE   : Bits_1;  -- Output Compare 4 clear enable
-      end case;
+      IC3PSC  : Bits_2;  -- Input capture 3 prescaler
+      IC3F    : Bits_4;  -- Input capture 3 filter
+      iCC4S   : Bits_2;  -- Capture/Compare 4 selection
+      IC4PSC  : Bits_2;  -- Input capture 4 prescaler
+      IC4F    : Bits_4;  -- Input capture 4 filter  
    end record;
    
-   for CCMR2_Register use record
+   for CCMR2_Capture_Register use record
       CC3S   at 0 range 0 .. 1;	
-      
       IC3PSC at 0 range 2 .. 3;
       IC3F   at 0 range 4 .. 7;
       iCC4S  at 0 range 8 .. 9;
       IC4PSC at 0 range 10 .. 11;
       IC4F   at 0 range 12 .. 15;
-      
+   end record;
+   
+    
+   type CCMR2_Compare_Register is record  
+      -- capture/compare mode register 2
+      CC3S    : Bits_2;             -- Capture/Compare 3 selection
+      OC3FE,             -- Output Compare 3 fast enable
+	OC3PE   : Bits_1;  -- Output Compare 3 preload enable
+      OC3M    : Bits_3;  -- Output Compare 3 mode
+      OC3CE   : Bits_1;  -- Output Compare 3 clear enable
+      oCC4S   : Bits_2;  -- Capture/Compare 4 selection
+      OC4FE,             -- Output Compare 4 fast enable
+	OC4PE   : Bits_1;  -- Output Compare 4 preload enable
+      OC4M    : Bits_3;  -- Output Compare 4 mode
+      OC4CE   : Bits_1;  -- Output Compare 4 clear enable
+   end record;
+   
+   for CCMR2_Compare_Register use record
+      CC3S   at 0 range 0 .. 1;	    
       OC3FE  at 0 range 2 .. 2;
       OC3PE  at 0 range 3 .. 3;
       OC3M   at 0 range 4 .. 6;
       OC3CE  at 0 range 7 .. 7;
-      oCC4S  at 0 range 8 .. 9;
+      OCC4S  at 0 range 8 .. 9;
       OC4FE  at 0 range 10 .. 10;
       OC4PE  at 0 range 11 .. 11;
       OC4M   at 0 range 12 .. 14;
       OC4CE  at 0 range 15 .. 15;
    end record;
    
-   
+  
    type CCER_Register is record  -- capture/compare enable register 
       CC1E,               -- Capture/Compare 1 output enable
       CC1P,               -- Capture/Compare 1 output polarity
@@ -400,48 +477,88 @@ package STM32F4.O7xx.Timers.T1_8 is
    	     
    type Timer_Register is record
       CR1         : Cr1_Register;   -- control register 1 
+      Res0        : Bits_16;
       CR2         : Cr2_Register;   -- control register 2 
+      Res1        : Bits_16;
       SMCR        : SMCR_Register;  -- slave mode control register
+      Res2        : Bits_16;
       DIER        : DIER_Register;  -- DMA/interrupt enable register
+      Res3        : Bits_16;
       SR          : SR_Register;    -- status register 
+      Res4        : Bits_16;
       EGR         : EGR_Register;   -- event generation register
-      CCMR1       : CCMR1_Register; -- capture/compare mode register 1
-      CCMR2       : CCMR2_Register; -- capture/compare mode register 2
+      Res5        : Bits_16;
+      CCMR1       : CCMR1_Capture_Register; -- capt/compare mode register 1
+      Res6        : Bits_16;
+      CCMR2       : CCMR2_Capture_Register; -- capt/compare mode register 2
+      Res7        : Bits_16;
       CCER        : CCER_Register;  -- capture/compare enable register 
+      Res8        : Bits_16;
       CNT         : CNT_Register;   -- counter
+      Res9        : Bits_16;
       PSC         : PSC_Register;   -- prescaler 
+      Res10       : Bits_16;
       ARR         : ARR_Register;   -- auto-reload register
+      Res11       : Bits_16;
       RCR         : RCR_Register;   -- repetition counter register
+      Res12       : Bits_16;
       CCR1        : CCR_Register;  -- capture/compare register 1
+      Res13       : Bits_16;
       CCR2        : CCR_Register;  -- capture/compare register 1
+      Res14       : Bits_16;
       CCR3        : CCR_Register;  -- capture/compare register 1
+      Res15       : Bits_16;
       CCR4        : CCR_Register;  -- capture/compare register 1
+      Res16       : Bits_16;
       BDTR        : BDTR_Register; -- break and dead-time register 
+      Res17       : Bits_16;
       DCR         : DCR_Register;  -- DMA control register
+      Res18       : Bits_16;
       DMAR        : DMAR_Register; -- DMA address for full transfer 
+      Res19       : Bits_16;
    end record;
    
    for Timer_Register use record
-      CR1   at 0   range 0 .. 31;
-      CR2   at 4   range 0 .. 31;
-      SMCR  at 8   range 0 .. 31;
-      DIER  at 12  range 0 .. 31;
-      SR    at 16  range 0 .. 31;
-      EGR   at 20  range 0 .. 31;
-      CCMR1 at 24  range 0 .. 31;
-      CCMR2 at 28  range 0 .. 31;
-      CCER  at 32  range 0 .. 31;
-      CNT   at 36  range 0 .. 31;
-      PSC   at 40  range 0 .. 31;
-      ARR   at 44  range 0 .. 31;
-      RCR   at 48  range 0 .. 31;
-      CCR1  at 52  range 0 .. 31;
-      CCR2  at 56  range 0 .. 31;
-      CCR3  at 60  range 0 .. 31;
-      CCR4  at 64  range 0 .. 31;
-      BDTR  at 68  range 0 .. 31;
-      DCR   at 72  range 0 .. 31;
-      DMAR  at 76  range 0 .. 31;
+      CR1   at 0   range 0 .. 15;
+      Res0  at 2   range 0 .. 15;
+      CR2   at 4   range 0 .. 15;
+      Res1  at 6   range 0 .. 15;
+      SMCR  at 8   range 0 .. 15;
+      Res2  at 10  range 0 .. 15;
+      DIER  at 12  range 0 .. 15;
+      Res3  at 14  range 0 .. 15;
+      SR    at 16  range 0 .. 15;
+      Res4  at 18  range 0 .. 15;
+      EGR   at 20  range 0 .. 15;
+      Res5  at 22  range 0 .. 15;
+      CCMR1 at 24  range 0 .. 15;
+      Res6  at 26  range 0 .. 15;
+      CCMR2 at 28  range 0 .. 15;
+      Res7  at 30  range 0 .. 15;
+      CCER  at 32  range 0 .. 15;
+      Res8  at 34  range 0 .. 15;
+      CNT   at 36  range 0 .. 15;
+      Res9  at 38  range 0 .. 15;
+      PSC   at 40  range 0 .. 15;
+      Res10 at 42  range 0 .. 15;
+      ARR   at 44  range 0 .. 15;
+      Res11 at 46  range 0 .. 15;
+      RCR   at 48  range 0 .. 15;
+      Res12 at 50  range 0 .. 15;
+      CCR1  at 52  range 0 .. 15;
+      Res13 at 54  range 0 .. 15;
+      CCR2  at 56  range 0 .. 15;
+      Res14 at 58  range 0 .. 15;
+      CCR3  at 60  range 0 .. 15;
+      Res15 at 62  range 0 .. 15;
+      CCR4  at 64  range 0 .. 15;
+      Res16 at 66  range 0 .. 15;
+      BDTR  at 68  range 0 .. 15;
+      Res17 at 70  range 0 .. 15;
+      DCR   at 72  range 0 .. 15;
+      Res18 at 74  range 0 .. 15;
+      DMAR  at 76  range 0 .. 15;
+      Res19 at 78  range 0 .. 15;
       --    at 80  range 0 .. 31;
    end record;
       
