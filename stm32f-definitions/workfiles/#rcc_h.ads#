@@ -1,0 +1,522 @@
+pragma Ada_2005;
+pragma Style_Checks (Off);
+
+with Interfaces.C; use Interfaces.C;
+with stdint_h;
+
+package rcc_h is
+
+   --  unsupported macro: RCC_CR_
+   --  unsupported macro: RCC_CR_
+   --  unsupported macro: RCC_CR_
+   --  unsupported macro: RCC_CR_
+   --  unsupported macro: RCC_CR_
+   --  unsupported macro: RCC_CR_
+   --  unsupported macro: RCC_CR_
+   --  unsupported macro: RCC_CR_
+   --  unsupported macro: RCC_CR_
+   --  unsupported macro: RCC_CR_
+   --  unsupported macro: RCC_CR_
+   --  unsupported macro: RCC_CR_
+   --  unsupported macro: RCC_CR_
+   --  unsupported macro: RCC_CR_
+   --  unsupported macro: RCC_CR_
+   --  unsupported macro: RCC_CR_
+   --  unsupported macro: RCC_CR_
+   --  unsupported macro: RCC_CR_
+   --  unsupported macro: RCC_CR_
+   --  unsupported macro: RCC_CR_
+   --  unsupported macro: RCC_CR_
+   --  unsupported macro: RCC_CR_
+   --  unsupported macro: RCC_CR_
+   --  unsupported macro: RCC_CR_
+   --  unsupported macro: RCC_CR_
+   --  unsupported macro: RCC_CR_
+   --  unsupported macro: RCC_CR_
+   --  unsupported macro: RCC_PLLCFGR_PLLM
+   --  unsupported macro: RCC_PLLCFGR_PLLM_0
+   --  unsupported macro: RCC_PLLCFGR_PLLM_1
+   --  unsupported macro: RCC_PLLCFGR_PLLM_2
+   --  unsupported macro: RCC_PLLCFGR_PLLM_3
+   --  unsupported macro: RCC_PLLCFGR_PLLM_4
+   --  unsupported macro: RCC_PLLCFGR_PLLM_5
+   --  unsupported macro: RCC_PLLCFGR_PLLN
+   --  unsupported macro: RCC_PLLCFGR_PLLN_0
+   --  unsupported macro: RCC_PLLCFGR_PLLN_1
+   --  unsupported macro: RCC_PLLCFGR_PLLN_2
+   --  unsupported macro: RCC_PLLCFGR_PLLN_3
+   --  unsupported macro: RCC_PLLCFGR_PLLN_4
+   --  unsupported macro: RCC_PLLCFGR_PLLN_5
+   --  unsupported macro: RCC_PLLCFGR_PLLN_6
+   --  unsupported macro: RCC_PLLCFGR_PLLN_7
+   --  unsupported macro: RCC_PLLCFGR_PLLN_8
+   --  unsupported macro: RCC_PLLCFGR_PLLP
+   --  unsupported macro: RCC_PLLCFGR_PLLP_0
+   --  unsupported macro: RCC_PLLCFGR_PLLP_1
+   --  unsupported macro: RCC_PLLCFGR_PLLSRC
+   --  unsupported macro: RCC_PLLCFGR_PLLSRC_HSE
+   --  unsupported macro: RCC_PLLCFGR_PLLSRC_HSI
+   --  unsupported macro: RCC_PLLCFGR_PLLQ
+   --  unsupported macro: RCC_PLLCFGR_PLLQ_0
+   --  unsupported macro: RCC_PLLCFGR_PLLQ_1
+   --  unsupported macro: RCC_PLLCFGR_PLLQ_2
+   --  unsupported macro: RCC_PLLCFGR_PLLQ_3
+   --  unsupported macro: RCC_CFGR_SW
+   --  unsupported macro: RCC_CFGR_SW_0
+   --  unsupported macro: RCC_CFGR_SW_1
+   --  unsupported macro: RCC_CFGR_SW_HSI
+   --  unsupported macro: RCC_CFGR_SW_HSE
+   --  unsupported macro: RCC_CFGR_SW_PLL
+   --  unsupported macro: RCC_CFGR_
+   --  unsupported macro: RCC_CFGR_SWS_0
+   --  unsupported macro: RCC_CFGR_SWS_1
+   --  unsupported macro: RCC_CFGR_SWS_HSI
+   --  unsupported macro: RCC_CFGR_SWS_HSE
+   --  unsupported macro: RCC_CFGR_SWS_PLL
+   --  unsupported macro: RCC_CFGR_HPRE
+   --  unsupported macro: RCC_CFGR_HPRE_0
+   --  unsupported macro: RCC_CFGR_HPRE_1
+   --  unsupported macro: RCC_CFGR_HPRE_2
+   --  unsupported macro: RCC_CFGR_HPRE_3
+   --  unsupported macro: RCC_CFGR_HPRE_DIV1
+   --  unsupported macro: RCC_CFGR_HPRE_DIV2
+   --  unsupported macro: RCC_CFGR_HPRE_DIV4
+   --  unsupported macro: RCC_CFGR_HPRE_DIV8
+   --  unsupported macro: RCC_CFGR_HPRE_DIV16
+   --  unsupported macro: RCC_CFGR_HPRE_DIV64
+   --  unsupported macro: RCC_CFGR_HPRE_DIV128
+   --  unsupported macro: RCC_CFGR_HPRE_DIV256
+   --  unsupported macro: RCC_CFGR_HPRE_DIV512
+   --  unsupported macro: RCC_CFGR_
+   --  unsupported macro: RCC_CFGR_PPRE1_0
+   --  unsupported macro: RCC_CFGR_PPRE1_1
+   --  unsupported macro: RCC_CFGR_PPRE1_2
+   --  unsupported macro: RCC_CFGR_PPRE1_DIV1
+   --  unsupported macro: RCC_CFGR_PPRE1_DIV2
+   --  unsupported macro: RCC_CFGR_PPRE1_DIV4
+   --  unsupported macro: RCC_CFGR_PPRE1_DIV8
+   --  unsupported macro: RCC_CFGR_PPRE1_DIV16
+   --  unsupported macro: RCC_CFGR_PPRE2
+   --  unsupported macro: RCC_CFGR_PPRE2_0
+   --  unsupported macro: RCC_CFGR_PPRE2_1
+   --  unsupported macro: RCC_CFGR_PPRE2_2
+   --  unsupported macro: RCC_CFGR_PPRE2_DIV1
+   --  unsupported macro: RCC_CFGR_PPRE2_DIV2
+   --  unsupported macro: RCC_CFGR_PPRE2_DIV4
+   --  unsupported macro: RCC_CFGR_PPRE2_DIV8
+   --  unsupported macro: RCC_CFGR_PPRE2_DIV16
+   --  unsupported macro: RCC_CFGR_
+   --  unsupported macro: RCC_CFGR_RTCPRE_0
+   --  unsupported macro: RCC_CFGR_RTCPRE_1
+   --  unsupported macro: RCC_CFGR_RTCPRE_2
+   --  unsupported macro: RCC_CFGR_RTCPRE_3
+   --  unsupported macro: RCC_CFGR_RTCPRE_4
+   --  unsupported macro: RCC_CFGR_
+   --  unsupported macro: RCC_CFGR_MCO1_0
+   --  unsupported macro: RCC_CFGR_MCO1_1
+   --  unsupported macro: RCC_CFGR_
+   --  unsupported macro: RCC_CFGR_
+   --  unsupported macro: RCC_CFGR_MCO1PRE_0
+   --  unsupported macro: RCC_CFGR_MCO1PRE_1
+   --  unsupported macro: RCC_CFGR_MCO1PRE_2
+   --  unsupported macro: RCC_CFGR_
+   --  unsupported macro: RCC_CFGR_MCO2PRE_0
+   --  unsupported macro: RCC_CFGR_MCO2PRE_1
+   --  unsupported macro: RCC_CFGR_MCO2PRE_2
+   --  unsupported macro: RCC_CFGR_
+   --  unsupported macro: RCC_CFGR_MCO2_0
+   --  unsupported macro: RCC_CFGR_MCO2_1
+   --  unsupported macro: RCC_CIR_LSIRDYF
+   --  unsupported macro: RCC_CIR_LSERDYF
+   --  unsupported macro: RCC_CIR_HSIRDYF
+   --  unsupported macro: RCC_CIR_HSERDYF
+   --  unsupported macro: RCC_CIR_PLLRDYF
+   --  unsupported macro: RCC_CIR_PLLI2SRDYF
+   --  unsupported macro: RCC_CIR_PLLSAIRDYF
+   --  unsupported macro: RCC_CIR_CSSF
+   --  unsupported macro: RCC_CIR_LSIRDYIE
+   --  unsupported macro: RCC_CIR_LSERDYIE
+   --  unsupported macro: RCC_CIR_HSIRDYIE
+   --  unsupported macro: RCC_CIR_HSERDYIE
+   --  unsupported macro: RCC_CIR_PLLRDYIE
+   --  unsupported macro: RCC_CIR_
+   --  unsupported macro: RCC_CIR_PLLSAIRDYIE
+   --  unsupported macro: RCC_CIR_
+   --  unsupported macro: RCC_CIR_
+   --  unsupported macro: RCC_CIR_
+   --  unsupported macro: RCC_CIR_
+   --  unsupported macro: RCC_CIR_
+   --  unsupported macro: RCC_CIR_
+   --  unsupported macro: RCC_CIR_PLLSAIRDYC
+   --  unsupported macro: RCC_CIR_
+   --  unsupported macro: RCC_AHB1RSTR_RST
+   --  unsupported macro: RCC_AHB1RSTR_RST
+   --  unsupported macro: RCC_AHB1RSTR_RST
+   --  unsupported macro: RCC_AHB1RSTR_RST
+   --  unsupported macro: RCC_AHB1RSTR_RST
+   --  unsupported macro: RCC_AHB1RSTR_RST
+   --  unsupported macro: RCC_AHB1RSTR_RST
+   --  unsupported macro: RCC_AHB1RSTR_RST
+   --  unsupported macro: RCC_AHB1RSTR_RST
+   --  unsupported macro: RCC_AHB1RSTR_RST
+   --  unsupported macro: RCC_AHB1RSTR_RST
+   --  unsupported macro: RCC_AHB1RSTR_CRCRST
+   --  unsupported macro: RCC_AHB1RSTR_DMA1RST
+   --  unsupported macro: RCC_AHB1RSTR_DMA2RST
+   --  unsupported macro: RCC_AHB1RSTR_DMA2DRST
+   --  unsupported macro: RCC_AHB1RSTR_
+   --  unsupported macro: RCC_AHB1RSTR_
+   
+   --  unsupported macro: RCC_AHB2RSTR_DCMIRST
+   --  unsupported macro: RCC_AHB2RSTR_CRYPRST
+   --  unsupported macro: RCC_AHB2RSTR_HASHRST
+   --  unsupported macro: RCC_AHB2RSTR_HSAHRST RCC_AHB2RSTR_HASHRST
+   --  unsupported macro: RCC_AHB2RSTR_RNGRST
+   --  unsupported macro: RCC_AHB2RSTR_OTGFSRST
+   
+   --  unsupported macro: RCC_APB1RSTR_RST
+   --  unsupported macro: RCC_APB1RSTR_RST
+   --  unsupported macro: RCC_APB1RSTR_RST
+   --  unsupported macro: RCC_APB1RSTR_RST
+   --  unsupported macro: RCC_APB1RSTR_RST
+   --  unsupported macro: RCC_APB1RSTR_RST
+   --  unsupported macro: RCC_APB1RSTR_RST
+   --  unsupported macro: RCC_APB1RSTR_RST
+   --  unsupported macro: RCC_APB1RSTR_RST
+   --  unsupported macro: RCC_APB1RSTR_RST
+   --  unsupported macro: RCC_APB1RSTR_RST
+   --  unsupported macro: RCC_APB1RSTR_RST
+   --  unsupported macro: RCC_APB1RSTR_RST
+   --  unsupported macro: RCC_APB1RSTR_RST
+   --  unsupported macro: RCC_APB1RSTR_ST
+   --  unsupported macro: RCC_APB1RSTR_ST
+   --  unsupported macro: RCC_APB1RSTR_RST
+   --  unsupported macro: RCC_APB1RSTR_RST
+   --  unsupported macro: RCC_APB1RSTR_RST
+   --  unsupported macro: RCC_APB1RSTR_CAN1RST
+   --  unsupported macro: RCC_APB1RSTR_CAN2RST
+   --  unsupported macro: RCC_APB1RSTR_PWRRST
+   --  unsupported macro: RCC_APB1RSTR_DACRST
+   --  unsupported macro: RCC_APB1RSTR_UART7RST
+   --  unsupported macro: RCC_APB1RSTR_UART8RST
+   
+   --  unsupported macro: RCC_APB2RSTR_TIM1RST
+   --  unsupported macro: RCC_APB2RSTR_TIM8RST
+   --  unsupported macro: RCC_APB2RSTR_USART1RST
+   --  unsupported macro: RCC_APB2RSTR_USART6RST
+   --  unsupported macro: RCC_APB2RSTR_ADCRST
+   --  unsupported macro: RCC_APB2RSTR_SDIORST
+   --  unsupported macro: RCC_APB2RSTR_SPI1RST
+   --  unsupported macro: RCC_APB2RSTR_SPI4RST
+   --  unsupported macro: RCC_APB2RSTR_SYSCFGRST
+   --  unsupported macro: RCC_APB2RSTR_ST
+   --  unsupported macro: RCC_APB2RSTR_RST
+   --  unsupported macro: RCC_APB2RSTR_RST
+   --  unsupported macro: RCC_APB2RSTR_SPI5RST
+   --  unsupported macro: RCC_APB2RSTR_SPI6RST
+   --  unsupported macro: RCC_APB2RSTR_SAI1RST
+   --  unsupported macro: RCC_APB2RSTR_LTDCRST
+   --  unsupported macro: RCC_APB2RSTR_SPI1 RCC_APB2RSTR_SPI1RST
+   
+   --  unsupported macro: RCC_AHB1ENR_GPIOAEN
+   --  unsupported macro: RCC_AHB1ENR_GPIOBEN
+   --  unsupported macro: RCC_AHB1ENR_GPIOCEN
+   --  unsupported macro: RCC_AHB1ENR_GPIODEN
+   --  unsupported macro: RCC_AHB1ENR_GPIOEEN
+   --  unsupported macro: RCC_AHB1ENR_GPIOFEN
+   --  unsupported macro: RCC_AHB1ENR_GPIOGEN
+   --  unsupported macro: RCC_AHB1ENR_GPIOHEN
+   --  unsupported macro: RCC_AHB1ENR_GPIOIEN
+   --  unsupported macro: RCC_AHB1ENR_GPIOJEN
+   --  unsupported macro: RCC_AHB1ENR_GPIOKEN
+   --  unsupported macro: RCC_AHB1ENR_CRCEN
+   --  unsupported macro: RCC_AHB1ENR_BKPSRAMEN
+   --  unsupported macro: RCC_AHB1ENR_CCMDATARAMEN
+   --  unsupported macro: RCC_AHB1ENR_DMA1EN
+   --  unsupported macro: RCC_AHB1ENR_DMA2EN
+   --  unsupported macro: RCC_AHB1ENR_DMA2DEN
+   --  unsupported macro: RCC_AHB1ENR_ETHMACEN
+   --  unsupported macro: RCC_AHB1ENR_ETHMACTXEN
+   --  unsupported macro: RCC_AHB1ENR_ETHMACRXEN
+   --  unsupported macro: RCC_AHB1ENR_ETHMACPTPEN
+   --  unsupported macro: RCC_AHB1ENR_OTGHSEN
+   --  unsupported macro: RCC_AHB1ENR_OTGHSULPIEN
+   --  unsupported macro: RCC_AHB2ENR_DCMIEN
+   --  unsupported macro: RCC_AHB2ENR_CRYPEN
+   --  unsupported macro: RCC_AHB2ENR_HASHEN
+   --  unsupported macro: RCC_AHB2ENR_RNGEN
+   --  unsupported macro: RCC_AHB2ENR_OTGFSEN
+   --  unsupported macro: RCC_APB1ENR_TIM2EN
+   --  unsupported macro: RCC_APB1ENR_TIM3EN
+   --  unsupported macro: RCC_APB1ENR_TIM4EN
+   --  unsupported macro: RCC_APB1ENR_TIM5EN
+   --  unsupported macro: RCC_APB1ENR_TIM6EN
+   --  unsupported macro: RCC_APB1ENR_TIM7EN
+   --  unsupported macro: RCC_APB1ENR_TIM12EN
+   --  unsupported macro: RCC_APB1ENR_TIM13EN
+   --  unsupported macro: RCC_APB1ENR_TIM14EN
+   --  unsupported macro: RCC_APB1ENR_WWDGEN
+   --  unsupported macro: RCC_APB1ENR_SPI2EN
+   --  unsupported macro: RCC_APB1ENR_SPI3EN
+   --  unsupported macro: RCC_APB1ENR_USART2EN
+   --  unsupported macro: RCC_APB1ENR_USART3EN
+   --  unsupported macro: RCC_APB1ENR_UART4EN
+   --  unsupported macro: RCC_APB1ENR_UART5EN
+   --  unsupported macro: RCC_APB1ENR_I2C1EN
+   --  unsupported macro: RCC_APB1ENR_I2C2EN
+   --  unsupported macro: RCC_APB1ENR_I2C3EN
+   --  unsupported macro: RCC_APB1ENR_CAN1EN
+   --  unsupported macro: RCC_APB1ENR_CAN2EN
+   --  unsupported macro: RCC_APB1ENR_PWREN
+   --  unsupported macro: RCC_APB1ENR_DACEN
+   --  unsupported macro: RCC_APB1ENR_UART7EN
+   --  unsupported macro: RCC_APB1ENR_UART8EN
+   --  unsupported macro: RCC_APB2ENR_TIM1EN
+   --  unsupported macro: RCC_APB2ENR_TIM8EN
+   --  unsupported macro: RCC_APB2ENR_USART1EN
+   --  unsupported macro: RCC_APB2ENR_USART6EN
+   --  unsupported macro: RCC_APB2ENR_ADC1EN
+   --  unsupported macro: RCC_APB2ENR_ADC2EN
+   --  unsupported macro: RCC_APB2ENR_ADC3EN
+   --  unsupported macro: RCC_APB2ENR_SDIOEN
+   --  unsupported macro: RCC_APB2ENR_SPI1EN
+   --  unsupported macro: RCC_APB2ENR_SPI4EN
+   --  unsupported macro: RCC_APB2ENR_SYSCFGEN
+   --  unsupported macro: RCC_APB2ENR_TIM9EN
+   --  unsupported macro: RCC_APB2ENR_TIM10EN
+   --  unsupported macro: RCC_APB2ENR_TIM11EN
+   --  unsupported macro: RCC_APB2ENR_SPI5EN
+   --  unsupported macro: RCC_APB2ENR_SPI6EN
+   --  unsupported macro: RCC_APB2ENR_SAI1EN
+   --  unsupported macro: RCC_APB2ENR_LTDCEN
+   --  unsupported macro: RCC_AHB1LPENR_GPIOALPEN
+   --  unsupported macro: RCC_AHB1LPENR_GPIOBLPEN
+   --  unsupported macro: RCC_AHB1LPENR_GPIOCLPEN
+   --  unsupported macro: RCC_AHB1LPENR_GPIODLPEN
+   --  unsupported macro: RCC_AHB1LPENR_GPIOELPEN
+   --  unsupported macro: RCC_AHB1LPENR_GPIOFLPEN
+   --  unsupported macro: RCC_AHB1LPENR_GPIOGLPEN
+   --  unsupported macro: RCC_AHB1LPENR_GPIOHLPEN
+   --  unsupported macro: RCC_AHB1LPENR_GPIOILPEN
+   --  unsupported macro: RCC_AHB1LPENR_GPIOJLPEN
+   --  unsupported macro: RCC_AHB1LPENR_GPIOKLPEN
+   --  unsupported macro: RCC_AHB1LPENR_CRCLPEN
+   --  unsupported macro: RCC_AHB1LPENR_FLITFLPEN
+   --  unsupported macro: RCC_AHB1LPENR_SRAM1LPEN
+   --  unsupported macro: RCC_AHB1LPENR_SRAM2LPEN
+   --  unsupported macro: RCC_AHB1LPENR_BKPSRAMLPEN
+   --  unsupported macro: RCC_AHB1LPENR_SRAM3LPEN
+   --  unsupported macro: RCC_AHB1LPENR_DMA1LPEN
+   --  unsupported macro: RCC_AHB1LPENR_DMA2LPEN
+   --  unsupported macro: RCC_AHB1LPENR_DMA2DLPEN
+   --  unsupported macro: RCC_AHB1LPENR_ETHMACLPEN
+   --  unsupported macro: RCC_AHB1LPENR_ETHMACTXLPEN
+   --  unsupported macro: RCC_AHB1LPENR_ETHMACRXLPEN
+   --  unsupported macro: RCC_AHB1LPENR_ETHMACPTPLPEN
+   --  unsupported macro: RCC_AHB1LPENR_OTGHSLPEN
+   --  unsupported macro: RCC_AHB1LPENR_OTGHSULPILPEN
+   --  unsupported macro: RCC_AHB2LPENR_DCMILPEN
+   --  unsupported macro: RCC_AHB2LPENR_CRYPLPEN
+   --  unsupported macro: RCC_AHB2LPENR_HASHLPEN
+   --  unsupported macro: RCC_AHB2LPENR_RNGLPEN
+   --  unsupported macro: RCC_AHB2LPENR_OTGFSLPEN
+   --  unsupported macro: RCC_APB1LPENR_TIM2LPEN
+   --  unsupported macro: RCC_APB1LPENR_TIM3LPEN
+   --  unsupported macro: RCC_APB1LPENR_TIM4LPEN
+   --  unsupported macro: RCC_APB1LPENR_TIM5LPEN
+   --  unsupported macro: RCC_APB1LPENR_TIM6LPEN
+   --  unsupported macro: RCC_APB1LPENR_TIM7LPEN
+   --  unsupported macro: RCC_APB1LPENR_TIM12LPEN
+   --  unsupported macro: RCC_APB1LPENR_TIM13LPEN
+   --  unsupported macro: RCC_APB1LPENR_TIM14LPEN
+   --  unsupported macro: RCC_APB1LPENR_WWDGLPEN
+   --  unsupported macro: RCC_APB1LPENR_SPI2LPEN
+   --  unsupported macro: RCC_APB1LPENR_SPI3LPEN
+   --  unsupported macro: RCC_APB1LPENR_USART2LPEN
+   --  unsupported macro: RCC_APB1LPENR_USART3LPEN
+   --  unsupported macro: RCC_APB1LPENR_UART4LPEN
+   --  unsupported macro: RCC_APB1LPENR_UART5LPEN
+   --  unsupported macro: RCC_APB1LPENR_I2C1LPEN
+   --  unsupported macro: RCC_APB1LPENR_I2C2LPEN
+   --  unsupported macro: RCC_APB1LPENR_I2C3LPEN
+   --  unsupported macro: RCC_APB1LPENR_CAN1LPEN
+   --  unsupported macro: RCC_APB1LPENR_CAN2LPEN
+   --  unsupported macro: RCC_APB1LPENR_PWRLPEN
+   --  unsupported macro: RCC_APB1LPENR_DACLPEN
+   --  unsupported macro: RCC_APB1LPENR_UART7LPEN
+   --  unsupported macro: RCC_APB1LPENR_UART8LPEN
+   --  unsupported macro: RCC_APB2LPENR_TIM1LPEN
+   --  unsupported macro: RCC_APB2LPENR_TIM8LPEN
+   --  unsupported macro: RCC_APB2LPENR_USART1LPEN
+   --  unsupported macro: RCC_APB2LPENR_USART6LPEN
+   --  unsupported macro: RCC_APB2LPENR_ADC1LPEN
+   --  unsupported macro: RCC_APB2LPENR_ADC2PEN
+   --  unsupported macro: RCC_APB2LPENR_ADC3LPEN
+   --  unsupported macro: RCC_APB2LPENR_SDIOLPEN
+   --  unsupported macro: RCC_APB2LPENR_SPI1LPEN
+   --  unsupported macro: RCC_APB2LPENR_SPI4LPEN
+   --  unsupported macro: RCC_APB2LPENR_SYSCFGLPEN
+   --  unsupported macro: RCC_APB2LPENR_TIM9LPEN
+   --  unsupported macro: RCC_APB2LPENR_TIM10LPEN
+   --  unsupported macro: RCC_APB2LPENR_TIM11LPEN
+   --  unsupported macro: RCC_APB2LPENR_SPI5LPEN
+   --  unsupported macro: RCC_APB2LPENR_SPI6LPEN
+   --  unsupported macro: RCC_APB2LPENR_SAI1LPEN
+   --  unsupported macro: RCC_APB2LPENR_LTDCLPEN
+   
+   --  unsupported macro: RCC_BDCR_
+   --  unsupported macro: RCC_BDCR_
+   --  unsupported macro: RCC_BDCR_
+   --  unsupported macro: RCC_BDCR_
+   --  unsupported macro: RCC_BDCR_
+   --  unsupported macro: RCC_BDCR_
+   --  unsupported macro: RCC_BDCR_
+   --  unsupported macro: RCC_BDCR_
+   
+   --  unsupported macro: RCC_CSR_LSION
+   --  unsupported macro: RCC_CSR_LSIRDY
+   --  unsupported macro: RCC_CSR_
+   --  unsupported macro: RCC_CSR_
+   --  unsupported macro: RCC_CSR_
+   --  unsupported macro: RCC_CSR_
+   --  unsupported macro: RCC_CSR_
+   --  unsupported macro: RCC_CSR_
+   --  unsupported macro: RCC_CSR_
+   --  unsupported macro: RCC_CSR_
+   
+   --  unsupported macro: RCC_SSCGR_MODPER
+   --  unsupported macro: RCC_SSCGR_INCSTEP
+   --  unsupported macro: RCC_SSCGR_SPREADSEL
+   --  unsupported macro: RCC_SSCGR_SSCGEN
+   
+   --  unsupported macro: RCC_PLLI2SCFGR_PLLI2SN
+   --  unsupported macro: RCC_PLLI2SCFGR_PLLI2SQ
+   --  unsupported macro: RCC_PLLI2SCFGR_PLLI2SR
+   
+   --  unsupported macro: RCC_PLLSAICFGR_PLLI2SN
+   --  unsupported macro: RCC_PLLSAICFGR_PLLI2SQ
+   --  unsupported macro: RCC_PLLSAICFGR_PLLI2SR
+   --  unsupported macro: RCC_DCKCFGR_PLLI2SDIVQ
+   --  unsupported macro: RCC_DCKCFGR_PLLSAIDIVQ
+   --  unsupported macro: RCC_DCKCFGR_PLLSAIDIVR
+   --  unsupported macro: RCC_DCKCFGR_SAI1ASRC
+   --  unsupported macro: RCC_DCKCFGR_SAI1BSRC
+   --  unsupported macro: RCC_DCKCFGR_TIMPRE
+  --**************************************************************************** 
+  --                                                                             
+  --                         Reset and Clock Control                             
+  --                                                                             
+  --**************************************************************************** 
+  --*******************  Bit definition for RCC_CR register  ******************* 
+  --*******************  Bit definition for RCC_PLLCFGR register  ************** 
+  --*******************  Bit definition for RCC_CFGR register  ***************** 
+  --!< SW configuration  
+  --!< SWS configuration  
+  --!< HPRE configuration  
+  --!< PPRE1 configuration  
+  --!< PPRE2 configuration  
+  --!< RTCPRE configuration  
+  --!< MCO1 configuration  
+  --*******************  Bit definition for RCC_CIR register  ****************** 
+  --*******************  Bit definition for RCC_AHB1RSTR register  ************* 
+  --*******************  Bit definition for RCC_AHB2RSTR register  ************* 
+  -- maintained for legacy purpose  
+  --*******************  Bit definition for RCC_AHB3RSTR register  ************* 
+  --*******************  Bit definition for RCC_APB1RSTR register  ************* 
+  --*******************  Bit definition for RCC_APB2RSTR register  ************* 
+  -- Old SPI1RST bit definition, maintained for legacy purpose  
+  --*******************  Bit definition for RCC_AHB1ENR register  ************** 
+  --*******************  Bit definition for RCC_AHB2ENR register  ************** 
+  --*******************  Bit definition for RCC_AHB3ENR register  ************** 
+  --*******************  Bit definition for RCC_APB1ENR register  ************** 
+  --*******************  Bit definition for RCC_APB2ENR register  ************** 
+  --*******************  Bit definition for RCC_AHB1LPENR register  ************ 
+  --*******************  Bit definition for RCC_AHB2LPENR register  ************ 
+  --*******************  Bit definition for RCC_AHB3LPENR register  ************ 
+  --*******************  Bit definition for RCC_APB1LPENR register  ************ 
+  --*******************  Bit definition for RCC_APB2LPENR register  ************ 
+  --*******************  Bit definition for RCC_BDCR register  ***************** 
+  --*******************  Bit definition for RCC_CSR register  ****************** 
+  --*******************  Bit definition for RCC_SSCGR register  **************** 
+  --*******************  Bit definition for RCC_PLLI2SCFGR register  *********** 
+  --*******************  Bit definition for RCC_PLLSAICFGR register  *********** 
+  --*******************  Bit definition for RCC_DCKCFGR register  ************** 
+  --* 
+  --  * @brief Reset and Clock Control
+  --   
+
+  --!< RCC clock control register,                                  Address offset: 0x00  
+   type RCC_TypeDef_RESERVED1_array is array (0 .. 1) of aliased uint32_t;
+   type RCC_TypeDef_RESERVED3_array is array (0 .. 1) of aliased uint32_t;
+   type RCC_TypeDef_RESERVED5_array is array (0 .. 1) of aliased uint32_t;
+   type RCC_TypeDef_RESERVED6_array is array (0 .. 1) of aliased uint32_t;
+   type RCC_TypeDef is record
+      CR		: aliased uint32_t;  -- rcc.h:508
+      PLLCFGR		: aliased uint32_t;  -- rcc.h:509
+      CFGR		: aliased uint32_t;  -- rcc.h:510
+      CIR		: aliased uint32_t;  -- rcc.h:511
+      AHB1RSTR		: aliased uint32_t;  -- rcc.h:512
+      AHB2RSTR		: aliased uint32_t;  -- rcc.h:513
+      AHB3RSTR		: aliased uint32_t;  -- rcc.h:514
+      RESERVED0		: aliased uint32_t;  -- rcc.h:515
+      APB1RSTR		: aliased uint32_t;  -- rcc.h:516
+      APB2RSTR		: aliased uint32_t;  -- rcc.h:517
+      RESERVED1		: aliased RCC_TypeDef_RESERVED1_array;  -- rcc.h:518
+      AHB1ENR		: aliased uint32_t;  -- rcc.h:519
+      AHB2ENR		: aliased uint32_t;  -- rcc.h:520
+      AHB3ENR		: aliased uint32_t;  -- rcc.h:521
+      RESERVED2		: aliased uint32_t;  -- rcc.h:522
+      APB1ENR		: aliased uint32_t;  -- rcc.h:523
+      APB2ENR		: aliased uint32_t;  -- rcc.h:524
+      RESERVED3		: aliased RCC_TypeDef_RESERVED3_array;  -- rcc.h:525
+      AHB1LPENR		: aliased uint32_t;  -- rcc.h:526
+      AHB2LPENR		: aliased uint32_t;  -- rcc.h:527
+      AHB3LPENR		: aliased uint32_t;  -- rcc.h:528
+      RESERVED4		: aliased uint32_t;  -- rcc.h:529
+      APB1LPENR		: aliased uint32_t;  -- rcc.h:530
+      APB2LPENR		: aliased uint32_t;  -- rcc.h:531
+      RESERVED5		: aliased RCC_TypeDef_RESERVED5_array;  -- rcc.h:532
+      BDCR		: aliased uint32_t;  -- rcc.h:533
+      CSR		: aliased uint32_t;  -- rcc.h:534
+      RESERVED6		: aliased RCC_TypeDef_RESERVED6_array;  -- rcc.h:535
+      SSCGR		: aliased uint32_t;  -- rcc.h:536
+      PLLI2SCFGR	: aliased uint32_t;  -- rcc.h:537
+      PLLSAICFGR	: aliased uint32_t;  -- rcc.h:538
+      DCKCFGR		: aliased uint32_t;  -- rcc.h:539
+   end record;
+   pragma Convention (C_Pass_By_Copy, RCC_TypeDef);  -- rcc.h:541
+
+   --  skipped anonymous struct anon_0
+
+  --!< RCC PLL configuration register,                              Address offset: 0x04  
+  --!< RCC clock configuration register,                            Address offset: 0x08  
+  --!< RCC clock interrupt register,                                Address offset: 0x0C  
+  --!< RCC AHB1 peripheral reset register,                          Address offset: 0x10  
+  --!< RCC AHB2 peripheral reset register,                          Address offset: 0x14  
+  --!< RCC AHB3 peripheral reset register,                          Address offset: 0x18  
+  --!< Reserved, 0x1C                                                                     
+  --!< RCC APB1 peripheral reset register,                          Address offset: 0x20  
+  --!< RCC APB2 peripheral reset register,                          Address offset: 0x24  
+  --!< Reserved, 0x28-0x2C                                                                
+  --!< RCC AHB1 peripheral clock register,                          Address offset: 0x30  
+  --!< RCC AHB2 peripheral clock register,                          Address offset: 0x34  
+  --!< RCC AHB3 peripheral clock register,                          Address offset: 0x38  
+  --!< Reserved, 0x3C                                                                     
+  --!< RCC APB1 peripheral clock enable register,                   Address offset: 0x40  
+  --!< RCC APB2 peripheral clock enable register,                   Address offset: 0x44  
+  --!< Reserved, 0x48-0x4C                                                                
+  --!< RCC AHB1 peripheral clock enable in low power mode register, Address offset: 0x50  
+  --!< RCC AHB2 peripheral clock enable in low power mode register, Address offset: 0x54  
+  --!< RCC AHB3 peripheral clock enable in low power mode register, Address offset: 0x58  
+  --!< Reserved, 0x5C                                                                     
+  --!< RCC APB1 peripheral clock enable in low power mode register, Address offset: 0x60  
+  --!< RCC APB2 peripheral clock enable in low power mode register, Address offset: 0x64  
+  --!< Reserved, 0x68-0x6C                                                                
+  --!< RCC Backup domain control register,                          Address offset: 0x70  
+  --!< RCC clock control & status register,                         Address offset: 0x74  
+  --!< Reserved, 0x78-0x7C                                                                
+  --!< RCC spread spectrum clock generation register,               Address offset: 0x80  
+  --!< RCC PLLI2S configuration register,                           Address offset: 0x84  
+  --!< RCC PLLSAI configuration register,                           Address offset: 0x88  
+  --!< RCC Dedicated Clocks configuration register,                 Address offset: 0x8C  
+end rcc_h;

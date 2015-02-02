@@ -48,6 +48,8 @@ package STM32F4 is
    type Bits_9  is mod 2**9 with Size => 9;
    type Bits_11 is mod 2**11 with Size => 11;
    type Bits_12 is mod 2**12 with Size => 12;
+   type Bits_13 is mod 2**13 with Size => 13;
+   type Bits_15 is mod 2**15 with Size => 15;
    type Bits_16 is mod 2**16 with Size => 16;
    type Bits_31 is mod 2**31 with Size => 31;
    type Bits_32 is mod 2**32 with Size => 32;

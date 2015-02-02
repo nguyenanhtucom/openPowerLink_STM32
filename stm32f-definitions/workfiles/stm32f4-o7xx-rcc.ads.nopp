@@ -1,0 +1,940 @@
+------------------------------------------------------------------------------
+--                                                                          --
+--                             STM32F4 COMPONENTS                           --
+--                                                                          --
+--                        S T M 32 F 4 . O7xx . R c c                       --
+--                                                                          --
+--                           H a r d w ar e  S p e c                        --
+--                                                                          --
+--                     Copyright (C) 2015, Jan de Kruyf                     --
+--                                                                          --
+-- This is free software;  you can redistribute it  and/or modify it  under --
+-- terms of the  GNU General Public License as published  by the Free Soft- --
+-- ware  Foundation;  either version 3,  or (at your option) any later ver- --
+-- sion.  This software is distributed in the hope  that it will be useful, --
+-- but WITHOUT ANY WARRANTY;  without even the implied warranty of MERCHAN- --
+-- TABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public --
+-- License for  more details.                                               --
+--                                                                          --
+-- You should have received a copy of the GNU General Public License and    --
+-- a copy of the GCC Runtime Library Exception along with this program;     --
+-- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
+-- <http://www.gnu.org/licenses/>.                                          --
+--                                                                          --
+--                      (email: jan.de.kruyf@gmail.com)                     --
+--                                                                          --
+------------------------------------------------------------------------------
+
+--  This file provides type definitions for the STM32F4 (ARM Cortex M4F)
+--  microcontrollers from ST Microelectronics.
+--
+--  chapter 7.3    RCC registers       RM0090 Reference manual
+--
+
+pragma Restrictions (No_Elaboration_Code);
+
+package STM32F4.o7xx.Rcc is
+   
+   --------------------------------------------------
+   -- constants for use with the rcc definitions   --
+   --  in the child packages                       --
+   --------------------------------------------------
+   
+   
+   --------------------------------------------------
+   -- register definitions                         --
+   --------------------------------------------------
+   
+   type CR_Register is record
+      --PLLSAIRDY  
+      --PLLSAION   
+      Res0      : Reserved (28 .. 31) := (others => 0);
+      PLLI2SRDY : Bits_1;
+      PLLI2SON  : Bits_1;
+      PLLRDY    : Bits_1;
+      PLLON     : Bits_1;
+      Res1      : Reserved (20 .. 23) := (others => 0);
+      CSSON     : Bits_1;
+      HSEBYP    : Bits_1;
+      HSERDY    : Bits_1;
+      HSEON     : Bits_1;
+      HSICAL    : Byte;
+      HSITRIM   : Bits_5;
+      Res2      : Reserved (2 .. 2) := (others => 0);
+      HSIRDY    : Bits_1;
+      HSION     : Bits_1;
+      
+   end record;
+   
+   for CR_Register use record
+      Res0      at 0 range 28 .. 31;
+      PLLI2SRDY at 0 range 27 .. 27;
+      PLLI2SON  at 0 range 26 .. 26;
+      PLLRDY    at 0 range 25 .. 25;
+      PLLON     at 0 range 24 .. 24;
+      Res1      at 0 range 20 .. 23;
+      CSSON     at 0 range 19 .. 19;
+      HSEBYP    at 0 range 18 .. 18;
+      HSERDY    at 0 range 17 .. 17;
+      HSEON     at 0 range 16 .. 16;
+      HSICAL    at 0 range  8 .. 15;
+      HSITRIM   at 0 range  3 ..  7;
+      Res2      at 0 range  2 ..  2;
+      HSIRDY    at 0 range  1 ..  1;
+      HSION     at 0 range  0 ..  0;
+   end record;
+   
+   
+   type PLLCFG_Register is record
+      Res0      : Reserved (28 .. 31) := (others => 0);
+      PLLQ      : Bits_4;
+      Res1      : Reserved (23 .. 23) := (others => 0);
+      PLLSRC    : Bits_1;
+      Res2      : Reserved (18 .. 21) := (others => 0);
+      PLLP      : Bits_2;
+      Res3      : Reserved (15 .. 15) := (others => 0);
+      PLLN      : Bits_9;
+      PLLM      : Bits_6;
+   end record;
+   
+   for PLLCFG_Register use record
+      Res0      at 0 range 28 .. 31;
+      PLLQ      at 0 range 24 .. 27;
+      Res1      at 0 range 23 .. 23;
+      PLLSRC    at 0 range 22 .. 22;
+      Res2      at 0 range 18 .. 21;
+      PLLP      at 0 range 16 .. 17;
+      Res3      at 0 range 15 .. 15;
+      PLLN      at 0 range  6 .. 14;
+      PLLM      at 0 range  0 ..  5;
+   end record;
+   
+   
+   type CFG_Register is record
+      MCO2      : Bits_2;
+      MCO2PRE   : Bits_3;
+      MCO1PRE   : Bits_3;
+      I2SSRC    : Bits_1;
+      MCO1      : Bits_2;
+      RTCPRE    : Bits_5;
+      PPRE2     : Bits_3;
+      PPRE1     : Bits_3;
+      Res0      : Reserved (8 .. 9) := (others => 0);
+      HPRE      : Bits_4;
+      SWS       : Bits_2;
+      SW        : Bits_2;
+   end record;
+   
+   for CFG_Register use record
+      MCO2      at 0 range 30 .. 31;
+      MCO2PRE   at 0 range 27 .. 29;
+      MCO1PRE   at 0 range 24 .. 26;
+      I2SSRC    at 0 range 23 .. 23;
+      MCO1      at 0 range 21 .. 22;
+      RTCPRE    at 0 range 16 .. 20;
+      PPRE2     at 0 range 13 .. 15;
+      PPRE1     at 0 range 10 .. 12;
+      Res0      at 0 range  8 ..  9;
+      HPRE      at 0 range  4 ..  7;
+      SWS       at 0 range  2 ..  3;
+      SW        at 0 range  0 ..  1;
+   end record;
+   
+   
+   type CIR_Register is record
+      Res0      : Reserved (24 .. 31) := (others => 0);
+      CSSC      : Bits_1;
+      Res1      : Reserved (22 .. 22) := (others => 0);
+      PLLI2SRDYC : Bits_1;
+      PLLRDYC   : Bits_1;
+      HSERDYC   : Bits_1;
+      HSIRDYC   : Bits_1;
+      LSERDYC   : Bits_1;
+      LSIRDYC   : Bits_1;
+      Res2      : Reserved (14 .. 15) := (others => 0);
+      PLLI2SRDYIE : Bits_1;
+      PLLRDYIE  : Bits_1;
+      HSERDYIE  : Bits_1;
+      HSIRDYIE  : Bits_1;
+      LSERDYIE  : Bits_1;
+      LSIRDYIE  : Bits_1;
+      CSSF      : Bits_1;
+      Res3      : Reserved ( 6 ..  6) := (others => 0);
+      PLLI2SRDYF : Bits_1;
+      PLLRDYF   : Bits_1;
+      HSERDYF   : Bits_1;
+      HSIRDYF   : Bits_1;
+      LSERDYF   : Bits_1;
+      LSIRDYF   : Bits_1;
+   end record;
+      
+   for CIR_Register use record
+      Res0      at 0 range 24 .. 31;
+      CSSC      at 0 range 23 .. 23;
+      Res1      at 0 range 22 .. 22;
+      PLLI2SRDYC at 0 range 21 .. 21;
+      PLLRDYC   at 0 range 20 .. 20;
+      HSERDYC   at 0 range 19 .. 19;
+      HSIRDYC   at 0 range 18 .. 18;
+      LSERDYC   at 0 range 17 .. 17;
+      LSIRDYC   at 0 range 16 .. 16;
+      Res2      at 0 range 14 .. 15;
+      PLLI2SRDYIE at 0 range 13 .. 13;
+      PLLRDYIE  at 0 range 12 .. 12;
+      HSERDYIE  at 0 range 11 .. 11;
+      HSIRDYIE  at 0 range 10 .. 10;
+      LSERDYIE  at 0 range  9 ..  9;
+      LSIRDYIE  at 0 range  8 ..  8;
+      CSSF      at 0 range  7 ..  7;
+      Res3      at 0 range  6 ..  6;
+      PLLI2SRDYF at 0 range  5 ..  5;
+      PLLRDYF   at 0 range  4 ..  4;
+      HSERDYF   at 0 range  3 ..  3;
+      HSIRDYF   at 0 range  2 ..  2;
+      LSERDYF   at 0 range  1 ..  1;
+      LSIRDYF   at 0 range  0 ..  0; 
+   end record;
+   
+   
+   type AHB1RST_Register is record
+      Res0      : Reserved (30 .. 31) := (others => 0);
+      OTGHS     : Bits_1;
+      Res1      : Reserved (26 .. 28) := (others => 0);
+      ETHMAC    : Bits_1;
+      Res2      : Reserved (23 .. 24) := (others => 0);
+      DMA2      : Bits_1;
+      DMA1      : Bits_1;
+      Res3      : Reserved (13 .. 20) := (others => 0);
+      CRC       : Bits_1;
+      Res4      : Reserved ( 9 .. 11) := (others => 0);
+      GPIOI     : Bits_1;
+      GPIOH     : Bits_1;
+      GPIOG     : Bits_1;
+      GPIOF     : Bits_1;
+      GPIOE     : Bits_1;
+      GPIOD     : Bits_1;
+      GPIOC     : Bits_1;
+      GPIOB     : Bits_1;
+      GPIOA     : Bits_1;
+   end record;
+   
+   for AHB1RST_Register use record
+      Res0      at 0 range 30 .. 31;
+      OTGHS     at 0 range 29 .. 29;
+      Res1      at 0 range 26 .. 28;
+      ETHMAC    at 0 range 25 .. 25;
+      Res2      at 0 range 23 .. 24;
+      DMA2      at 0 range 22 .. 22;
+      DMA1      at 0 range 21 .. 21;
+      Res3      at 0 range 13 .. 20;
+      CRC       at 0 range 12 .. 12;
+      Res4      at 0 range  9 .. 11;
+      GPIOI     at 0 range  8 ..  8; 
+      GPIOH     at 0 range  7 ..  7; 
+      GPIOG     at 0 range  6 ..  6; 
+      GPIOF     at 0 range  5 ..  5;
+      GPIOE     at 0 range  4 ..  4; 
+      GPIOD     at 0 range  3 ..  3; 
+      GPIOC     at 0 range  2 ..  2; 
+      GPIOB     at 0 range  1 ..  1; 
+      GPIOA     at 0 range  0 ..  0; 
+   end record;
+   
+   
+   type AHB2RST_Register is record
+      Res0      : Reserved ( 8 .. 31) := (others => 0);
+      OTGFS     : Bits_1;
+      RNG       : Bits_1;
+      HASH      : Bits_1;
+      CRYP      : Bits_1;
+      Res1      : Reserved ( 1 ..  3) := (others => 0);
+      DCMI      : Bits_1;
+   end record;
+   
+   for AHB2RST_Register use record
+      Res0      at 0 range  8 .. 31;
+      OTGFS     at 0 range  7 ..  7; 
+      RNG       at 0 range  6 ..  6; 
+      HASH      at 0 range  5 ..  5; 
+      CRYP      at 0 range  4 ..  4; 
+      Res1      at 0 range  1 ..  3; 
+      DCMI      at 0 range  0 ..  0; 
+   end record;
+   
+   
+   type AHB3RST_Register is record
+      Res0      : Reserved ( 1 .. 31) := (others => 0);
+      FSMC      : Bits_1;
+   end record;
+   
+   for AHB3RST_Register use record
+      Res0      at 0 range  1 .. 31;
+      FSMC      at 0 range  0 ..  0; 
+   end record;
+   
+   
+   type APB1RST_Register is record
+      Res0      : Reserved (30 .. 31) := (others => 0);
+      DAC       : Bits_1;
+      PWR       : Bits_1;
+      Res1      : Reserved (27 .. 27) := (others => 0);
+      CAN2      : Bits_1;
+      CAN1      : Bits_1;
+      Res2      : Reserved (24 .. 24) := (others => 0);
+      I2C3      : Bits_1;
+      I2C2      : Bits_1;
+      I2C1      : Bits_1;
+      UART5     : Bits_1;
+      UART4     : Bits_1;
+      UART3     : Bits_1;
+      UART2     : Bits_1;
+      Res3      : Reserved (16 .. 16) := (others => 0);
+      SPI3      : Bits_1;
+      SPI2      : Bits_1;
+      Res4      : Reserved (12 .. 13) := (others => 0);
+      WWDG      : Bits_1;
+      Res5      : Reserved ( 9 .. 10) := (others => 0);
+      TIM14     : Bits_1;
+      TIM13     : Bits_1;
+      TIM12     : Bits_1;
+      TIM7      : Bits_1;
+      TIM6      : Bits_1;
+      TIM5      : Bits_1;
+      TIM4      : Bits_1;
+      TIM3      : Bits_1;
+      TIM2      : Bits_1;
+   end record;
+   
+   for APB1RST_Register use record
+      Res0      at 0 range 30 .. 31;
+      DAC       at 0 range 29 .. 29;
+      PWR       at 0 range 28 .. 28;
+      Res1      at 0 range 27 .. 27;
+      CAN2      at 0 range 26 .. 26;
+      CAN1      at 0 range 25 .. 25;
+      Res2      at 0 range 24 .. 24;
+      I2C3      at 0 range 23 .. 23;
+      I2C2      at 0 range 22 .. 22;
+      I2C1      at 0 range 21 .. 21;
+      UART5     at 0 range 20 .. 20;
+      UART4     at 0 range 19 .. 19;
+      UART3     at 0 range 18 .. 18;
+      UART2     at 0 range 17 .. 17;
+      Res3      at 0 range 16 .. 16;
+      SPI3      at 0 range 15 .. 15;
+      SPI2      at 0 range 14 .. 14;
+      Res4      at 0 range 12 .. 13;
+      WWDG      at 0 range 11 .. 11;
+      Res5      at 0 range  9 .. 10; 
+      TIM14     at 0 range  8 ..  8; 
+      TIM13     at 0 range  7 ..  7; 
+      TIM12     at 0 range  6 ..  6; 
+      TIM7      at 0 range  5 ..  5;
+      TIM6      at 0 range  4 ..  4; 
+      TIM5      at 0 range  3 ..  3; 
+      TIM4      at 0 range  2 ..  2; 
+      TIM3      at 0 range  1 ..  1; 
+      TIM2      at 0 range  0 ..  0; 
+   end record;
+   
+   
+   type APB2RST_Register is record
+      Res0      : Reserved (19 .. 31) := (others => 0);
+      TIM11     : Bits_1;
+      TIM10     : Bits_1;
+      TIM9      : Bits_1;
+      Res1      : Reserved (15 .. 15) := (others => 0);
+      SYSCFG    : Bits_1;
+      Res2      : Reserved (13 .. 13) := (others => 0);
+      SPI1      : Bits_1;
+      SDIO      : Bits_1;
+      Res3      : Reserved ( 9 .. 10) := (others => 0);
+      ADC       : Bits_1;
+      Res4      : Reserved ( 6 ..  7) := (others => 0);
+      UART6     : Bits_1;
+      UART1     : Bits_1;
+      Res5      : Reserved ( 2 ..  3) := (others => 0);
+      TIM8      : Bits_1;
+      TIM1      : Bits_1;
+   end record;
+   
+   for APB2RST_Register use record
+      Res0      at 0 range 19 .. 31;
+      TIM11     at 0 range 18 .. 18;
+      TIM10     at 0 range 17 .. 17;
+      TIM9      at 0 range 16 .. 16;
+      Res1      at 0 range 15 .. 15;
+      SYSCFG    at 0 range 14 .. 14;
+      Res2      at 0 range 13 .. 13;
+      SPI1      at 0 range 12 .. 12;
+      SDIO      at 0 range 11 .. 11;
+      Res3      at 0 range  9 .. 10; 
+      ADC       at 0 range  8 ..  8; 
+      Res4      at 0 range  6 ..  7; 
+      UART6     at 0 range  5 ..  5;
+      UART1     at 0 range  4 ..  4; 
+      Res5      at 0 range  2 ..  3; 
+      TIM8      at 0 range  1 ..  1; 
+      TIM1      at 0 range  0 ..  0; 
+   end record;
+   
+   
+   type AHB1EN_Register is record
+      Res0      : Reserved (31 .. 31) := (others => 0);
+      OTGHSULPI : Bits_1;
+      OTGHS     : Bits_1;
+      ETHMACPTP : Bits_1;
+      ETHMACRX  : Bits_1;
+      ETHMACTX  : Bits_1;
+      ETHMAC    : Bits_1;
+      Res2      : Reserved (23 .. 24) := (others => 0);
+      DMA2      : Bits_1;
+      DMA1      : Bits_1;
+      CCMDATARAM : Bits_1;
+      Res3      : Reserved (19 .. 19) := (others => 0);
+      BKPSRAM   : Bits_1;
+      Res5      : Reserved (13 .. 17) := (others => 0);
+      CRC       : Bits_1;
+      Res4      : Reserved ( 9 .. 11) := (others => 0);
+      GPIOI     : Bits_1;
+      GPIOH     : Bits_1;
+      GPIOG     : Bits_1;
+      GPIOF     : Bits_1;
+      GPIOE     : Bits_1;
+      GPIOD     : Bits_1;
+      GPIOC     : Bits_1;
+      GPIOB     : Bits_1;
+      GPIOA     : Bits_1;
+   end record;
+   
+   for AHB1EN_Register use record
+      Res0      at 0 range 31 .. 31;
+      OTGHSULPI at 0 range 30 .. 30;
+      OTGHS     at 0 range 29 .. 29;
+      ETHMACPTP at 0 range 28 .. 28;
+      ETHMACRX  at 0 range 27 .. 27;
+      ETHMACTX  at 0 range 26 .. 26;
+      ETHMAC    at 0 range 25 .. 25;
+      Res2      at 0 range 23 .. 24;
+      DMA2      at 0 range 22 .. 22;
+      DMA1      at 0 range 21 .. 21;
+      CCMDATARAM at 0 range 20 .. 20;
+      Res3      at 0 range 19 .. 19;
+      BKPSRAM   at 0 range 18 .. 18;
+      Res5      at 0 range 13 .. 17;
+      CRC       at 0 range 12 .. 12;
+      Res4      at 0 range  9 .. 11;
+      GPIOI     at 0 range  8 ..  8; 
+      GPIOH     at 0 range  7 ..  7; 
+      GPIOG     at 0 range  6 ..  6; 
+      GPIOF     at 0 range  5 ..  5;
+      GPIOE     at 0 range  4 ..  4; 
+      GPIOD     at 0 range  3 ..  3; 
+      GPIOC     at 0 range  2 ..  2; 
+      GPIOB     at 0 range  1 ..  1; 
+      GPIOA     at 0 range  0 ..  0;
+   end record;
+   
+   
+   type AHB2EN_Register is record
+      Res0      : Reserved ( 8 .. 31) := (others => 0);
+      OTGFS     : Bits_1;
+      RNG       : Bits_1;
+      HASH      : Bits_1;
+      CRYP      : Bits_1;
+      Res1      : Reserved ( 1 ..  3) := (others => 0);
+      DCMI      : Bits_1;
+   end record;
+   
+   for AHB2EN_Register use record
+      Res0      at 0 range  8 .. 31;
+      OTGFS     at 0 range  7 ..  7; 
+      RNG       at 0 range  6 ..  6; 
+      HASH      at 0 range  5 ..  5; 
+      CRYP      at 0 range  4 ..  4; 
+      Res1      at 0 range  1 ..  3; 
+      DCMI      at 0 range  0 ..  0; 
+   end record;
+   
+   
+   type AHB3EN_Register is record
+      Res0      : Reserved ( 1 .. 31) := (others => 0);
+      FSMC      : Bits_1;
+   end record;
+   
+   for AHB3EN_Register use record
+      Res0      at 0 range  1 .. 31;
+      FSMC      at 0 range  0 ..  0; 
+   end record;
+   
+   
+   type APB1EN_Register is record
+      Res0      : Reserved (30 .. 31) := (others => 0);
+      DAC       : Bits_1;
+      PWR       : Bits_1;
+      Res1      : Reserved (27 .. 27) := (others => 0);
+      CAN2      : Bits_1;
+      CAN1      : Bits_1;
+      Res2      : Reserved (24 .. 24) := (others => 0);
+      I2C3      : Bits_1;
+      I2C2      : Bits_1;
+      I2C1      : Bits_1;
+      UART5     : Bits_1;
+      UART4     : Bits_1;
+      UART3     : Bits_1;
+      UART2     : Bits_1;
+      Res3      : Reserved (16 .. 16) := (others => 0);
+      SPI3      : Bits_1;
+      SPI2      : Bits_1;
+      Res4      : Reserved (12 .. 13) := (others => 0);
+      WWDG      : Bits_1;
+      Res5      : Reserved ( 9 .. 10) := (others => 0);
+      TIM14     : Bits_1;
+      TIM13     : Bits_1;
+      TIM12     : Bits_1;
+      TIM7      : Bits_1;
+      TIM6      : Bits_1;
+      TIM5      : Bits_1;
+      TIM4      : Bits_1;
+      TIM3      : Bits_1;
+      TIM2      : Bits_1;
+   end record;
+   
+   for APB1EN_Register use record
+      Res0      at 0 range 30 .. 31;
+      DAC       at 0 range 29 .. 29;
+      PWR       at 0 range 28 .. 28;
+      Res1      at 0 range 27 .. 27;
+      CAN2      at 0 range 26 .. 26;
+      CAN1      at 0 range 25 .. 25;
+      Res2      at 0 range 24 .. 24;
+      I2C3      at 0 range 23 .. 23;
+      I2C2      at 0 range 22 .. 22;
+      I2C1      at 0 range 21 .. 21;
+      UART5     at 0 range 20 .. 20;
+      UART4     at 0 range 19 .. 19;
+      UART3     at 0 range 18 .. 18;
+      UART2     at 0 range 17 .. 17;
+      Res3      at 0 range 16 .. 16;
+      SPI3      at 0 range 15 .. 15;
+      SPI2      at 0 range 14 .. 14;
+      Res4      at 0 range 12 .. 13;
+      WWDG      at 0 range 11 .. 11;
+      Res5      at 0 range  9 .. 10; 
+      TIM14     at 0 range  8 ..  8; 
+      TIM13     at 0 range  7 ..  7; 
+      TIM12     at 0 range  6 ..  6; 
+      TIM7      at 0 range  5 ..  5;
+      TIM6      at 0 range  4 ..  4; 
+      TIM5      at 0 range  3 ..  3; 
+      TIM4      at 0 range  2 ..  2; 
+      TIM3      at 0 range  1 ..  1; 
+      TIM2      at 0 range  0 ..  0; 
+   end record;
+   
+   
+   type APB2EN_Register is record
+      Res0      : Reserved (19 .. 31) := (others => 0);
+      TIM11     : Bits_1;
+      TIM10     : Bits_1;
+      TIM9      : Bits_1;
+      Res1      : Reserved (15 .. 15) := (others => 0);
+      SYSCFG    : Bits_1;
+      Res2      : Reserved (13 .. 13) := (others => 0);
+      SPI1      : Bits_1;
+      SDIO      : Bits_1;
+      ADC3      : Bits_1;
+      ADC2      : Bits_1;
+      ADC1      : Bits_1;
+      Res4      : Reserved ( 6 ..  7) := (others => 0);
+      UART6     : Bits_1;
+      UART1     : Bits_1;
+      Res5      : Reserved ( 2 ..  3) := (others => 0);
+      TIM8      : Bits_1;
+      TIM1      : Bits_1;
+   end record;
+   
+   for APB2EN_Register use record
+      Res0      at 0 range 19 .. 31;
+      TIM11     at 0 range 18 .. 18;
+      TIM10     at 0 range 17 .. 17;
+      TIM9      at 0 range 16 .. 16;
+      Res1      at 0 range 15 .. 15;
+      SYSCFG    at 0 range 14 .. 14;
+      Res2      at 0 range 13 .. 13;
+      SPI1      at 0 range 12 .. 12;
+      SDIO      at 0 range 11 .. 11;
+      ADC3      at 0 range 10 .. 10; 
+      ADC2      at 0 range  9 ..  9; 
+      ADC1      at 0 range  8 ..  8; 
+      Res4      at 0 range  6 ..  7; 
+      UART6     at 0 range  5 ..  5;
+      UART1     at 0 range  4 ..  4; 
+      Res5      at 0 range  2 ..  3; 
+      TIM8      at 0 range  1 ..  1; 
+      TIM1      at 0 range  0 ..  0;
+   end record;
+   
+   
+   type AHB1LPEN_Register is record
+      Res0      : Reserved (31 .. 31) := (others => 0);
+      OTGHSULPI : Bits_1;
+      OTGHS     : Bits_1;
+      ETHMACPTP : Bits_1;
+      ETHMACRX  : Bits_1;
+      ETHMACTX  : Bits_1;
+      ETHMAC    : Bits_1;
+      Res2      : Reserved (23 .. 24) := (others => 0);
+      DMA2      : Bits_1;
+      DMA1      : Bits_1;
+      Res3      : Reserved (19 .. 20) := (others => 0);
+      BKPSRAM   : Bits_1;
+      SRAM2     : Bits_1;
+      SRAM1     : Bits_1;
+      FLITF     : Bits_1;
+      Res5      : Reserved (13 .. 14) := (others => 0);
+      CRC       : Bits_1;
+      Res4      : Reserved ( 9 .. 11) := (others => 0);
+      GPIOI     : Bits_1;
+      GPIOH     : Bits_1;
+      GPIOG     : Bits_1;
+      GPIOF     : Bits_1;
+      GPIOE     : Bits_1;
+      GPIOD     : Bits_1;
+      GPIOC     : Bits_1;
+      GPIOB     : Bits_1;
+      GPIOA     : Bits_1;
+   end record;
+   
+   for AHB1LPEN_Register use record
+      Res0      at 0 range 31 .. 31;
+      OTGHSULPI at 0 range 30 .. 30;
+      OTGHS     at 0 range 29 .. 29;
+      ETHMACPTP at 0 range 28 .. 28;
+      ETHMACRX  at 0 range 27 .. 27;
+      ETHMACTX  at 0 range 26 .. 26;
+      ETHMAC    at 0 range 25 .. 25;
+      Res2      at 0 range 23 .. 24;
+      DMA2      at 0 range 22 .. 22;
+      DMA1      at 0 range 21 .. 21;
+      Res3      at 0 range 19 .. 20;
+      BKPSRAM   at 0 range 18 .. 18;
+      SRAM2     at 0 range 17 .. 17;
+      SRAM1     at 0 range 16 .. 16;
+      FLITF     at 0 range 15 .. 15;
+      Res5      at 0 range 13 .. 14;
+      CRC       at 0 range 12 .. 12;
+      Res4      at 0 range  9 .. 11;
+      GPIOI     at 0 range  8 ..  8; 
+      GPIOH     at 0 range  7 ..  7; 
+      GPIOG     at 0 range  6 ..  6; 
+      GPIOF     at 0 range  5 ..  5;
+      GPIOE     at 0 range  4 ..  4; 
+      GPIOD     at 0 range  3 ..  3; 
+      GPIOC     at 0 range  2 ..  2; 
+      GPIOB     at 0 range  1 ..  1; 
+      GPIOA     at 0 range  0 ..  0;
+   end record;
+   
+   
+   type AHB2LPEN_Register is record
+      Res0      : Reserved ( 8 .. 31) := (others => 0);
+      OTGFS     : Bits_1;
+      RNG       : Bits_1;
+      HASH      : Bits_1;
+      CRYP      : Bits_1;
+      Res1      : Reserved ( 1 ..  3) := (others => 0);
+      DCMI      : Bits_1;
+   end record;
+   
+   for AHB2LPEN_Register use record
+      Res0      at 0 range  8 .. 31;
+      OTGFS     at 0 range  7 ..  7; 
+      RNG       at 0 range  6 ..  6; 
+      HASH      at 0 range  5 ..  5; 
+      CRYP      at 0 range  4 ..  4; 
+      Res1      at 0 range  1 ..  3; 
+      DCMI      at 0 range  0 ..  0;
+   end record;
+   
+   
+   type AHB3LPEN_Register is record
+      Res0      : Reserved ( 1 .. 31) := (others => 0);
+      FSMC      : Bits_1;
+   end record;
+   
+   for AHB3LPEN_Register use record
+      Res0      at 0 range  1 .. 31;
+      FSMC      at 0 range  0 ..  0; 
+   end record;
+   
+   
+   type APB1LPEN_Register is record
+      Res0      : Reserved (30 .. 31) := (others => 0);
+      DAC       : Bits_1;
+      PWR       : Bits_1;
+      Res1      : Reserved (27 .. 27) := (others => 0);
+      CAN2      : Bits_1;
+      CAN1      : Bits_1;
+      Res2      : Reserved (24 .. 24) := (others => 0);
+      I2C3      : Bits_1;
+      I2C2      : Bits_1;
+      I2C1      : Bits_1;
+      UART5     : Bits_1;
+      UART4     : Bits_1;
+      UART3     : Bits_1;
+      UART2     : Bits_1;
+      Res3      : Reserved (16 .. 16) := (others => 0);
+      SPI3      : Bits_1;
+      SPI2      : Bits_1;
+      Res4      : Reserved (12 .. 13) := (others => 0);
+      WWDG      : Bits_1;
+      Res5      : Reserved ( 9 .. 10) := (others => 0);
+      TIM14     : Bits_1;
+      TIM13     : Bits_1;
+      TIM12     : Bits_1;
+      TIM7      : Bits_1;
+      TIM6      : Bits_1;
+      TIM5      : Bits_1;
+      TIM4      : Bits_1;
+      TIM3      : Bits_1;
+      TIM2      : Bits_1;
+   end record;
+   
+   for APB1LPEN_Register use record
+      Res0      at 0 range 30 .. 31;
+      DAC       at 0 range 29 .. 29;
+      PWR       at 0 range 28 .. 28;
+      Res1      at 0 range 27 .. 27;
+      CAN2      at 0 range 26 .. 26;
+      CAN1      at 0 range 25 .. 25;
+      Res2      at 0 range 24 .. 24;
+      I2C3      at 0 range 23 .. 23;
+      I2C2      at 0 range 22 .. 22;
+      I2C1      at 0 range 21 .. 21;
+      UART5     at 0 range 20 .. 20;
+      UART4     at 0 range 19 .. 19;
+      UART3     at 0 range 18 .. 18;
+      UART2     at 0 range 17 .. 17;
+      Res3      at 0 range 16 .. 16;
+      SPI3      at 0 range 15 .. 15;
+      SPI2      at 0 range 14 .. 14;
+      Res4      at 0 range 12 .. 13;
+      WWDG      at 0 range 11 .. 11;
+      Res5      at 0 range  9 .. 10; 
+      TIM14     at 0 range  8 ..  8; 
+      TIM13     at 0 range  7 ..  7; 
+      TIM12     at 0 range  6 ..  6; 
+      TIM7      at 0 range  5 ..  5;
+      TIM6      at 0 range  4 ..  4; 
+      TIM5      at 0 range  3 ..  3; 
+      TIM4      at 0 range  2 ..  2; 
+      TIM3      at 0 range  1 ..  1; 
+      TIM2      at 0 range  0 ..  0; 
+   end record;
+   
+   
+   type APB2LPEN_Register is record
+      Res0      : Reserved (19 .. 31) := (others => 0);
+      TIM11     : Bits_1;
+      TIM10     : Bits_1;
+      TIM9      : Bits_1;
+      Res1      : Reserved (15 .. 15) := (others => 0);
+      SYSCFG    : Bits_1;
+      Res2      : Reserved (13 .. 13) := (others => 0);
+      SPI1      : Bits_1;
+      SDIO      : Bits_1;
+      ADC3      : Bits_1;
+      ADC2      : Bits_1;
+      ADC1      : Bits_1;
+      Res4      : Reserved ( 6 ..  7) := (others => 0);
+      UART6     : Bits_1;
+      UART1     : Bits_1;
+      Res5      : Reserved ( 2 ..  3) := (others => 0);
+      TIM8      : Bits_1;
+      TIM1      : Bits_1;
+   end record;
+   
+   for APB2LPEN_Register use record
+      Res0      at 0 range 19 .. 31;
+      TIM11     at 0 range 18 .. 18;
+      TIM10     at 0 range 17 .. 17;
+      TIM9      at 0 range 16 .. 16;
+      Res1      at 0 range 15 .. 15;
+      SYSCFG    at 0 range 14 .. 14;
+      Res2      at 0 range 13 .. 13;
+      SPI1      at 0 range 12 .. 12;
+      SDIO      at 0 range 11 .. 11;
+      ADC3      at 0 range 10 .. 10; 
+      ADC2      at 0 range  9 ..  9; 
+      ADC1      at 0 range  8 ..  8; 
+      Res4      at 0 range  6 ..  7; 
+      UART6     at 0 range  5 ..  5;
+      UART1     at 0 range  4 ..  4; 
+      Res5      at 0 range  2 ..  3; 
+      TIM8      at 0 range  1 ..  1; 
+      TIM1      at 0 range  0 ..  0;
+   end record;
+   
+   
+   type BDC_Register is record
+      Res0      : Reserved (17 .. 31) := (others => 0);
+      BDRST     : Bits_1;
+      RTCEN     : Bits_1;
+      Res1      : Reserved (10 .. 14) := (others => 0);
+      RTCSEL    : Bits_2;
+      Res2      : Reserved ( 3 ..  7) := (others => 0);
+      LSEBYP    : Bits_1;
+      LSERDY    : Bits_1;
+      LSEON     : Bits_1;
+   end record;
+   
+   for BDC_Register use record
+      Res0      at 0 range 17 .. 31;
+      BDRST     at 0 range 16 .. 16;
+      RTCEN     at 0 range 15 .. 15;
+      Res1      at 0 range 10 .. 14;
+      RTCSEL    at 0 range  8 ..  9; 
+      Res2      at 0 range  3 ..  7; 
+      LSEBYP    at 0 range  2 ..  2;
+      LSERDY    at 0 range  1 ..  1;
+      LSEON     at 0 range  0 ..  0;
+   end record;
+   
+   
+   type CCS_Register is record
+      LPWRRSTF  : Bits_1;
+      WWDGRSTF  : Bits_1;
+      IWDGRSTF  : Bits_1;
+      SFTRSTF   : Bits_1;
+      PORRSTF   : Bits_1;
+      PINRSTF   : Bits_1;
+      BORRSTF   : Bits_1;
+      RMVF      : Bits_1;
+      Res1      : Reserved ( 2 .. 23) := (others => 0);
+      LSIRDY    : Bits_1;
+      LSION     : Bits_1;
+   end record;
+   
+   for CCS_Register use record
+      LPWRRSTF  at 0 range 31 .. 31;
+      WWDGRSTF  at 0 range 30 .. 30;
+      IWDGRSTF  at 0 range 29 .. 29;
+      SFTRSTF   at 0 range 28 .. 28;
+      PORRSTF   at 0 range 27 .. 27;
+      PINRSTF   at 0 range 26 .. 26;
+      BORRSTF   at 0 range 25 .. 25;
+      RMVF      at 0 range 24 .. 24;
+      Res1      at 0 range  2 .. 23;
+      LSIRDY    at 0 range  1 ..  1; 
+      LSION     at 0 range  0 ..  0; 
+   end record;
+   
+   
+   type SSCG_Register is record
+      SSCGEN    : Bits_1;
+      SPREADSEL : Bits_1;
+      Res0      : Reserved (28 .. 29) := (others => 0);
+      INCSTEP   : Bits_15;
+      MODPER    : Bits_13;
+   end record;
+   
+   for SSCG_Register use record
+      SSCGEN    at 0 range 31 .. 31;
+      SPREADSEL at 0 range 30 .. 30;
+      Res0      at 0 range 28 .. 29;
+      INCSTEP   at 0 range 13 .. 27;
+      MODPER    at 0 range  0 .. 12;
+   end record;
+   
+   
+   type PLLI2SCFG_Register is record
+      Res0      : Reserved (31 .. 31) := (others => 0);
+      PLLI2SR   : Bits_3;
+      Res1      : Reserved (15 .. 27) := (others => 0);
+      PLLI2SN   : Bits_9;
+      Res2      : Reserved ( 0 ..  5) := (others => 0);
+   end record;
+   
+   for PLLI2SCFG_Register use record
+      Res0      at 0 range 31 .. 31;
+      PLLI2SR   at 0 range 28 .. 30;
+      Res1      at 0 range 15 .. 27;
+      PLLI2SN   at 0 range  6 .. 14;
+      Res2      at 0 range  0 ..  5; 
+   end record;
+
+   
+   type RESERVED_Register is array (0 .. 1) of aliased Bits_32x1;
+   
+   type RCC_TypeDef is record
+      CR                : CR_Register;  
+      PLLCFGR           : PLLCFG_Register;     
+      CFGR              : CFG_Register;        
+      CIR               : CIR_Register; 
+      AHB1RSTR          : AHB1RST_Register;    
+      AHB2RSTR          : AHB2RST_Register;    
+      AHB3RSTR          : AHB3RST_Register;    
+      RESERVED0         : Bits_32;      
+      APB1RSTR          : APB1RST_Register;    
+      APB2RSTR          : APB2RST_Register;    
+      RESERVED1         : RESERVED_Register;    
+      AHB1ENR           : AHB1EN_Register;     
+      AHB2ENR           : AHB2EN_Register;     
+      AHB3ENR           : AHB3EN_Register;     
+      RESERVED2         : Bits_32;      
+      APB1ENR           : APB1EN_Register;     
+      APB2ENR           : APB2EN_Register;     
+      RESERVED3         : RESERVED_Register;    
+      AHB1LPENR         : AHB1LPEN_Register;   
+      AHB2LPENR         : AHB2LPEN_Register;   
+      AHB3LPENR         : AHB3LPEN_Register;   
+      RESERVED4         : Bits_32;      
+      APB1LPENR         : APB1LPEN_Register;   
+      APB2LPENR         : APB2LPEN_Register;   
+      RESERVED5         : RESERVED_Register;    
+      BDCR              : BDC_Register;        
+      CSR               : CCS_Register; 
+      RESERVED6         : RESERVED_Register;    
+      SSCGR             : SSCG_Register;       
+      PLLI2SCFGR        : PLLI2SCFG_Register; 
+      ---PLLSAICFGR        : PLLSAICFG_Register; 
+      -- DCKCFGR           : DCKCFG_Register;     
+   end record;
+   
+   for RCC_TypeDef use record
+      CR                at    0 range 0 ..    31;
+      PLLCFGR           at    4 range 0 ..    31;
+      CFGR              at    8 range 0 ..    31;
+      CIR               at   12 range 0 ..    31;
+      AHB1RSTR          at   16 range 0 ..    31;
+      AHB2RSTR          at   20 range 0 ..    31;
+      AHB3RSTR          at   24 range 0 ..    31;
+      RESERVED0         at   28 range 0 ..    31;
+      APB1RSTR          at   32 range 0 ..    31;
+      APB2RSTR          at   36 range 0 ..    31;
+      RESERVED1         at   40 range 0 ..    63;
+      AHB1ENR           at   48 range 0 ..    31;
+      AHB2ENR           at   52 range 0 ..    31;
+      AHB3ENR           at   56 range 0 ..    31;
+      RESERVED2         at   60 range 0 ..    31;
+      APB1ENR           at   64 range 0 ..    31;
+      APB2ENR           at   68 range 0 ..    31;
+      RESERVED3         at   72 range 0 ..    63;
+      AHB1LPENR         at   80 range 0 ..    31;
+      AHB2LPENR         at   84 range 0 ..    31;
+      AHB3LPENR         at   88 range 0 ..    31;
+      RESERVED4         at   92 range 0 ..    31;
+      APB1LPENR         at   96 range 0 ..    31;
+      APB2LPENR         at  100 range 0 ..    31;
+      RESERVED5         at  104 range 0 ..    63;
+      BDCR              at  112 range 0 ..    31;
+      CSR               at  116 range 0 ..    31;
+      RESERVED6         at  120 range 0 ..    63;
+      SSCGR             at  128 range 0 ..    31;
+      PLLI2SCFGR        at  132 range 0 ..    31;
+      --PLLSAICFGR        at  136 range 0 ..    31;
+      --DCKCFGR           at  140 range 0 ..    31;
+   end record;
+    
+end STM32F4.o7xx.Rcc;
