@@ -36,8 +36,8 @@ pragma Restrictions (No_Elaboration_Code);
 package STM32F4.o7xx.Usart is
 
    --------------------------------------------------
-   -- constants for use with the dma definitions   --
-   --  in the child packages                       --
+   -- constants for use with the usart definitions --
+   --  in the client packages                      --
    --------------------------------------------------
 
    Change       : constant Bits_1 := 1;

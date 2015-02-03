@@ -48,6 +48,7 @@ with STM32F4.o7xx.Wwdg;
 with STM32F4.o7xx.Iwdg;
 with STM32F4.o7xx.Rcc;
 with STM32F4.O7xx.Syscfg;
+with STM32F4.Gpio;
 
 
 package STM32F4.O7xx.Registers is
@@ -61,6 +62,60 @@ package STM32F4.O7xx.Registers is
      Volatile,
      Address => System'To_Address (RCC_Base);
    pragma Import (Ada, Rcc);
+   
+   
+   -------------------
+   -- GPIO (ch 8)   --
+   -------------------
+   
+   package Gpio renames STM32F4.Gpio;
+   
+   GPIOA : Gpio.GPIO_Register with
+     Volatile,
+     Address => System'To_Address (Gpioa_Base);
+   pragma Import (Ada, GPIOA);
+   
+    GPIOB : Gpio.GPIO_Register with
+     Volatile,
+     Address => System'To_Address (GpioB_Base);
+   pragma Import (Ada, GPIOB);
+   
+    GPIOC : Gpio.GPIO_Register with
+     Volatile,
+     Address => System'To_Address (GpioC_Base);
+   pragma Import (Ada, GPIOC);
+   
+    GPIOD : Gpio.GPIO_Register with
+     Volatile,
+     Address => System'To_Address (GpioD_Base);
+   pragma Import (Ada, GPIOD);
+   
+   --   GPIOE : Gpio.GPIO_Register with
+   --    Volatile,
+   --    Address => System'To_Address (GpioE_Base);
+   --  pragma Import (Ada, GPIOE);
+   
+   --   GPIOF : Gpio.GPIO_Register with
+   --    Volatile,
+   --    Address => System'To_Address (GpioF_Base);
+   --  pragma Import (Ada, GPIOF);
+   
+   --   GPIOG : Gpio.GPIO_Register with
+   --    Volatile,
+   --    Address => System'To_Address (GpioG_Base);
+   --  pragma Import (Ada, GPIOG);
+   
+   --   GPIOH : Gpio.GPIO_Register with
+   --    Volatile,
+   --    Address => System'To_Address (GpioH_Base);
+   --  pragma Import (Ada, GPIOH);
+   
+   --   GPIOI : Gpio.GPIO_Register with
+   --    Volatile,
+   --    Address => System'To_Address (GpioI_Base);
+   --  pragma Import (Ada, GPIOI);
+   
+   
    
    
    -------------------

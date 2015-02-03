@@ -37,7 +37,7 @@ package STM32F4.o7xx.Dma is
 
    --------------------------------------------------
    -- constants for use with the dma definitions   --
-   --  in the child packages                       --
+   --  in the client packages                      --
    --------------------------------------------------
 
    Xfer_Complete  : constant Bits_1 := 1;

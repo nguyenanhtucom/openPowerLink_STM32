@@ -32,16 +32,13 @@
 --
 
 
-
-
-
 pragma Restrictions (No_Elaboration_Code);
 
 package STM32F4.O7xx.Dac is
    
    --------------------------------------------------
    -- constants for use with the dac definitions   --
-   --  in the child packages                       --
+   --  in the client packages                      --
    --------------------------------------------------
    
    --------------------------------

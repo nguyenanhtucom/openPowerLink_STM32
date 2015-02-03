@@ -39,7 +39,7 @@ package STM32F4.o7xx.Eth is
 
    --------------------------------------------------
    -- constants for use with the eth definitions   --
-   --  in the child packages                       --
+   --  in the client packages                      --
    --------------------------------------------------
 
    Strip_Crc                   : constant Bits_1 := 1;
