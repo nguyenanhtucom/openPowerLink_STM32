@@ -2,7 +2,7 @@
 --                                                                          --
 --                             STM32F4 COMPONENTS                           --
 --                                                                          --
---                        S T M 32 F 4 . O7xx . W w d                       --
+--                        S T M 32 F 4 . O7xx . I w d g                     --
 --                                                                          --
 --                           H a r d w ar e  S p e c                        --
 --                                                                          --
@@ -28,93 +28,107 @@
 --  This file provides type definitions for the STM32F4 (ARM Cortex M4F)
 --  microcontrollers from ST Microelectronics.
 --
---  chapter 22.6    WWDG registers       RM0090 Reference manual
+--  chapter 21.4    IWDG registers       RM0090 Reference manual
 --
 
 pragma Restrictions (No_Elaboration_Code);
 
-package STM32F4.o7xx.Wwdg is
+package STM32F4.o7xx.Iwdg is
 
    --------------------------------------------------
-   -- constants for use with the wwdg definitions  --
+   -- constants for use with the iwdg definitions  --
    --  in the client packages                      --
    --------------------------------------------------
-
-   Enable    : constant Bits_1 := 1;
-   On        : constant Bits_1 := 1;
-   Off       : constant Bits_1 := 0;
-   Ckcc_Div1 : constant Bits_2 := 0;
-   Ckcc_Div2 : constant Bits_2 := 1;
-   Ckcc_Div4 : constant Bits_2 := 2;
-   Ckcc_Div8 : constant Bits_2 := 3;
-
+   
+   Open          : constant Bits_1 := 0;
+   Locked        : constant Bits_1 := 1;
+   Div_4         : constant Bits_3 := 0;
+   Div_8         : constant Bits_3 := 1;
+   Div_16        : constant Bits_3 := 2;
+   Div_32        : constant Bits_3 := 3;
+   Div_64        : constant Bits_3 := 4;
+   Div_128       : constant Bits_3 := 5;
+   Div_256       : constant Bits_3 := 6;
+   Init          : constant Bits_16 := 16#CCCC#;
+   Update        : constant Bits_16 := 16#AAAA#;
+   Access_En     : constant Bits_16 := 16#5555#;
+   
    --------------------------------------------------
    -- register definitions                         --
    --------------------------------------------------
-
-   type CR_Register is record
-      -- WWDG Control register
-      Res0	: Reserved (8 .. 31) := (others => 0);
-      WDGA	: Bits_1;
-      --  Activation bit
-      --- On, Off
-      T		: Bits_7;
-      --  7-bit counter
+   
+   type KR_Register is record
+      -- Key register 
+      Res0	: Reserved (16 .. 31) := (others => 0);
+      Key       : Bits_16;
+      --  Key value (write only, read 0000h)
+      --- Init, Update, Access_En
    end record;
-
-   for CR_Register use record
-      Res0 at 0 range 8 .. 31;
-      WDGA at 0 range 7 ..  7;
-      T    at 0 range 0 ..  6;
+   
+   for KR_Register use record
+      Res0 at 0 range 16 .. 31;
+      Key  at 0 range 0 ..  15;
    end record;
    
    
-   type CFR_Register is record
-      -- WWDG Configuration register
-      Res0	: Reserved (10 .. 31) := (others => 0);
-      EWI	: Bits_1;
-      --  Early wakeup interrupt
-      --- Enable, off
-      WDGTB	: Bits_2;
-      --  time base of the prescaler
-      --- Ckcc_Div1, Ckcc_Div2, Ckcc_Div4, Ckcc_Div8
-      W		: Bits_7;
-      --  7-bit window value
+   type PR_Register is record
+      -- Prescaler register
+      Res0	: Reserved (3 .. 31) := (others => 0);
+      Pr        : Bits_3;
+      --  Prescaler divider
+      --- Div_4, Div_8, Div_16, Div_32, Div_64, Div_128, Div_256
    end record;
-
-   for CFR_Register use record
-      Res0  at 0 range 10 .. 31;
-      EWI   at 0 range  9 ..  9;
-      WDGTB at 0 range  7 ..  8;
-      W     at 0 range  0 ..  6;
+   
+   for PR_Register use record
+      Res0 at 0 range 3 .. 31;
+      Pr   at 0 range 0 ..  2;
+   end record;
+   
+   
+   type RLR_Register is record
+      -- Reload register
+      Res0	: Reserved (12 .. 31) := (others => 0);
+      Rl        : Bits_12;
+      --  Watchdog counter reload value
+      --- ?
+   end record;
+   
+   for RLR_Register use record
+      Res0 at 0 range 12 .. 31;
+      Rl   at 0 range 0  .. 11;
    end record;
    
    
    type SR_Register is record
-      -- WWDG Status register
-      Res0	: Reserved (1 .. 31) := (others => 0);
-      EWIF	: Bits_1;
-      --  Early wakeup interrupt flag
-      --- On, Off
+      -- Status register 
+      Res0	: Reserved (2 .. 31) := (others => 0);
+      Rvu       : Bits_1;
+      --  Watchdog counter reload value update
+      --- Open, Locked
+      Pvu       : Bits_1;
+      --  Watchdog prescaler value update
+      --- Open, Locked
    end record;
-
+   
    for SR_Register use record
-      Res0 at 0 range 1 .. 31;
-      EWIF at 0 range 0 ..  0;
+      Res0 at 0 range 2 .. 31;
+      Rvu  at 0 range 1 ..  1;
+      Pvu  at 0 range 0 ..  0;
    end record;
    
    
-   type WWDG_TypeDef is record
-      CR	: CR_Register;
-      CFR	: CFR_Register;
-      SR	: SR_Register;
+   type IWDG_TypeDef is record
+      KR     : KR_Register;
+      PR     : PR_Register;
+      RLR    : RLR_Register;
+      SR     : SR_Register;
    end record;
-   pragma Convention (C_Pass_By_Copy, WWDG_TypeDef);
-
-   for WWDG_TypeDef use record
-      CR  at 0 range 0 .. 31;
-      CFR at 4 range 0 .. 31;
-      SR  at 8 range 0 .. 31;
+   
+   for IWDG_TypeDef use record
+      KR     at 0  range 0 .. 31;
+      PR     at 4  range 0 .. 31;
+      RLR    at 8  range 0 .. 31;
+      SR     at 12 range 0 .. 31;
    end record;
-
-end STM32F4.o7xx.Wwdg;
+   
+end STM32F4.o7xx.Iwdg;

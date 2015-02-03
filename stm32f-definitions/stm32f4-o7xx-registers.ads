@@ -45,8 +45,32 @@ with STM32F4.O7xx.Adc.Adc1_3;
 with STM32F4.O7xx.Adc.Common;
 with STM32F4.O7xx.Dac;
 with STM32F4.o7xx.Wwdg;
+with STM32F4.o7xx.Iwdg;
+with STM32F4.o7xx.Rcc;
+with STM32F4.O7xx.Syscfg;
+
 
 package STM32F4.O7xx.Registers is
+   
+   
+   -----------------
+   -- Rcc (ch 7)  --
+   -----------------
+   
+   Rcc : STM32F4.o7xx.Rcc.RCC_TypeDef with
+     Volatile,
+     Address => System'To_Address (RCC_Base);
+   pragma Import (Ada, Rcc);
+   
+   
+   -------------------
+   -- SYSCFG (ch 9) --
+   -------------------
+   
+   Syscfg : STM32F4.o7xx.Syscfg.SYSCFG_TypeDef with
+     Volatile,
+     Address => System'To_Address (SYSCFG_Base);
+   pragma Import (Ada, Syscfg);
    
    
    -----------------
@@ -187,6 +211,16 @@ package STM32F4.O7xx.Registers is
    pragma Import (Ada, TIM14);
    
    
+   ---------------------
+   -- watchdog (ch21) --
+   ---------------------
+   
+   IWDG : STM32F4.o7xx.Iwdg.IWDG_TypeDef with
+     Volatile,
+     Address => System'To_Address (IWDG_Base);
+   pragma Import (Ada, IWDG);
+   
+  
    ---------------------
    -- watchdog (ch22) --
    ---------------------

@@ -35,10 +35,10 @@ pragma Restrictions (No_Elaboration_Code);
 
 package STM32F4.O7xx.Syscfg is
 
-   --------------------------------------------------
-   -- constants for use with the rcc definitions   --
-   --  in the child packages                       --
-   --------------------------------------------------
+   ---------------------------------------------------
+   -- constants for use with the syscfg definitions --
+   --  in the client packages                       --
+   ---------------------------------------------------
    
    Main_Flash   : constant Bits_2 := 0;
    System_Flash : constant Bits_2 := 1;
