@@ -316,11 +316,11 @@ package STM32F4.o7xx.Eth is
    end record;
 
 
-   type MACHTHR_Register is new Bits_32;
+   subtype MACHTHR_Register is Bits_32;
    -- Bit definition for Ethernet MAC Hash Table High Register
 
 
-   type MACHTLR_Register is new Bits_32;
+   subtype MACHTLR_Register is Bits_32;
    -- Bit definition for Ethernet MAC Hash Table Low Register
 
 
@@ -629,7 +629,7 @@ package STM32F4.o7xx.Eth is
    end record;
 
 
-   type MACA0LR_Register is new Bits_32;
+   subtype MACA0LR_Register is Bits_32;
    -- Bit definition for Ethernet MAC Address0 Low Register
 
 
@@ -657,7 +657,7 @@ package STM32F4.o7xx.Eth is
    end record;
 
 
-   type MACA1LR_Register is new Bits_32;
+   subtype MACA1LR_Register is Bits_32;
    -- Bit definition for Ethernet MAC Address1 Low Register
 
 
@@ -685,7 +685,7 @@ package STM32F4.o7xx.Eth is
    end record;
 
 
-   type MACA2LR_Register is new Bits_32;
+   subtype MACA2LR_Register is Bits_32;
    -- Bit definition for Ethernet MAC Address2 Low Register
 
 
@@ -713,7 +713,7 @@ package STM32F4.o7xx.Eth is
    end record;
 
 
-   type MACA3LR_Register is new Bits_32;
+   subtype MACA3LR_Register is Bits_32;
    -- Bit definition for Ethernet MAC Address3 Low Register
    
    
@@ -865,31 +865,31 @@ package STM32F4.o7xx.Eth is
    end record;
 
 
-   type MMCTGFSCCR_Register is new Bits_32;
+   subtype MMCTGFSCCR_Register is Bits_32;
    -- Bit definition for Ethernet MMC Transmitted Good Frames after
    -- Single Collision Counter Register
 
 
-   type MMCTGFMSCCR_Register is new Bits_32;
+   subtype MMCTGFMSCCR_Register is Bits_32;
    -- Bit definition for Ethernet MMC Transmitted Good Frames after
    -- More than a Single Collision Counter Register
 
 
-   type MMCTGFCR_Register is new Bits_32;
+   subtype MMCTGFCR_Register is Bits_32;
    -- Bit definition for Ethernet MMC Transmitted Good Frames Counter Register
 
 
-   type MMCRFCECR_Register is new Bits_32;
+   subtype MMCRFCECR_Register is Bits_32;
    -- Bit definition for Ethernet MMC Received Frames with
    -- CRC Error Counter Register
 
 
-   type MMCRFAECR_Register is new Bits_32;
+   subtype MMCRFAECR_Register is Bits_32;
    -- Bit definition for Ethernet MMC Received Frames with
    -- Alignement Error Counter Register
 
 
-   type MMCRGUFCR_Register is new Bits_32;
+   subtype MMCRGUFCR_Register is Bits_32;
    -- Bit definition for Ethernet MMC Received Good Unicast Frames Counter Register
    
    
@@ -986,7 +986,7 @@ package STM32F4.o7xx.Eth is
    end record;
 
 
-   type PTPTSHR_Register is new Bits_32;
+   subtype PTPTSHR_Register is Bits_32;
    -- Bit definition for Ethernet PTP Time Stamp High Register
 
 
@@ -1004,7 +1004,7 @@ package STM32F4.o7xx.Eth is
    end record;
 
 
-   type PTPTSHUR_Register is new Bits_32;
+   subtype PTPTSHUR_Register is Bits_32;
    -- Bit definition for Ethernet PTP Time Stamp High Update Register
 
 
@@ -1022,15 +1022,15 @@ package STM32F4.o7xx.Eth is
    end record;
 
 
-   type PTPTSAR_Register is new Bits_32;
+   subtype PTPTSAR_Register is Bits_32;
    -- Bit definition for Ethernet PTP Time Stamp Addend Register
 
 
-   type PTPTTHR_Register is new Bits_32;
+   subtype PTPTTHR_Register is Bits_32;
    -- Bit definition for Ethernet PTP Target Time High Register
 
 
-   type PTPTTLR_Register is new Bits_32;
+   subtype PTPTTLR_Register is Bits_32;
    -- Bit definition for Ethernet PTP Target Time Low Register
 
 
@@ -1123,19 +1123,19 @@ package STM32F4.o7xx.Eth is
    end record;
 
 
-   type DMATPDR_Register is new Bits_32;
+   subtype DMATPDR_Register is Bits_32;
    -- Bit definition for Ethernet DMA Transmit Poll Demand Register
 
 
-   type DMARPDR_Register is new Bits_32;
+   subtype DMARPDR_Register is Bits_32;
    -- Bit definition for Ethernet DMA Receive Poll Demand Register
 
 
-   type DMARDLAR_Register is new Bits_32;
+   subtype DMARDLAR_Register is Bits_32;
    -- Bit definition for Ethernet DMA Receive Descriptor List Address Register
 
 
-   type DMATDLAR_Register is new Bits_32;
+   subtype DMATDLAR_Register is Bits_32;
    -- Bit definition for Ethernet DMA Transmit Descriptor List Address Register
 
 
@@ -1420,19 +1420,19 @@ package STM32F4.o7xx.Eth is
    end record;
    
    
-   type DMACHTDR_Register is new Bits_32;
+   subtype DMACHTDR_Register is Bits_32;
    -- Ethernet DMA current host transmit descriptor register
    
    
-   type DMACHRDR_Register is new Bits_32;
+   subtype DMACHRDR_Register is Bits_32;
    -- Ethernet DMA current host receive descriptor register
    
    
-   type DMACHTBAR_Register is new Bits_32;
+   subtype DMACHTBAR_Register is Bits_32;
    -- Ethernet DMA current host transmit buffer address register
    
    
-   type DMACHRBAR_Register is new Bits_32;
+   subtype DMACHRBAR_Register is Bits_32;
    -- Ethernet DMA current host receive buffer address register
    
    

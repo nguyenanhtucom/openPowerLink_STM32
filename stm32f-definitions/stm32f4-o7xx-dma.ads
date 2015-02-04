@@ -524,7 +524,7 @@ package STM32F4.o7xx.Dma is
       --- Periph_To_Mem, Mem_To_Periph, Mem_To_Mem
       PFCTRL	: Bits_1;
       --  Peripheral flow controller
-      ---
+      --- Dma_Contrld, Periph_Contrld
       TCIE	: Bits_1;
       --  Transfer complete interrupt enable
       --- Enable, Off
@@ -578,15 +578,15 @@ package STM32F4.o7xx.Dma is
       NDT  at 0 range  0 .. 15;
    end record;
 
-   type PAR_Register is new Bits_32;
+   subtype PAR_Register is Bits_32;
    -- DMA stream x peripheral address register
    -- Base address of the peripheral data register
 
-   type M0AR_Register is new Bits_32;
+   subtype M0AR_Register is Bits_32;
    -- DMA stream x memory 0 address register
    -- Base address of Memory area
 
-   type M1AR_Register is new Bits_32;
+   subtype M1AR_Register is Bits_32;
    -- DMA stream x memory 1 address register
    -- Base address of Memory area
 
