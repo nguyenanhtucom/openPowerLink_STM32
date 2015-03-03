@@ -78,6 +78,9 @@ package STM32F4 is
    GPIOB_Base           : constant := AHB1_Peripheral_Base + 16#0400#;
    GPIOC_Base           : constant := AHB1_Peripheral_Base + 16#0800#;
    GPIOD_Base           : constant := AHB1_Peripheral_Base + 16#0C00#;
+   GPIOe_Base           : constant := AHB1_Peripheral_Base + 16#1000#;
+   GPIOf_Base           : constant := AHB1_Peripheral_Base + 16#1400#;
+   GPIOg_Base           : constant := AHB1_Peripheral_Base + 16#1800#;
 
    --FLASH_Base           : constant := AHB1_Peripheral_Base + 16#3C00#;
    RCC_Base             : constant := AHB1_Peripheral_Base + 16#3800#;

@@ -278,10 +278,10 @@ package STM32F4.o7xx.Ethbuf is
       -- VLAN frame
       --- Vlan, off
       Fs        : Bits_1;
-      -- First descriptor
+      -- First segment
       --- Tru, Off
       Ls        : Bits_1;
-      -- Last descriptor
+      -- Last segment
       --- Tru, Off
       Iphce_Tsv : Bits_1;
       --  IPv header checksum error / time stamp valid
@@ -468,8 +468,8 @@ package STM32F4.o7xx.Ethbuf is
    type Xl_Xmit_Desc_Type is record
       Tdes0     : Tdes0_Type;
       Tdes1     : Tdes1_Type;
-      Tdes2     : Tdes2_Type (True); -- ?????
-      Tdes3     : Tdes3_Type (True); -- ??????
+      Tdes2     : Tdes2_Type (False);
+      Tdes3     : Tdes3_Type (False);
       Reserved4 : Bits_32;
       Reserved5 : Bits_32;
       Ttsl      : Bits_32;
@@ -508,8 +508,8 @@ package STM32F4.o7xx.Ethbuf is
    type Xl_Recv_Desc_Type is record
       Rdes0     : Rdes0_Type;
       Rdes1     : Rdes1_Type;
-      Rdes2     : Rdes2_Type (False); -- ???????
-      Rdes3     : Rdes3_Type (False); -- ???????
+      Rdes2     : Rdes2_Type (False);
+      Rdes3     : Rdes3_Type (False);
       Rdes4     : Rdes4_Type;
       Reserved5 : Bits_32;
       Rtsl      : Bits_32;

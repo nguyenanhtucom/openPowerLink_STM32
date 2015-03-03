@@ -90,20 +90,20 @@ package STM32F4.O7xx.Registers is
      Address => System'To_Address (GpioD_Base);
    pragma Import (Ada, GPIOD);
    
-   --   GPIOE : Gpio.GPIO_Register with
-   --    Volatile,
-   --    Address => System'To_Address (GpioE_Base);
-   --  pragma Import (Ada, GPIOE);
+   GPIOE : Gpio.GPIO_Register with
+     Volatile,
+     Address => System'To_Address (GpioE_Base);
+   pragma Import (Ada, GPIOE);
    
-   --   GPIOF : Gpio.GPIO_Register with
-   --    Volatile,
-   --    Address => System'To_Address (GpioF_Base);
-   --  pragma Import (Ada, GPIOF);
+   GPIOF : Gpio.GPIO_Register with
+     Volatile,
+     Address => System'To_Address (GpioF_Base);
+   pragma Import (Ada, GPIOF);
    
-   --   GPIOG : Gpio.GPIO_Register with
-   --    Volatile,
-   --    Address => System'To_Address (GpioG_Base);
-   --  pragma Import (Ada, GPIOG);
+   GPIOG : Gpio.GPIO_Register with
+     Volatile,
+     Address => System'To_Address (GpioG_Base);
+   pragma Import (Ada, GPIOG);
    
    --   GPIOH : Gpio.GPIO_Register with
    --    Volatile,
