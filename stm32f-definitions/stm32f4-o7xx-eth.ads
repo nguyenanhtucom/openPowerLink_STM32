@@ -168,7 +168,12 @@ package STM32F4.o7xx.Eth is
    RTC_32Bytes                 : constant Bits_2 := 1;
    RTC_96Bytes                 : constant Bits_2 := 2;
    RTC_128Bytes                : constant Bits_2 := 3;
-   
+   Msbyte                      : constant Bits_6 := 2#100000#;
+   Byte5                       : constant Bits_6 := 2#010000#;
+   Byte4                       : constant Bits_6 := 2#001000#;
+   Byte3                       : constant Bits_6 := 2#000100#;
+   Byte2                       : constant Bits_6 := 2#000010#;
+   Lsbyte                      : constant Bits_6 := 2#000001#;
     
    --------------------------------------------------
    -- register definitions                         --
@@ -642,7 +647,8 @@ package STM32F4.o7xx.Eth is
       -- Source address
       -- Maca_Sa, Maca_da
       MBC       : Bits_6;
-   -- Mask byte control: bits to mask for comparison of the MAC Address bytes
+      -- Mask byte control: bits to mask for comparison of the MAC Address bytes
+      -- msbyte, byte5, byte4, byte3, byte2, lsbyte;
       Res0      : Reserved (16 .. 23) := (others => 0);
       MACA1H    : Bits_16;
       -- MAC address1 high
@@ -1103,7 +1109,7 @@ package STM32F4.o7xx.Eth is
       --: Rx_Tx, Round_Robin
       SR        : Bits_1;
       -- Software reset
-      --: Reset
+      --: Reset, off
    end record;
 
    for DMABMR_Register use record
