@@ -1098,8 +1098,8 @@ package STM32F4.o7xx.Eth is
       --: RTPR_1_1, RTPR_2_1, RTPR_3_1, RTPR_4_1
       PBL       : Bits_6;
       -- maximum number of beats to be transferred in one TxDMA
-      --: PBL_1Beat, PBL_2Beat, PBL_4Beat, PBL_8Beat, PBL_16Beat, PBL_32Beat
-      EDEFE     : Bits_1;
+      --: PBL_1Beat, PBL_2Beat;, PBL_4Beat, PBL_8Beat, PBL_16Beat, PBL_32Beat
+      EDFE     : Bits_1;
       -- Enhanced Descriptor Enable
       --: Enabled, off
       DSL       : Bits_5;
@@ -1122,7 +1122,7 @@ package STM32F4.o7xx.Eth is
       FB    at 0 range 16 .. 16;
       RTPR  at 0 range 14 .. 15;
       PBL   at 0 range  8 .. 13;
-      EDEFE at 0 range  7 ..  7;
+      EDFE  at 0 range  7 ..  7;
       DSL   at 0 range  2 ..  6;
       DA    at 0 range  1 ..  1;
       SR    at 0 range  0 ..  0;
